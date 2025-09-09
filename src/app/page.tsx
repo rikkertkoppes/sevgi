@@ -10,10 +10,8 @@ import {
 import styles from "./page.module.css";
 import React from "react";
 
-// import "@rkmodules/rules/index.css";
-import "@xyflow/react/dist/style.css";
-import { point } from "@/functions/Point";
-import { edge } from "@/functions/Edge";
+import "@rkmodules/rules/index.css";
+
 import { exporter } from "makerjs";
 
 const engine = new Engine({

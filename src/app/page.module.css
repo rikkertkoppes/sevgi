@@ -2,6 +2,8 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  --node-line: #888;
+  --node-background: #222;
 }
 
 .Panes {

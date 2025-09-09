@@ -12,11 +12,11 @@ import React from "react";
 
 import "@rkmodules/rules/index.css";
 
+import Shapes from "@/functions/Shapes";
 import { exporter } from "makerjs";
 
 const engine = new Engine({
-    point,
-    edge,
+    ...Shapes,
 });
 
 const testFunction: GraphedFunction = {
@@ -50,16 +50,23 @@ const testFunction: GraphedFunction = {
             },
         },
         myEdge: {
-            name: "edge",
+            name: "line",
             inputs: {
-                a: "<p1.p>",
-                b: "<p2.p>",
+                o: "<p1.p>",
+                e: "<p2.p>",
+            },
+        },
+        myCircle: {
+            name: "circle",
+            inputs: {
+                o: "<p1.p>",
+                r: 50,
             },
         },
     },
     outputs: {
         data: "<myLog.data>",
-        geometry: ["<p1.p>", "<p2.p>", "<myEdge.e>"],
+        geometry: ["<p1.p>", "<p2.p>", "<myEdge.l>", "<myCircle.c>"],
     },
 };
 
@@ -86,7 +93,6 @@ export default function Home() {
     return (
         <div className={styles.Container}>
             <div className={styles.Header}>
-                home
                 <button onClick={async () => run()}>run</button>
                 {Object.entries(primitives).map(([name, primitive]) => (
                     <button
@@ -97,7 +103,6 @@ export default function Home() {
                         {primitive.label || primitive.name}
                     </button>
                 ))}
-                <pre>{JSON.stringify(result)}</pre>
             </div>
             <div className={styles.Panes}>
                 <div className={styles.FlowVis}>

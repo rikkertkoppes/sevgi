@@ -15,9 +15,14 @@ export const circle: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            c: binaryOnTree(inputs.o, inputs.r, (o: IPoint, r: number) => {
-                return new paths.Circle(o, r);
-            }),
+            c: binaryOnTree(
+                inputs.o,
+                inputs.r,
+                (o: IPoint, r: number) => {
+                    return new paths.Circle(o, r);
+                },
+                true
+            ),
         };
     },
 };

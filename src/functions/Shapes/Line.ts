@@ -15,9 +15,14 @@ export const line: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            l: binaryOnTree(inputs.o, inputs.e, (o: IPoint, e: IPoint) => {
-                return new paths.Line(o, e);
-            }),
+            l: binaryOnTree(
+                inputs.o,
+                inputs.e,
+                (o: IPoint, e: IPoint) => {
+                    return new paths.Line(o, e);
+                },
+                true
+            ),
         };
     },
 };

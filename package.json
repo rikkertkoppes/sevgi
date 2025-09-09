@@ -9,7 +9,7 @@
         "lint": "eslint"
     },
     "dependencies": {
-        "@rkmodules/rules": "^0.0.9",
+        "@rkmodules/rules": "^0.0.12",
         "makerjs": "^0.18.1",
         "next": "15.5.2",
         "react": "^19.1.1",

@@ -21,7 +21,8 @@ export const arc: PrimitiveFunction = {
                 [inputs.o, inputs.r, inputs.s, inputs.e],
                 ([o, r, s, e]) => {
                     return new paths.Arc(o, r, s, e);
-                }
+                },
+                true
             ),
         };
     },

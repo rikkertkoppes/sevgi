@@ -13,9 +13,14 @@ export const point: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            p: binaryOnTree(inputs.x, inputs.y, (x: number, y: number) => {
-                return [x, y];
-            }),
+            p: binaryOnTree(
+                inputs.x,
+                inputs.y,
+                (x: number, y: number) => {
+                    return [x, y];
+                },
+                true
+            ),
         };
     },
 };

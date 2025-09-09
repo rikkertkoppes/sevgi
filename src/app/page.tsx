@@ -5,6 +5,7 @@ import {
     Flow,
     GraphedFunction,
     primitives,
+    toArray,
     useFunction,
 } from "@rkmodules/rules";
 import styles from "./page.module.css";
@@ -75,10 +76,9 @@ export default function Home() {
     const { run, result } = useFunction(engine, fn, true);
     const [svg, setSvg] = React.useState("");
 
-    const handleAddNode =
-        (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
-            setFn(applyNodeAdd(fn, name));
-        };
+    const handleAddNode = (name: string) => () => {
+        setFn(applyNodeAdd(fn, name));
+    };
 
     // run on every change (not always required, hence not in useFunction)
     React.useEffect(() => {
@@ -86,7 +86,9 @@ export default function Home() {
     }, [fn, run]);
 
     React.useEffect(() => {
-        const svg = exporter.toSVG(result?.geometry?.[0] || []);
+        const geometry = toArray(result?.geometry || []);
+        console.log("result geometry", result, geometry);
+        const svg = exporter.toSVG(geometry);
         setSvg(svg);
     }, [result]);
 
@@ -94,15 +96,17 @@ export default function Home() {
         <div className={styles.Container}>
             <div className={styles.Header}>
                 <button onClick={async () => run()}>run</button>
-                {Object.entries(primitives).map(([name, primitive]) => (
-                    <button
-                        key={name}
-                        title={primitive.description}
-                        onClick={handleAddNode(name)}
-                    >
-                        {primitive.label || primitive.name}
-                    </button>
-                ))}
+                {Object.entries({ ...primitives, ...Shapes }).map(
+                    ([name, primitive]) => (
+                        <button
+                            key={name}
+                            title={primitive.description}
+                            onClick={handleAddNode(name)}
+                        >
+                            {primitive.label || primitive.name}
+                        </button>
+                    )
+                )}
             </div>
             <div className={styles.Panes}>
                 <div className={styles.FlowVis}>

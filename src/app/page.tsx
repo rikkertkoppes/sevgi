@@ -1,95 +1,115 @@
-import Image from "next/image";
+"use client";
+import {
+    applyNodeAdd,
+    Engine,
+    Flow,
+    GraphedFunction,
+    primitives,
+    useFunction,
+} from "@rkmodules/rules";
 import styles from "./page.module.css";
+import React from "react";
+
+// import "@rkmodules/rules/index.css";
+import "@xyflow/react/dist/style.css";
+import { point } from "@/functions/Point";
+import { edge } from "@/functions/Edge";
+import { exporter } from "makerjs";
+
+const engine = new Engine({
+    point,
+    edge,
+});
+
+const testFunction: GraphedFunction = {
+    name: "test",
+    body: {
+        myVal: {
+            name: "value",
+            params: {
+                type: "string",
+                value: "woo",
+            },
+        },
+        myLog: {
+            name: "log",
+            inputs: {
+                data: "<myVal.value>",
+            },
+        },
+        p1: {
+            name: "point",
+            inputs: {
+                x: 0,
+                y: 0,
+            },
+        },
+        p2: {
+            name: "point",
+            inputs: {
+                x: 100,
+                y: 100,
+            },
+        },
+        myEdge: {
+            name: "edge",
+            inputs: {
+                a: "<p1.p>",
+                b: "<p2.p>",
+            },
+        },
+    },
+    outputs: {
+        data: "<myLog.data>",
+        geometry: ["<p1.p>", "<p2.p>", "<myEdge.e>"],
+    },
+};
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [fn, setFn] = React.useState(testFunction);
+    const { run, result } = useFunction(engine, fn, true);
+    const [svg, setSvg] = React.useState("");
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    const handleAddNode =
+        (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+            setFn(applyNodeAdd(fn, name));
+        };
+
+    // run on every change (not always required, hence not in useFunction)
+    React.useEffect(() => {
+        run({});
+    }, [fn, run]);
+
+    React.useEffect(() => {
+        const svg = exporter.toSVG(result?.geometry?.[0] || []);
+        setSvg(svg);
+    }, [result]);
+
+    return (
+        <div className={styles.Container}>
+            <div className={styles.Header}>
+                home
+                <button onClick={async () => run()}>run</button>
+                {Object.entries(primitives).map(([name, primitive]) => (
+                    <button
+                        key={name}
+                        title={primitive.description}
+                        onClick={handleAddNode(name)}
+                    >
+                        {primitive.label || primitive.name}
+                    </button>
+                ))}
+                <pre>{JSON.stringify(result)}</pre>
+            </div>
+            <div className={styles.Panes}>
+                <div className={styles.FlowVis}>
+                    <Flow function={fn} engine={engine} onChange={setFn} />
+                </div>
+                <div
+                    className={styles.Canvas}
+                    dangerouslySetInnerHTML={{ __html: svg }}
+                ></div>
+            </div>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }

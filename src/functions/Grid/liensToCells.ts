@@ -63,7 +63,6 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
 
     // --- 2) Build half-edges & adjacency lists ---
     const H: HalfEdge[] = [];
-    const outgoing: Vid[][] = []; // temporary holder of half-edge ids per vertex
     const outgoingHE: number[][] = []; // per vertex list of half-edge ids
 
     for (let vid = 0; vid < vertices.length; vid++) {
@@ -169,14 +168,17 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
     for (const f of faces) {
         if (f.area <= EPS_AREA) continue; // drop outer face or degenerate loops
 
-        // Build the list of boundary lines for this face using the original lines
+        // Build the list of boundary lines for this face using the directed lines
         // We keep them in traversal order (optional; you can sort/normalize if desired).
         const modelLines: paths.Line[] = f.hedges.map((hid) => {
-            const li = H[hid].lineIndex;
-            return undirectedLines[li].src;
+            const origin = vertices[H[hid].tail];
+            const end = vertices[H[hid].head];
+            return new paths.Line(origin, end);
         });
 
-        cells.push({ paths: modelLines });
+        cells.push({
+            paths: Object.fromEntries(modelLines.map((l, i) => [`e${i}`, l])),
+        });
     }
 
     return cells;

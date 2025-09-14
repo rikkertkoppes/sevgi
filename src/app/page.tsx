@@ -16,6 +16,7 @@ import "@rkmodules/rules/index.css";
 import Shapes from "@/functions/Shapes";
 import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
+import { ScrollCanvas } from "@/components/ScrollCanvas";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 
 const engine = new Engine({
@@ -132,10 +133,11 @@ export default function Home() {
                 <div className={styles.FlowVis}>
                     <Flow function={fn} engine={engine} onChange={setFn} />
                 </div>
-                <div
-                    className={styles.Canvas}
-                    dangerouslySetInnerHTML={{ __html: svg }}
-                ></div>
+                <div className={styles.Canvas}>
+                    <ScrollCanvas className={styles.Scroll}>
+                        <div dangerouslySetInnerHTML={{ __html: svg }} />
+                    </ScrollCanvas>
+                </div>
             </div>
         </div>
     );

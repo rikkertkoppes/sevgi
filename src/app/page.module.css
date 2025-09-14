@@ -21,10 +21,18 @@
 }
 
 .FlowVis {
-  flex: 1;
+  flex: 2;
 }
 
 .Canvas {
   flex: 1;
   background-color: white;
+}
+
+.Scroll {
+  height: 100%;
+}
+
+.Scroll svg {
+  overflow: visible;
 }

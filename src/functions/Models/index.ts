@@ -7,12 +7,14 @@ import { mChains } from "./MChains";
 import { mPoints } from "./MPoints";
 import { outline } from "./Outline";
 import { mPaths } from "./MPaths";
+import { center } from "./Center";
 
 const primitives: Record<string, PrimitiveFunction> = {
     polygon,
     model,
     move,
     scale,
+    center,
     outline,
     mPoints,
     mChains,

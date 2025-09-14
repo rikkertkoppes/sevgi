@@ -1,5 +1,5 @@
-import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-import { model, measure } from "makerjs";
+import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import { model } from "makerjs";
 
 export const scale: PrimitiveFunction = {
     name: "scale",
@@ -7,9 +7,13 @@ export const scale: PrimitiveFunction = {
     description: "Scale a model",
     inputs: {
         m: "Model",
-        s: {
+        scale: {
             type: "number",
             default: 0.5,
+        },
+        center: {
+            type: "Point",
+            default: [0, 0],
         },
     },
     outputs: {
@@ -17,18 +21,12 @@ export const scale: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            m: binaryOnTree(
-                inputs.m,
-                inputs.s,
-                (m, s) => {
-                    // TODO: add center input and scale arount that point
-                    // also add center node
+            m: nAryOnTree(
+                [inputs.m, inputs.scale, inputs.center || broadCast([[0, 0]])],
+                ([m, s, c]) => {
                     m = model.clone(m);
-                    const exts = measure.modelExtents(m);
-                    model.center(m);
-                    model.originate(m);
+                    model.originate(m, c);
                     model.scale(m, s);
-                    model.move(m, exts.center);
                     return m;
                 },
                 true

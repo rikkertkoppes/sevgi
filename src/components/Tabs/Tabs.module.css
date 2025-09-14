@@ -1,0 +1,32 @@
+.Tabs {
+    display: flex;
+    padding-left: 4px;
+    background-color: var(--tab-background);
+    position: relative;
+}
+.Tabs::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--tab-line);
+    z-index: 0;
+}
+.Tabs li {
+    border: 1px solid transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-color: var(--tab-line);
+    padding: 4px 16px;
+    list-style: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.Tabs li.active {
+    background-color: var(--tab-panel);
+    border: 1px solid var(--tab-line);
+    border-bottom-color: transparent;
+}

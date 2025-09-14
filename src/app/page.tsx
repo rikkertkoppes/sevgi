@@ -14,10 +14,12 @@ import React from "react";
 import "@rkmodules/rules/index.css";
 
 import Shapes from "@/functions/Shapes";
-import { exporter } from "makerjs";
+import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 
 const engine = new Engine({
     ...Shapes,
+    ...Models,
+    ...Grid,
 });
 
 const testFunction: GraphedFunction = {
@@ -67,9 +69,21 @@ const testFunction: GraphedFunction = {
     },
     outputs: {
         data: "<myLog.data>",
-        geometry: ["<p1.p>", "<p2.p>", "<myEdge.l>", "<myCircle.c>"],
-    },
-};
+function NodeButtons({ nodes, handleAddNode }) {
+    return (
+        <div className={styles.Header}>
+            {Object.entries(nodes).map(([name, primitive]) => (
+                <button
+                    key={name}
+                    title={primitive.description}
+                    onClick={handleAddNode(name)}
+                >
+                    {primitive.label || primitive.name}
+                </button>
+            ))}
+        </div>
+    );
+}
 
 export default function Home() {
     const [fn, setFn] = React.useState(testFunction);
@@ -94,20 +108,24 @@ export default function Home() {
 
     return (
         <div className={styles.Container}>
-            <div className={styles.Header}>
-                <button onClick={async () => run()}>run</button>
-                {Object.entries({ ...primitives, ...Shapes }).map(
-                    ([name, primitive]) => (
-                        <button
-                            key={name}
-                            title={primitive.description}
-                            onClick={handleAddNode(name)}
-                        >
-                            {primitive.label || primitive.name}
-                        </button>
-                    )
-                )}
-            </div>
+            <Tabs>
+                <TabHeaders />
+                <Tab header="Tree">
+                    <NodeButtons
+                        nodes={primitives}
+                        handleAddNode={handleAddNode}
+                    />
+                </Tab>
+                <Tab header="Shapes">
+                    <NodeButtons nodes={Shapes} handleAddNode={handleAddNode} />
+                </Tab>
+                <Tab header="Model">
+                    <NodeButtons nodes={Models} handleAddNode={handleAddNode} />
+                </Tab>
+                <Tab header="Grid">
+                    <NodeButtons nodes={Grid} handleAddNode={handleAddNode} />
+                </Tab>
+            </Tabs>
             <div className={styles.Panes}>
                 <div className={styles.FlowVis}>
                     <Flow function={fn} engine={engine} onChange={setFn} />

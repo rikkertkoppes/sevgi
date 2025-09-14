@@ -1,14 +1,19 @@
 "use client";
+import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import classNames from "classnames";
 import {
     Engine,
     Flow,
     GraphedFunction,
     PrimitiveFunction,
     primitives,
+    useDraggableNode,
     useFunction,
+    useUpdatePositions,
 } from "@rkmodules/rules";
 import styles from "./page.module.css";
-import React from "react";
 
 import "@rkmodules/rules/index.css";
 
@@ -37,6 +42,20 @@ const testFunction: GraphedFunction = {
     },
 };
 
+interface DraggableButtonProps {
+    name: string;
+    fn: PrimitiveFunction;
+    onClick?: (e: React.MouseEvent) => void;
+}
+function DraggableButton({ name, fn, onClick }: DraggableButtonProps) {
+    const ref = useDraggableNode(name, fn);
+    return (
+        <button ref={ref as any} title={fn.description} onClick={onClick}>
+            {fn.label || fn.name}
+        </button>
+    );
+}
+
 interface NodeButtonsProps {
     nodes: Record<string, PrimitiveFunction>;
     handleAddNode: (name: string) => void;
@@ -45,13 +64,12 @@ function NodeButtons({ nodes, handleAddNode }: NodeButtonsProps) {
     return (
         <div className={styles.Header}>
             {Object.entries(nodes).map(([name, primitive]) => (
-                <button
+                <DraggableButton
                     key={name}
-                    title={primitive.description}
+                    name={name}
+                    fn={primitive}
                     onClick={() => handleAddNode(name)}
-                >
-                    {primitive.label || primitive.name}
-                </button>
+                />
             ))}
         </div>
     );
@@ -60,9 +78,22 @@ function NodeButtons({ nodes, handleAddNode }: NodeButtonsProps) {
 export default function Home() {
     const [fn, setFn] = React.useState(testFunction);
     const { run, result } = useFunction(engine, fn, true);
+    const [placing, setPlacing] = React.useState<string | null>(null);
+    const updatePositions = useUpdatePositions(fn);
 
     const handleAddNode = (name: string) => {
-        setFn(engine.applyNodeAdd(fn, name));
+        setPlacing(name);
+    };
+
+    const handlePlace = (e: React.MouseEvent, pos) => {
+        if (placing) {
+            setFn(
+                engine.applyNodeAdd(fn, placing, (fn, id) => {
+                    updatePositions(id, pos);
+                    setPlacing(null);
+                })
+            );
+        }
     };
 
     // run on every change (not always required, hence not in useFunction)
@@ -71,31 +102,51 @@ export default function Home() {
     }, [fn, run]);
 
     return (
-        <div className={styles.Container}>
-            <Tabs>
-                <TabHeaders />
-                <Tab header="Tree">
-                    <NodeButtons
-                        nodes={primitives}
-                        handleAddNode={handleAddNode}
-                    />
-                </Tab>
-                <Tab header="Shapes">
-                    <NodeButtons nodes={Shapes} handleAddNode={handleAddNode} />
-                </Tab>
-                <Tab header="Model">
-                    <NodeButtons nodes={Models} handleAddNode={handleAddNode} />
-                </Tab>
-                <Tab header="Grid">
-                    <NodeButtons nodes={Grid} handleAddNode={handleAddNode} />
-                </Tab>
-            </Tabs>
-            <div className={styles.Panes}>
-                <div className={styles.FlowVis}>
-                    <Flow function={fn} engine={engine} onChange={setFn} />
+        <DndProvider backend={HTML5Backend}>
+            <div
+                className={classNames(styles.Container, {
+                    [styles.placing]: !!placing,
+                })}
+            >
+                <Tabs>
+                    <TabHeaders />
+                    <Tab header="Tree">
+                        <NodeButtons
+                            nodes={primitives}
+                            handleAddNode={handleAddNode}
+                        />
+                    </Tab>
+                    <Tab header="Shapes">
+                        <NodeButtons
+                            nodes={Shapes}
+                            handleAddNode={handleAddNode}
+                        />
+                    </Tab>
+                    <Tab header="Model">
+                        <NodeButtons
+                            nodes={Models}
+                            handleAddNode={handleAddNode}
+                        />
+                    </Tab>
+                    <Tab header="Grid">
+                        <NodeButtons
+                            nodes={Grid}
+                            handleAddNode={handleAddNode}
+                        />
+                    </Tab>
+                </Tabs>
+                <div className={styles.Panes}>
+                    <div className={styles.FlowVis}>
+                        <Flow
+                            function={fn}
+                            engine={engine}
+                            onChange={setFn}
+                            onClick={handlePlace}
+                        />
+                    </div>
+                    <Canvas model={result?.model} />
                 </div>
-                <Canvas model={result?.model} />
             </div>
-        </div>
+        </DndProvider>
     );
 }

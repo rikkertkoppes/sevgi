@@ -9,10 +9,12 @@
         "lint": "eslint"
     },
     "dependencies": {
-        "@rkmodules/rules": "^0.0.16",
+        "@rkmodules/rules": "^0.0.22",
         "makerjs": "^0.18.1",
         "next": "15.5.2",
         "react": "^19.1.1",
+        "react-dnd": "^16.0.1",
+        "react-dnd-html5-backend": "^16.0.1",
         "react-dom": "^19.1.1",
         "react-infinite-viewer": "^0.28.1"
     },

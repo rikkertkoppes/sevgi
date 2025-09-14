@@ -22,6 +22,10 @@
   --color-any: silver;
 }
 
+.Container.placing :global(.react-flow__pane.draggable) {
+  cursor: crosshair;
+}
+
 .Header {
   gap: 4px;
   display: flex;

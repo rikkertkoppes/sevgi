@@ -7,8 +7,8 @@ export const circle: PrimitiveFunction = {
     label: "Circle",
     description: "Creates a circle",
     inputs: {
-        o: "Point",
-        r: "number",
+        o: { type: "Point", default: [0, 0] },
+        r: { type: "number", default: 10 },
     },
     outputs: {
         c: "Circle",

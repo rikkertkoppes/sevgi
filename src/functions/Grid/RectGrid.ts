@@ -14,9 +14,9 @@ export const rectGrid: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        p: "Point",
-        l: "Line",
-        m: "Model",
+        points: "Point",
+        lines: "Line",
+        cells: "Model",
     },
     impl: async (inputs, params) => {
         const points: IPoint[] = [];
@@ -51,9 +51,9 @@ export const rectGrid: PrimitiveFunction = {
         const models = linesToCells(lines);
 
         return {
-            p: broadCast(points),
-            l: broadCast(lines),
-            m: broadCast(models),
+            points: broadCast(points),
+            lines: broadCast(lines),
+            cells: broadCast(models),
         };
     },
 };

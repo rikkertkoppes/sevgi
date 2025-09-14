@@ -5,8 +5,8 @@ export const point: PrimitiveFunction = {
     label: "Point",
     description: "Create a point",
     inputs: {
-        x: "number",
-        y: "number",
+        x: { type: "number", default: 0 },
+        y: { type: "number", default: 0 },
     },
     outputs: {
         p: "Point",

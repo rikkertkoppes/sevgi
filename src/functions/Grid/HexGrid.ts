@@ -14,9 +14,9 @@ export const hexGrid: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        p: "Point",
-        l: "Line",
-        m: "Model",
+        points: "Point",
+        lines: "Line",
+        cells: "Model",
     },
     impl: async (inputs, params) => {
         const points: IPoint[] = [];
@@ -34,7 +34,9 @@ export const hexGrid: PrimitiveFunction = {
             for (let i = 0; i < pointsInRow; i++) {
                 const x = i * hSpace + dx;
                 const y = j * vSpace;
-                points.push([x, y]);
+                if ((isMid && i % 3 !== 1) || (isLower && i % 3 !== 2)) {
+                    points.push([x, y]);
+                }
                 if (
                     i < pointsInRow - 1 &&
                     ((isLower && i % 3 === 0) || (isMid && i % 3 === 2))
@@ -69,12 +71,12 @@ export const hexGrid: PrimitiveFunction = {
             }
         }
 
-        const modlels = linesToCells(lines);
+        const models = linesToCells(lines);
 
         return {
-            p: broadCast(points),
-            l: broadCast(lines),
-            m: broadCast(modlels),
+            points: broadCast(points),
+            lines: broadCast(lines),
+            cells: broadCast(models),
         };
     },
 };

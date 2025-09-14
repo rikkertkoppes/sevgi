@@ -8,10 +8,10 @@ export const polygon: PrimitiveFunction = {
     description: "Creates a polygon",
     inputs: {
         o: "Point",
-        n: "number",
-        r: "number",
-        a: "number",
-        or: "boolean",
+        n: { type: "number", default: 6 },
+        r: { type: "number", default: 10 },
+        a: { type: "number", default: 0 },
+        or: { type: "boolean", default: false },
     },
     outputs: {
         m: "Model",

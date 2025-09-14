@@ -7,8 +7,8 @@ export const line: PrimitiveFunction = {
     label: "Line",
     description: "Creates a line",
     inputs: {
-        o: "Point",
-        e: "Point",
+        o: { type: "Point", default: [0, 0] },
+        e: { type: "Point", default: [10, 10] },
     },
     outputs: {
         l: "Line",

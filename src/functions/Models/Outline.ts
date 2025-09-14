@@ -8,11 +8,11 @@ export const outline: PrimitiveFunction = {
         "Outline a model by a specified distance. Useful for accommodating for kerf",
     inputs: {
         m: "Model",
-        d: "number",
+        d: { type: "number", default: 1 },
     },
     params: {
-        joints: "number",
-        inside: "boolean",
+        joints: { type: "number", default: 0 },
+        inside: { type: "boolean", default: false },
     },
     outputs: {
         m: "Model",

@@ -16,6 +16,7 @@ import "@rkmodules/rules/index.css";
 import Shapes from "@/functions/Shapes";
 import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
+import { exporter, IModel } from "makerjs";
 import { ScrollCanvas } from "@/components/ScrollCanvas";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 
@@ -28,50 +29,16 @@ const engine = new Engine({
 const testFunction: GraphedFunction = {
     name: "test",
     body: {
-        myVal: {
-            name: "value",
-            params: {
-                type: "string",
-                value: "woo",
-            },
-        },
-        myLog: {
-            name: "log",
-            inputs: {
-                data: "<myVal.value>",
-            },
-        },
-        p1: {
-            name: "point",
-            inputs: {
-                x: 0,
-                y: 0,
-            },
-        },
-        p2: {
-            name: "point",
-            inputs: {
-                x: 100,
-                y: 100,
-            },
-        },
-        myEdge: {
-            name: "line",
-            inputs: {
-                o: "<p1.p>",
-                e: "<p2.p>",
-            },
-        },
-        myCircle: {
-            name: "circle",
-            inputs: {
-                o: "<p1.p>",
-                r: 50,
-            },
+        mainModel: {
+            name: "model",
+            inputs: {},
         },
     },
     outputs: {
-        data: "<myLog.data>",
+        model: "<mainModel.m>",
+    },
+};
+
 function NodeButtons({ nodes, handleAddNode }) {
     return (
         <div className={styles.Header}>
@@ -103,10 +70,31 @@ export default function Home() {
     }, [fn, run]);
 
     React.useEffect(() => {
-        const geometry = toArray(result?.geometry || []);
-        console.log("result geometry", result, geometry);
-        const svg = exporter.toSVG(geometry);
-        setSvg(svg);
+        const models = toArray(result?.model || []) as IModel[];
+        console.log("result geometry", result, models);
+
+        // TODO: use model walker to iterate paths
+        // then use pathToSVGPathData to create svg paths
+        // use own style annotations in the paths to add style
+        // output react elements
+        // can use memoization to only redraw when needed
+
+        const finalModel: IModel = {
+            models: Object.fromEntries(
+                models.map((m: any, i: number) => [`m${i}`, m])
+            ),
+        };
+
+        setSvg(
+            exporter.toSVG(finalModel, {
+                useSvgPathOnly: false,
+                // fill: "red",
+                flow: {
+                    size: 1,
+                },
+                strokeWidth: 0.1,
+            })
+        );
     }, [result]);
 
     return (

@@ -7,7 +7,10 @@ export const scale: PrimitiveFunction = {
     description: "Scale a model",
     inputs: {
         m: "Model",
-        s: "number",
+        s: {
+            type: "number",
+            default: 0.5,
+        },
     },
     outputs: {
         m: "Model",

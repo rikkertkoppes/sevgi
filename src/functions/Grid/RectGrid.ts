@@ -8,10 +8,10 @@ export const rectGrid: PrimitiveFunction = {
     description: "Creates a rectangular grid",
     inputs: {},
     params: {
-        width: "number",
-        height: "number",
-        nx: "number",
-        ny: "number",
+        width: { type: "number", default: 100 },
+        height: { type: "number", default: 100 },
+        nx: { type: "number", default: 5 },
+        ny: { type: "number", default: 5 },
     },
     outputs: {
         p: "Point",

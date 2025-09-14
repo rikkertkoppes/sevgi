@@ -14,6 +14,8 @@ import React from "react";
 import "@rkmodules/rules/index.css";
 
 import Shapes from "@/functions/Shapes";
+import Models from "@/functions/Models";
+import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 
 const engine = new Engine({

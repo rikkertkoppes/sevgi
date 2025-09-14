@@ -48,6 +48,7 @@
 
 .Scroll {
   height: 100%;
+  cursor: grab;
 }
 
 .Scroll svg {

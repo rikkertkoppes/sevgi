@@ -60,7 +60,7 @@ export function ScrollCanvas({
                 // }}
                 onDragStart={(e) => {
                     // only  allow wheel
-                    if (e.inputEvent.button !== 1) {
+                    if (e.inputEvent.button > 1) {
                         e.stop();
                         return;
                     }

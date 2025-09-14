@@ -7,6 +7,19 @@
   --tab-background: #333;
   --node-line: #888;
   --node-background: #222;
+  --node-select-line: #0af;
+  --node-active-line: #0af;
+
+  --color-number: #aaf;
+  --color-string: #faa;
+  --color-boolean: #afa;
+  --color-Point: orange;
+  --color-Line: #00c59e;
+  --color-Circle: #00c59e;
+  --color-Arc: #00c59e;
+  --color-Path: #00c59e;
+  --color-Model: #f0c;
+  --color-any: silver;
 }
 
 .Header {

@@ -7,7 +7,7 @@ export const polygon: PrimitiveFunction = {
     label: "Polygon",
     description: "Creates a polygon",
     inputs: {
-        o: "Point",
+        o: { type: "Point", default: [0, 0] },
         n: { type: "number", default: 6 },
         r: { type: "number", default: 10 },
         a: { type: "number", default: 0 },

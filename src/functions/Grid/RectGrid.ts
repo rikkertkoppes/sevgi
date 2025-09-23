@@ -8,8 +8,7 @@ export const rectGrid: PrimitiveFunction = {
     description: "Creates a rectangular grid",
     inputs: {},
     params: {
-        width: { type: "number", default: 100 },
-        height: { type: "number", default: 100 },
+        size: { type: "number", default: 10 },
         nx: { type: "number", default: 5 },
         ny: { type: "number", default: 5 },
     },
@@ -24,8 +23,8 @@ export const rectGrid: PrimitiveFunction = {
 
         const nx = params.nx + 1;
         const ny = params.ny + 1;
-        const hSpace = params.width / (nx - 1);
-        const vSpace = params.height / (ny - 1);
+        const hSpace = params.size;
+        const vSpace = params.size;
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
                 points.push([i * hSpace, j * vSpace]);

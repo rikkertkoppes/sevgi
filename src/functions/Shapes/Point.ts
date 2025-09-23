@@ -9,11 +9,11 @@ export const point: PrimitiveFunction = {
         y: { type: "number", default: 0 },
     },
     outputs: {
-        p: "Point",
+        point: "Point",
     },
     impl: async (inputs) => {
         return {
-            p: binaryOnTree(
+            point: binaryOnTree(
                 inputs.x,
                 inputs.y,
                 (x: number, y: number) => {

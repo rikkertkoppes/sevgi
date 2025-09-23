@@ -7,7 +7,7 @@ export const outline: PrimitiveFunction = {
     description:
         "Outline a model by a specified distance. Useful for accommodating for kerf",
     inputs: {
-        m: "Model",
+        shape: "Model",
         d: { type: "number", default: 1 },
     },
     params: {
@@ -15,12 +15,12 @@ export const outline: PrimitiveFunction = {
         inside: { type: "boolean", default: false },
     },
     outputs: {
-        m: "Model",
+        shape: "Model",
     },
     impl: async (inputs, params) => {
         return {
-            m: binaryOnTree(
-                inputs.m,
+            shape: binaryOnTree(
+                inputs.shape,
                 inputs.d,
 
                 (m, d) => {

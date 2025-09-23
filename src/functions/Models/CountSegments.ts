@@ -6,14 +6,14 @@ export const countSegments: PrimitiveFunction = {
     label: "Count Segments",
     description: "Count the number of segments in a model",
     inputs: {
-        m: "Model",
+        shape: "Model",
     },
     outputs: {
         count: "number",
     },
     impl: async (inputs) => {
         return {
-            count: mapTree(inputs.m, (m) => {
+            count: mapTree(inputs.shape, (m) => {
                 let count = 0;
                 model.walk(m, {
                     onPath: () => {

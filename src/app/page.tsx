@@ -39,7 +39,7 @@ const testFunction: GraphedFunction = {
         },
     },
     outputs: {
-        model: "<mainModel.m>",
+        model: "<mainModel.shapes>",
     },
 };
 

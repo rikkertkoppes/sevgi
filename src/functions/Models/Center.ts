@@ -6,14 +6,14 @@ export const center: PrimitiveFunction = {
     label: "Center",
     description: "Center of a model",
     inputs: {
-        m: "Model",
+        shape: "Model",
     },
     outputs: {
-        p: "Point",
+        point: "Point",
     },
     impl: async (inputs) => {
         return {
-            p: mapTree(inputs.m, (m) => {
+            point: mapTree(inputs.shape, (m) => {
                 const chains = model.findChains(m) as MakerJs.IChain[];
                 const points = chains.flatMap((c) => chain.toKeyPoints(c));
                 const center = points.reduce(

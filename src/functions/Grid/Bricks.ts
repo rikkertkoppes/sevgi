@@ -16,7 +16,7 @@ export const bricks: PrimitiveFunction = {
     outputs: {
         points: "Point",
         lines: "Line",
-        cells: "Model",
+        shapes: "Model",
     },
     impl: async (inputs, params) => {
         const points: IPoint[] = [];
@@ -56,7 +56,7 @@ export const bricks: PrimitiveFunction = {
         return {
             points: broadCast(points),
             lines: broadCast(lines),
-            cells: broadCast(models),
+            shapes: broadCast(models),
         };
     },
 };

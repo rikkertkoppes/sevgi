@@ -7,19 +7,25 @@ export const polygon: PrimitiveFunction = {
     label: "Polygon",
     description: "Creates a polygon",
     inputs: {
-        o: { type: "Point", default: [[0, 0]] },
-        n: { type: "number", default: 6 },
-        r: { type: "number", default: 10 },
-        a: { type: "number", default: 0 },
-        or: { type: "boolean", default: false },
+        center: { type: "Point", default: [[0, 0]] },
+        sides: { type: "number", default: 6 },
+        radius: { type: "number", default: 10 },
+        angle: { type: "number", default: 0 },
+        useOuter: { type: "boolean", default: false },
     },
     outputs: {
-        m: "Model",
+        shape: "Model",
     },
     impl: async (inputs) => {
         return {
-            m: nAryOnTree(
-                [inputs.o, inputs.n, inputs.r, inputs.a, inputs.or],
+            shape: nAryOnTree(
+                [
+                    inputs.center,
+                    inputs.sides,
+                    inputs.radius,
+                    inputs.angle,
+                    inputs.useOuter,
+                ],
                 ([o, n, r, a, or]) => {
                     const m: IModel = new models.Polygon(n, r, a, or);
                     if (o) {

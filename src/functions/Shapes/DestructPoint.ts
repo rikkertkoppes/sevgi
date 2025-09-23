@@ -5,7 +5,7 @@ export const destructPoint: PrimitiveFunction = {
     label: "Destruct Point",
     description: "Destruct a point into x and y components",
     inputs: {
-        p: "Point",
+        point: "Point",
     },
     outputs: {
         x: "number",
@@ -13,8 +13,8 @@ export const destructPoint: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            x: mapTree(inputs.p, (p) => p[0]),
-            y: mapTree(inputs.p, (p) => p[1]),
+            x: mapTree(inputs.point, (p) => p[0]),
+            y: mapTree(inputs.point, (p) => p[1]),
         };
     },
 };

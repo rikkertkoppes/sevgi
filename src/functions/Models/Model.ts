@@ -5,16 +5,16 @@ export const model: PrimitiveFunction = {
     label: "Model",
     description: "Creates a model",
     inputs: {
-        p: "Path",
-        m: "Model",
+        paths: "Path",
+        shapes: "Model",
     },
     outputs: {
-        m: "Model",
+        shapes: "Model",
     },
     impl: async (inputs) => {
         return {
-            m: nAryOnTreeBranch(
-                [inputs.p || {}, inputs.m || {}],
+            shapes: nAryOnTreeBranch(
+                [inputs.paths || {}, inputs.shapes || {}],
                 ([p = [], m = []]) => {
                     return [
                         {

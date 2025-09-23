@@ -6,17 +6,17 @@ export const move: PrimitiveFunction = {
     label: "Move",
     description: "Move a model to an absolute poinl",
     inputs: {
-        o: { type: "Point", default: [[0, 0]] },
-        m: "Model",
+        point: { type: "Point", default: [[0, 0]] },
+        shape: "Model",
     },
     outputs: {
-        m: "Model",
+        shape: "Model",
     },
     impl: async (inputs) => {
         return {
-            m: binaryOnTree(
-                inputs.o,
-                inputs.m,
+            shape: binaryOnTree(
+                inputs.point,
+                inputs.shape,
                 (o, m: IModel) => {
                     m = model.clone(m);
                     model.move(m, o);

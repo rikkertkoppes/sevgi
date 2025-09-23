@@ -7,18 +7,18 @@ export const arc: PrimitiveFunction = {
     label: "Arc",
     description: "Creates a arc",
     inputs: {
-        o: { type: "Point", default: [[0, 0]] },
-        r: { type: "number", default: 10 },
-        s: { type: "number", default: 0 },
-        e: { type: "number", default: 90 },
+        center: { type: "Point", default: [[0, 0]] },
+        radius: { type: "number", default: 10 },
+        start: { type: "number", default: 0 },
+        end: { type: "number", default: 90 },
     },
     outputs: {
-        a: "Arc",
+        path: "Arc",
     },
     impl: async (inputs) => {
         return {
-            a: nAryOnTree(
-                [inputs.o, inputs.r, inputs.s, inputs.e],
+            path: nAryOnTree(
+                [inputs.center, inputs.radius, inputs.start, inputs.end],
                 ([o, r, s, e]) => {
                     return new paths.Arc(o, r, s, e);
                 },

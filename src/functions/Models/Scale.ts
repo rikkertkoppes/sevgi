@@ -6,7 +6,7 @@ export const scale: PrimitiveFunction = {
     label: "Scale",
     description: "Scale a model",
     inputs: {
-        m: "Model",
+        shape: "Model",
         scale: {
             type: "number",
             default: 0.5,
@@ -17,12 +17,16 @@ export const scale: PrimitiveFunction = {
         },
     },
     outputs: {
-        m: "Model",
+        shape: "Model",
     },
     impl: async (inputs) => {
         return {
-            m: nAryOnTree(
-                [inputs.m, inputs.scale, inputs.center || broadCast([[0, 0]])],
+            shape: nAryOnTree(
+                [
+                    inputs.shape,
+                    inputs.scale,
+                    inputs.center || broadCast([[0, 0]]),
+                ],
                 ([m, s, c]) => {
                     m = model.clone(m);
                     model.originate(m, c);

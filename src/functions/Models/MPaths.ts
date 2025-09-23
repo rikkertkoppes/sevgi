@@ -5,14 +5,14 @@ export const mPaths: PrimitiveFunction = {
     label: "Model Paths",
     description: "Deconstructs a model to its paths",
     inputs: {
-        m: "Model",
+        shape: "Model",
     },
     outputs: {
-        p: "Path",
+        paths: "Path",
     },
     impl: async (inputs) => {
         return {
-            p: mapTree(inputs.m, (m) => {
+            paths: mapTree(inputs.shape, (m) => {
                 return Object.values(m.paths);
             }),
         };

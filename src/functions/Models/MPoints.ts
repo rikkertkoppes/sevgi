@@ -6,18 +6,18 @@ export const mPoints: PrimitiveFunction = {
     label: "Model Points",
     description: "Find points in a model",
     inputs: {
-        m: "Model",
+        shape: "Model",
     },
     outputs: {
-        p: "Point",
+        points: "Point",
     },
     impl: async (inputs) => {
         const chains = mapTree(
-            inputs.m,
+            inputs.shape,
             (m) => model.findChains(m) as any
         ) as Tree<MakerJs.IChain>;
         return {
-            p: mapTree(chains, (c) => chain.toKeyPoints(c)),
+            points: mapTree(chains, (c) => chain.toKeyPoints(c)),
         };
     },
 };

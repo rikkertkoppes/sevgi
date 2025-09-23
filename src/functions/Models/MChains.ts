@@ -6,14 +6,14 @@ export const mChains: PrimitiveFunction = {
     label: "Model Chains",
     description: "Find chains in a model",
     inputs: {
-        m: "Model",
+        shape: "Model",
     },
     outputs: {
-        m: "Model",
+        shape: "Model",
     },
     impl: async (inputs) => {
         return {
-            m: mapTree(inputs.m, (m) => {
+            shape: mapTree(inputs.shape, (m) => {
                 return model.findChains(m);
             }),
         };

@@ -7,22 +7,23 @@ export const circle: PrimitiveFunction = {
     label: "Circle",
     description: "Creates a circle",
     inputs: {
-        o: { type: "Point", default: [[0, 0]] },
-        r: { type: "number", default: 10 },
+        center: { type: "Point", default: [[0, 0]] },
+        radius: { type: "number", default: 10 },
     },
     outputs: {
-        c: "Circle",
+        path: "Circle",
     },
     impl: async (inputs) => {
+        const circle = binaryOnTree(
+            inputs.center,
+            inputs.radius,
+            (o: IPoint, r: number) => {
+                return new paths.Circle(o, r);
+            },
+            true
+        );
         return {
-            c: binaryOnTree(
-                inputs.o,
-                inputs.r,
-                (o: IPoint, r: number) => {
-                    return new paths.Circle(o, r);
-                },
-                true
-            ),
+            path: circle,
         };
     },
 };

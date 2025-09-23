@@ -7,17 +7,17 @@ export const line: PrimitiveFunction = {
     label: "Line",
     description: "Creates a line",
     inputs: {
-        o: { type: "Point", default: [[0, 0]] },
-        e: { type: "Point", default: [[10, 10]] },
+        start: { type: "Point", default: [[0, 0]] },
+        end: { type: "Point", default: [[10, 10]] },
     },
     outputs: {
-        l: "Line",
+        path: "Line",
     },
     impl: async (inputs) => {
         return {
-            l: binaryOnTree(
-                inputs.o,
-                inputs.e,
+            path: binaryOnTree(
+                inputs.start,
+                inputs.end,
                 (o: IPoint, e: IPoint) => {
                     return new paths.Line(o, e);
                 },

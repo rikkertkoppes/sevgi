@@ -9,7 +9,7 @@ export const star: PrimitiveFunction = {
     label: "Star Pattern",
     description: "Creates star pattern in a cell",
     inputs: {
-        cell: { type: "Model" },
+        shape: { type: "Model" },
     },
     params: {
         angle: { type: "number", default: 40 },
@@ -17,10 +17,10 @@ export const star: PrimitiveFunction = {
     },
     outputs: {
         lines: "Line",
-        cells: "Model",
+        shapes: "Model",
     },
     impl: async (inputs, params) => {
-        const lines = mapTreeBranch(inputs.cell, (branch: IModel[]) => {
+        const lines = mapTreeBranch(inputs.shape, (branch: IModel[]) => {
             const trimmed: paths.Line[] = [];
             branch.forEach((c) => {
                 const lines: paths.Line[] = [];
@@ -107,13 +107,13 @@ export const star: PrimitiveFunction = {
             return trimmed;
         });
 
-        const cells = mapTreeBranch(lines, (lines: paths.Line[]) => {
+        const shapes = mapTreeBranch(lines, (lines: paths.Line[]) => {
             return linesToCells(lines);
         });
 
         return {
             lines,
-            cells,
+            shapes,
         };
     },
 };

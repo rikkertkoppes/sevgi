@@ -3,17 +3,18 @@ import InfiniteViewer from "react-infinite-viewer";
 
 // import styles from "./Consolidation.module.css";
 
-export function ScrollCanvas({
-    className,
-    children,
-}: React.PropsWithChildren<HTMLDivElement>) {
+interface ScrollCanvasProps {
+    className?: string;
+    children?: React.ReactNode;
+}
+export function ScrollCanvas({ className, children }: ScrollCanvasProps) {
     const viewer = React.useRef<any>(null);
 
-    const center = () => {
-        viewer.current?.infiniteViewer.scrollCenter({
-            duration: 300,
-        });
-    };
+    // const center = () => {
+    //     viewer.current?.infiniteViewer.scrollCenter({
+    //         duration: 300,
+    //     });
+    // };
     const zoomin = () => {
         if (viewer.current) {
             const iv = viewer.current.infiniteViewer;
@@ -38,6 +39,8 @@ export function ScrollCanvas({
         } else {
             zoomout();
         }
+        // e.preventDefault();
+        // e.stopPropagation();
     };
 
     return (

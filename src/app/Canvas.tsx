@@ -38,7 +38,7 @@ export function Canvas({ model }: CanvasProps) {
                 flow: {
                     size: 1,
                 },
-                strokeWidth: 0.1,
+                strokeWidth: "0.1px",
             })
         );
     }, [model]);

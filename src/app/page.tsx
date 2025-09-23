@@ -22,6 +22,7 @@ import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "./Canvas";
+import { Point } from "@/Core/Geometry/Vector";
 
 const engine = new Engine({
     ...Shapes,
@@ -85,7 +86,7 @@ export default function Home() {
         setPlacing(name);
     };
 
-    const handlePlace = (e: React.MouseEvent, pos) => {
+    const handlePlace = (e: React.MouseEvent, pos: Point) => {
         if (placing) {
             setFn(
                 engine.applyNodeAdd(fn, placing, (fn, id) => {

@@ -16,7 +16,7 @@ export const countSegments: PrimitiveFunction = {
             count: mapTree(inputs.m, (m) => {
                 let count = 0;
                 model.walk(m, {
-                    onPath: (p) => {
+                    onPath: () => {
                         count++;
                     },
                 });

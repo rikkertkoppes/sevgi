@@ -179,6 +179,7 @@ export class Arc {
     public offsetAt(t: number, d: number) {
         return sum(this.pointAt(t), mult(d, this.normalAt(t)));
     }
+    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public curvatureAt(t: number) {
         return 1 / this.c.r;
     }

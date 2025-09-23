@@ -6,7 +6,7 @@ interface VariableStore {
     getVar: (scope: string, name: string, persist: boolean) => any;
     setVar: (scope: string, name: string, value: any, persist: boolean) => void;
 }
-let variableStore = create<VariableStore>((set, get, api) =>
+const variableStore = create<VariableStore>((set, get, api) =>
     persist<VariableStore>(
         (pset, pget) => ({
             data: {},
@@ -24,10 +24,13 @@ let variableStore = create<VariableStore>((set, get, api) =>
                 persist: boolean
             ) => {
                 if (persist) {
-                    let data = { ...pget().data, [`${scope}|${name}`]: value };
+                    const data = {
+                        ...pget().data,
+                        [`${scope}|${name}`]: value,
+                    };
                     pset({ data });
                 } else {
-                    let data = { ...get().data, [`${scope}|${name}`]: value };
+                    const data = { ...get().data, [`${scope}|${name}`]: value };
                     set({ data });
                 }
             },
@@ -52,7 +55,7 @@ export const useVariable = <T = any>(
 ): [T, (t: T) => void] => {
     let value = variableStore(({ getVar }) => getVar(scope, name, persist));
     if (typeof value === "undefined") value = initial;
-    let setVar = variableStore(({ setVar }) => setVar);
-    let setValue = (value: any) => setVar(scope, name, value, persist);
+    const setVar = variableStore(({ setVar }) => setVar);
+    const setValue = (value: any) => setVar(scope, name, value, persist);
     return [value, setValue];
 };

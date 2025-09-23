@@ -70,15 +70,18 @@ export class LineSegment {
     public pointAt(t: number) {
         return sum(this.start, mult(t * this.length, this.direction()));
     }
+    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public tangentAt(t: number) {
         return this.direction();
     }
+    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public normalAt(t: number) {
         return this.normal();
     }
     public offsetAt(t: number, d: number) {
         return sum(this.pointAt(t), mult(d, this.normalAt(t)));
     }
+    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public curvatureAt(t: number) {
         return 0;
     }

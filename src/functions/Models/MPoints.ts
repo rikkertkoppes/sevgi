@@ -1,4 +1,4 @@
-import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
+import { mapTree, PrimitiveFunction, Tree } from "@rkmodules/rules";
 import { model, chain } from "makerjs";
 
 export const mPoints: PrimitiveFunction = {
@@ -12,11 +12,12 @@ export const mPoints: PrimitiveFunction = {
         p: "Point",
     },
     impl: async (inputs) => {
+        const chains = mapTree(
+            inputs.m,
+            (m) => model.findChains(m) as any
+        ) as Tree<MakerJs.IChain>;
         return {
-            p: mapTree(
-                mapTree(inputs.m, (m) => model.findChains(m)),
-                (c) => chain.toKeyPoints(c)
-            ),
+            p: mapTree(chains, (c) => chain.toKeyPoints(c)),
         };
     },
 };

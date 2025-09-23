@@ -75,8 +75,9 @@ export const Tab: React.FC<TabProps> = ({ header, children }) => {
     );
 
     React.useEffect(() => {
-        registerTab({ id: tabId.current, header, content: children });
-        return () => unregisterTab(tabId.current);
+        const currentTab = tabId.current;
+        registerTab({ id: currentTab, header, content: children });
+        return () => unregisterTab(currentTab);
     }, [header, children, registerTab, unregisterTab]);
 
     const tabIndex = tabs.findIndex((tab) => tab.id === tabId.current);

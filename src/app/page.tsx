@@ -109,35 +109,35 @@ export default function Home() {
                     [styles.placing]: !!placing,
                 })}
             >
-                <Tabs>
-                    <TabHeaders />
-                    <Tab header="Tree">
-                        <NodeButtons
-                            nodes={primitives}
-                            handleAddNode={handleAddNode}
-                        />
-                    </Tab>
-                    <Tab header="Shapes">
-                        <NodeButtons
-                            nodes={Shapes}
-                            handleAddNode={handleAddNode}
-                        />
-                    </Tab>
-                    <Tab header="Model">
-                        <NodeButtons
-                            nodes={Models}
-                            handleAddNode={handleAddNode}
-                        />
-                    </Tab>
-                    <Tab header="Grid">
-                        <NodeButtons
-                            nodes={Grid}
-                            handleAddNode={handleAddNode}
-                        />
-                    </Tab>
-                </Tabs>
                 <div className={styles.Panes}>
-                    <div className={styles.FlowVis}>
+                    <div className={styles.FlowPane}>
+                        <Tabs>
+                            <TabHeaders />
+                            <Tab header="Tree">
+                                <NodeButtons
+                                    nodes={primitives}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                            <Tab header="Shapes">
+                                <NodeButtons
+                                    nodes={Shapes}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                            <Tab header="Model">
+                                <NodeButtons
+                                    nodes={Models}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                            <Tab header="Grid">
+                                <NodeButtons
+                                    nodes={Grid}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                        </Tabs>
                         <Flow
                             function={fn}
                             engine={engine}
@@ -145,7 +145,14 @@ export default function Home() {
                             onClick={handlePlace}
                         />
                     </div>
-                    <Canvas model={result?.model} />
+                    <div className={styles.ResultPane}>
+                        <Tabs>
+                            <TabHeaders />
+                            <Tab header="Canvas">
+                                <Canvas model={result?.model} />
+                            </Tab>
+                        </Tabs>
+                    </div>
                 </div>
             </div>
         </DndProvider>

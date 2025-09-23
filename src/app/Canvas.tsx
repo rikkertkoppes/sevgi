@@ -34,11 +34,11 @@ export function Canvas({ model }: CanvasProps) {
         setSvg(
             exporter.toSVG(finalModel, {
                 useSvgPathOnly: false,
-                // fill: "red",
                 // flow: {
                 //     size: 1,
                 // },
-                strokeWidth: "0.1px",
+                strokeWidth: "0.2px",
+                origin: [0, 0],
             })
         );
     }, [model]);

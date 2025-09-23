@@ -35,15 +35,27 @@
 .Panes {
   flex: 1;
   display: flex;
+  overflow: hidden;
 }
 
-.FlowVis {
+.FlowPane {
   flex: 2;
+  display: flex;
+  flex-direction: column;
 }
+
+.ResultPane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 
 .Canvas {
   flex: 1;
   background-color: white;
+  color: black;
 }
 
 .Scroll {
@@ -53,4 +65,12 @@
 
 .Scroll svg {
   overflow: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Data {
+  overflow:auto;
+  flex:1;
 }

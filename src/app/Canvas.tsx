@@ -35,9 +35,9 @@ export function Canvas({ model }: CanvasProps) {
             exporter.toSVG(finalModel, {
                 useSvgPathOnly: false,
                 // fill: "red",
-                flow: {
-                    size: 1,
-                },
+                // flow: {
+                //     size: 1,
+                // },
                 strokeWidth: "0.1px",
             })
         );

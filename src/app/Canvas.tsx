@@ -1,12 +1,11 @@
 "use client";
-import { toArray, Tree } from "@rkmodules/rules";
-import styles from "./page.module.css";
 import React from "react";
-
-import "@rkmodules/rules/index.css";
-
+import { toArray, Tree } from "@rkmodules/rules";
 import { ScrollCanvas } from "@/components/ScrollCanvas";
 import { exporter, IModel } from "makerjs";
+
+import "@rkmodules/rules/index.css";
+import styles from "./page.module.css";
 
 interface CanvasProps {
     model: Tree<IModel>;
@@ -43,8 +42,21 @@ export function Canvas({ model }: CanvasProps) {
         );
     }, [model]);
 
+    const handleDownload = () => {
+        const element = document.createElement("a");
+        const file = new Blob([svg], { type: "image/svg+xml" });
+        element.href = URL.createObjectURL(file);
+        element.download = "model.svg";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+        document.body.removeChild(element); // Clean up
+    };
+
     return (
         <div className={styles.Canvas}>
+            <button className={styles.Download} onClick={handleDownload}>
+                Download SVG
+            </button>
             <ScrollCanvas className={styles.Scroll}>
                 <div dangerouslySetInnerHTML={{ __html: svg }} />
             </ScrollCanvas>

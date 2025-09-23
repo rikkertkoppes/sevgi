@@ -74,3 +74,9 @@
   overflow:auto;
   flex:1;
 }
+
+.Download {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}

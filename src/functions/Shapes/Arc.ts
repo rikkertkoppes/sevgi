@@ -7,7 +7,7 @@ export const arc: PrimitiveFunction = {
     label: "Arc",
     description: "Creates a arc",
     inputs: {
-        o: { type: "Point", default: [0, 0] },
+        o: { type: "Point", default: [[0, 0]] },
         r: { type: "number", default: 10 },
         s: { type: "number", default: 0 },
         e: { type: "number", default: 90 },

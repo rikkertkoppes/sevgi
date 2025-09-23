@@ -6,7 +6,7 @@ export const move: PrimitiveFunction = {
     label: "Move",
     description: "Move a model to an absolute poinl",
     inputs: {
-        o: { type: "Point", default: [0, 0] },
+        o: { type: "Point", default: [[0, 0]] },
         m: "Model",
     },
     outputs: {

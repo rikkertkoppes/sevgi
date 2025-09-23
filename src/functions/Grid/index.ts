@@ -5,6 +5,7 @@ import { hexGrid } from "./HexGrid";
 import { bricks } from "./Bricks";
 import { star } from "./Star";
 import { truncatedSquareGrid } from "./TruncatedSquareGrid";
+import { spiral } from "./Spiral";
 
 const primitives: Record<string, PrimitiveFunction> = {
     triGrid,
@@ -13,6 +14,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     truncatedSquareGrid,
     bricks,
     star,
+    spiral,
 };
 
 export default primitives;

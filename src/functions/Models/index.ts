@@ -8,6 +8,7 @@ import { mPoints } from "./MPoints";
 import { outline } from "./Outline";
 import { mPaths } from "./MPaths";
 import { center } from "./Center";
+import { countSegments } from "./CountSegments";
 
 const primitives: Record<string, PrimitiveFunction> = {
     polygon,
@@ -19,6 +20,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     mPoints,
     mChains,
     mPaths,
+    countSegments,
 };
 
 export default primitives;

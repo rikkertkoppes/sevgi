@@ -4,7 +4,7 @@ import { linesToCells } from "./liensToCells";
 
 export const triGrid: PrimitiveFunction = {
     name: "triGrid",
-    label: "TriGrid",
+    label: "Triangular Grid",
     description: "Creates a triangular grid",
     inputs: {},
     params: {

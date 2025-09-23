@@ -4,7 +4,7 @@ import { linesToCells } from "./liensToCells";
 
 export const hexGrid: PrimitiveFunction = {
     name: "hexGrid",
-    label: "HexGrid",
+    label: "Hexagonal Grid",
     description: "Creates a hexagonal grid",
     inputs: {},
     params: {

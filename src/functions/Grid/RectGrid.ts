@@ -4,8 +4,8 @@ import { linesToCells } from "./liensToCells";
 
 export const rectGrid: PrimitiveFunction = {
     name: "rectGrid",
-    label: "RectGrid",
-    description: "Creates a rectangular grid",
+    label: "Square Grid",
+    description: "Creates a square grid",
     inputs: {},
     params: {
         size: { type: "number", default: 10 },

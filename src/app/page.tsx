@@ -8,7 +8,7 @@ import {
     Flow,
     GraphedFunction,
     PrimitiveFunction,
-    primitives,
+    Lib,
     useDraggableNode,
     useFunction,
     useUpdatePositions,
@@ -113,9 +113,27 @@ export default function Home() {
                     <div className={styles.FlowPane}>
                         <Tabs>
                             <TabHeaders />
+                            <Tab header="List">
+                                <NodeButtons
+                                    nodes={{ ...Lib.List, ...Lib.Sequence }}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
                             <Tab header="Tree">
                                 <NodeButtons
-                                    nodes={primitives}
+                                    nodes={Lib.Tree}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                            <Tab header="Util">
+                                <NodeButtons
+                                    nodes={Lib.Util}
+                                    handleAddNode={handleAddNode}
+                                />
+                            </Tab>
+                            <Tab header="Math">
+                                <NodeButtons
+                                    nodes={{ ...Lib.Math, ...Lib.Logic }}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
@@ -131,7 +149,7 @@ export default function Home() {
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
-                            <Tab header="Grid">
+                            <Tab header="Patterns">
                                 <NodeButtons
                                     nodes={Grid}
                                     handleAddNode={handleAddNode}

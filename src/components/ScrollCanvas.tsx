@@ -10,11 +10,16 @@ interface ScrollCanvasProps {
 export function ScrollCanvas({ className, children }: ScrollCanvasProps) {
     const viewer = React.useRef<any>(null);
 
-    // const center = () => {
-    //     viewer.current?.infiniteViewer.scrollCenter({
-    //         duration: 300,
-    //     });
-    // };
+    const center = () => {
+        viewer.current?.infiniteViewer.scrollCenter({
+            duration: 300,
+        });
+    };
+
+    React.useEffect(() => {
+        center();
+    }, []);
+
     const zoomin = () => {
         if (viewer.current) {
             const iv = viewer.current.infiniteViewer;

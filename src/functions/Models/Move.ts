@@ -1,13 +1,13 @@
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-import { IModel, model } from "makerjs";
+import { IModel, IPoint, model } from "makerjs";
 
 export const move: PrimitiveFunction = {
     name: "move",
     label: "Move",
     description: "Move a model to an absolute poinl",
     inputs: {
-        point: { type: "Point", default: [[0, 0]] },
         shape: "Model",
+        point: { type: "Point", default: [[0, 0]] },
     },
     outputs: {
         shape: "Model",
@@ -15,9 +15,9 @@ export const move: PrimitiveFunction = {
     impl: async (inputs) => {
         return {
             shape: binaryOnTree(
-                inputs.point,
                 inputs.shape,
-                (o, m: IModel) => {
+                inputs.point,
+                (m: IModel, o: IPoint) => {
                     m = model.clone(m);
                     model.move(m, o);
                     return m;

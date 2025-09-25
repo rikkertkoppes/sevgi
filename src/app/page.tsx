@@ -35,6 +35,7 @@ const testFunction: GraphedFunction = {
     body: {
         mainModel: {
             name: "model",
+            label: "Output",
             inputs: {},
         },
     },

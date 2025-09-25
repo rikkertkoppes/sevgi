@@ -2,17 +2,36 @@
 import React from "react";
 import { toArray, Tree } from "@rkmodules/rules";
 import { ScrollCanvas } from "@/components/ScrollCanvas";
-import { exporter, IModel } from "makerjs";
+import { exporter, IModel, IPath, IPoint } from "makerjs";
+
+function isPoint(obj: any): obj is [number, number] {
+    return (
+        Array.isArray(obj) &&
+        obj.length === 2 &&
+        typeof obj[0] === "number" &&
+        typeof obj[1] === "number"
+    );
+}
+function isPath(obj: any): obj is IPath {
+    return ["line", "arc", "circle", "ellipse", "bezier"].includes(obj?.type);
+}
+
+function isModel(obj: any): obj is IModel {
+    return obj && (obj.paths || obj.models);
+}
 
 import "@rkmodules/rules/index.css";
 import styles from "./page.module.css";
 
 interface CanvasProps {
     model: Tree<IModel>;
+    selection: Record<string, any>;
 }
 
-export function Canvas({ model }: CanvasProps) {
+export function Canvas({ model, selection }: CanvasProps) {
     const [svg, setSvg] = React.useState("");
+    const [selSvg, setSelSvg] = React.useState("");
+    const [points, setPoints] = React.useState<IPoint[]>([]);
 
     React.useEffect(() => {
         const models = toArray(model || {}) as IModel[];
@@ -52,6 +71,34 @@ export function Canvas({ model }: CanvasProps) {
         document.body.removeChild(element); // Clean up
     };
 
+    React.useEffect(() => {
+        const mainSel = selection[Object.keys(selection)[0]];
+        const points: IPoint[] = [];
+        const selModel: IModel = { paths: {}, models: {} };
+        if (mainSel) {
+            const items = toArray(mainSel);
+            console.log("focus items", items);
+            items.forEach((item, index) => {
+                if (isPoint(item)) {
+                    points.push(item);
+                } else if (isPath(item)) {
+                    selModel.paths!["p" + index] = item;
+                } else if (isModel(item)) {
+                    selModel.models!["m" + index] = item;
+                }
+            });
+        }
+        setPoints(points);
+        setSelSvg(
+            exporter.toSVG(selModel, {
+                useSvgPathOnly: false,
+                strokeWidth: "0.1px",
+                stroke: "#0af",
+                origin: [0, 0],
+            })
+        );
+    }, [selection]);
+
     return (
         <div className={styles.Canvas}>
             <button className={styles.Download} onClick={handleDownload}>
@@ -59,6 +106,18 @@ export function Canvas({ model }: CanvasProps) {
             </button>
             <ScrollCanvas className={styles.Scroll}>
                 <div dangerouslySetInnerHTML={{ __html: svg }} />
+                <div dangerouslySetInnerHTML={{ __html: selSvg }} />
+                <svg>
+                    {points.map((p, i) => (
+                        <circle
+                            key={i}
+                            cx={p[0]}
+                            cy={-p[1]}
+                            r={1}
+                            fill="#0af"
+                        />
+                    ))}
+                </svg>
             </ScrollCanvas>
         </div>
     );

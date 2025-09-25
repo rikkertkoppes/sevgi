@@ -81,6 +81,8 @@ export default function Home() {
     const { run, result } = useFunction(engine, fn, true);
     const [placing, setPlacing] = React.useState<string | null>(null);
     const updatePositions = useUpdatePositions(fn);
+    const [data, setData] = React.useState<Record<string, any>>({});
+    const [selection, setSelection] = React.useState<string | null>(null);
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -96,6 +98,17 @@ export default function Home() {
             );
         }
     };
+
+    // keep the scope of every run
+    React.useEffect(() => {
+        return engine.subscribe("result", (event) => {
+            setData(event.context.scope);
+        });
+    }, []);
+
+    const handleSelect = React.useCallback((ids: string[]) => {
+        setSelection(ids[0] || null);
+    }, []);
 
     // run on every change (not always required, hence not in useFunction)
     React.useEffect(() => {
@@ -161,13 +174,19 @@ export default function Home() {
                             engine={engine}
                             onChange={setFn}
                             onClick={handlePlace}
+                            onSelect={handleSelect}
                         />
                     </div>
                     <div className={styles.ResultPane}>
                         <Tabs>
                             <TabHeaders />
                             <Tab header="Canvas">
-                                <Canvas model={result?.model} />
+                                <Canvas
+                                    model={result?.model}
+                                    selection={
+                                        selection ? data[selection] || {} : {}
+                                    }
+                                />
                             </Tab>
                         </Tabs>
                     </div>

@@ -3,6 +3,7 @@
   --foreground: #171717; */
   --background: #0a0a0a;
   --foreground: #ededed;
+  --connection-color: #007bff;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -9,11 +9,13 @@ import { outline } from "./Outline";
 import { mPaths } from "./MPaths";
 import { center } from "./Center";
 import { countSegments } from "./CountSegments";
+import { rotate } from "./Rotate";
 
 const primitives: Record<string, PrimitiveFunction> = {
     polygon,
     model,
     move,
+    rotate,
     scale,
     center,
     outline,

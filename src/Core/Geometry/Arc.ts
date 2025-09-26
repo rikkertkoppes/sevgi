@@ -1,4 +1,5 @@
 import { Circle } from "./Circle";
+import { Curve } from "./Curve";
 import { fixedNum, normalizeAngle } from "./Util";
 import { Point, v2 } from "./Vector";
 import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
@@ -6,7 +7,7 @@ import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
 const PI = Math.PI;
 const TWO_PI = 2 * PI;
 
-export class Arc {
+export class Arc extends Curve {
     private zero: boolean; //zero length arc
     private full: boolean; //full circle
     private s: Point;
@@ -28,6 +29,7 @@ export class Arc {
         private _start: number,
         private _end: number
     ) {
+        super();
         this.zero = Math.abs(_start - _end) < 1e-5;
         this.full = Math.abs(Math.abs(_start - _end) - TWO_PI) < 1e-5;
         const start = normalizeAngle(_start);
@@ -142,9 +144,9 @@ export class Arc {
         let t = this.positionOf(p);
         if (t < 0) t = 0;
         if (t > 1) t = 1;
-        const pt = this.pointAt(t);
-        const d = norm(diff(p, pt));
-        return { t, pt, d };
+        const point = this.pointAt(t);
+        const distance = norm(diff(p, point));
+        return { t, point, distance };
     }
 
     /** offsets the arc */
@@ -199,6 +201,10 @@ export class Arc {
             fixedNum`A ${r} ${r} 0 ${lf} ${sf} ${m.x} ${m.y} ` +
             fixedNum`A ${r} ${r} 0 ${lf} ${sf} ${e.x} ${e.y}`
         );
+    }
+
+    public toString(): string {
+        return `<Arc>`;
     }
 
     static is(thing: any): thing is Arc {

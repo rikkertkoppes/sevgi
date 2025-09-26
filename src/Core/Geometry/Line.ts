@@ -1,12 +1,14 @@
 import { Point, v2 } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
+import { Curve } from "./Curve";
 
-export class LineSegment {
+export class LineSegment extends Curve {
     public length;
     private _tangent;
     private _normal;
     constructor(public start: Point, public end: Point) {
+        super();
         this.length = norm(diff(start, end));
         this._tangent = unit(diff(end, start));
         this._normal = unit(rot(Math.PI / 2, this.direction()));
@@ -54,9 +56,9 @@ export class LineSegment {
     public findClosestPoint(p: Point) {
         let t = dot(diff(p, this.start), this.direction()) / this.length;
         t = Math.max(0, Math.min(1, t));
-        const pt = this.pointAt(t);
-        const d = norm(diff(p, pt));
-        return { t, pt, d };
+        const point = this.pointAt(t);
+        const distance = norm(diff(p, point));
+        return { t, point, distance };
     }
 
     public offset(d: number) {
@@ -98,6 +100,11 @@ export class LineSegment {
         const p = this.end;
         return fixedNum`L ${p.x} ${p.y}`;
     }
+
+    public toString(): string {
+        return `<LineSegment>`;
+    }
+
     static is(thing: any): thing is LineSegment {
         return thing instanceof LineSegment;
     }
@@ -165,10 +172,10 @@ export class Line {
         if (this.isParallelWith(other)) return null;
         const [a, b, c] = [this.a, this.b, this.c];
         const [d, e, f] = [other.a, other.b, other.c];
-        return {
-            x: (c * e - b * f) / (a * e - b * d),
-            y: (a * f - c * d) / (a * e - b * d),
-        };
+        return v2(
+            (c * e - b * f) / (a * e - b * d),
+            (a * f - c * d) / (a * e - b * d)
+        );
     }
 
     /** unit vector in the line direction (positive x) */
@@ -198,7 +205,7 @@ export class Line {
         const r = a * a + b * b;
         const x = (b * (b * p.x - a * p.y) + a * c) / r;
         const y = (a * (a * p.y - b * p.x) + b * c) / r;
-        return { x, y };
+        return v2(x, y);
     }
 
     public distanceToPoint(p: Point): number {
@@ -218,10 +225,10 @@ export class Line {
         { x: x1, y: y1 }: Point,
         { x: x2, y: y2 }: Point
     ): LineSegment {
-        const t = Line.fromPoints({ x: x1, y: y1 }, { x: x2, y: y1 });
-        const r = Line.fromPoints({ x: x2, y: y1 }, { x: x2, y: y2 });
-        const b = Line.fromPoints({ x: x1, y: y2 }, { x: x2, y: y2 });
-        const l = Line.fromPoints({ x: x1, y: y1 }, { x: x1, y: y2 });
+        const t = Line.fromPoints(v2(x1, y1), v2(x2, y1));
+        const r = Line.fromPoints(v2(x2, y1), v2(x2, y2));
+        const b = Line.fromPoints(v2(x1, y2), v2(x2, y2));
+        const l = Line.fromPoints(v2(x1, y1), v2(x1, y2));
         if (this.isHorizontal()) {
             // guaranteed to exist as l and r are vertical
             const p1 = this.intersectWith(l) as Point;
@@ -301,10 +308,7 @@ export class Line {
 
     static perpendicularFromPoints(p1: Point, p2: Point) {
         const mid = mult(0.5, sum(p1, p2));
-        const dir = {
-            x: -p2.y + p1.y,
-            y: p2.x - p1.x,
-        };
+        const dir = v2(-p2.y + p1.y, p2.x - p1.x);
         return this.fromPointAndDirection(mid, dir);
     }
 

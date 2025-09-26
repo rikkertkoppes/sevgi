@@ -1,8 +1,28 @@
+import { BaseGeometry } from "./BaseGeometry";
+import { fixedNum } from "./Util";
+
 /**
  * class wrapper for a point
  */
-export class Point {
-    constructor(public x: number, public y: number) {}
+export class Point extends BaseGeometry {
+    constructor(public x: number, public y: number) {
+        super();
+    }
+
+    public clone(): Point {
+        return new Point(this.x, this.y);
+    }
+    public translate(v: Point): Point {
+        return sum(this, v);
+    }
+    public rotate(angle: number, center: Point): Point {
+        return rot(angle, this, center);
+    }
+
+    public toString(): string {
+        return fixedNum`<Point ${this.x}, ${this.y}>`;
+    }
+
     public static is(p: any): p is Point {
         return p && typeof p.x === "number" && typeof p.y === "number";
     }
@@ -80,7 +100,7 @@ export const sum = (...ps: Point[]) => {
 export const mult = (a: number, { x, y }: Point): Point => v2(a * x, a * y);
 /** rotates the vector. positive angles are clockwise in radians */
 export const rot = (a: number, p: Point, around?: Point): Point => {
-    around = around || { x: 0, y: 0 };
+    around = around || v2(0, 0);
     const pc = diff(p, around);
     const ca = Math.cos(a);
     const sa = Math.sin(a);
@@ -94,7 +114,7 @@ export const rotateLeft = ({ x, y }: Point): Point => {
 };
 export const unit = (p: Point): Point => {
     const n = norm(p);
-    if (n === 0) return { x: 0, y: 0 };
+    if (n === 0) return v2(0, 0);
     return mult(1 / norm(p), p);
 };
 export const diff = (p1: Point, ...ps: Point[]): Point =>

@@ -1,11 +1,17 @@
-const full = 2 * Math.PI;
+export const TAU = 2 * Math.PI;
 
 /**
  * brings an angle in the range [0, 2π)
  * @param angle
  */
 export function normalizeAngle(angle: number) {
-    return ((angle % full) + full) % full;
+    return ((angle % TAU) + TAU) % TAU;
+}
+export function toRadians(degrees: number): number {
+    return (degrees * Math.PI) / 180;
+}
+export function toDegrees(radians: number): number {
+    return (radians * 180) / Math.PI;
 }
 
 export function fixedNum(

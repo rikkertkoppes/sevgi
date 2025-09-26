@@ -16,9 +16,7 @@ import {
     unit,
 } from "./Vector";
 import { Line, LineSegment } from "./Line";
-import { normalizeAngle } from "./Util";
-
-const full = 2 * Math.PI;
+import { normalizeAngle, TAU } from "./Util";
 
 /** signed circle, negative radii are counter clockwise */
 export class Circle {
@@ -85,7 +83,7 @@ export class Circle {
         // points.push(this.pointAtAngle(startAngle))
         // console.log(ccw);
         if (ccw) {
-            if (startAngle <= endAngle) startAngle += full;
+            if (startAngle <= endAngle) startAngle += TAU;
             points.push(this.pointAtAngle(startAngle));
             // decrease angle to get to endAngle
             // round down to quarter
@@ -111,7 +109,7 @@ export class Circle {
             if (c) points.push(c);
             points.push(this.pointAtAngle(endAngle));
         } else {
-            if (startAngle >= endAngle) startAngle -= full;
+            if (startAngle >= endAngle) startAngle -= TAU;
             points.push(this.pointAtAngle(startAngle));
             // increase angle to get to endAngle
             let a = q * Math.ceil(startAngle / q);
@@ -158,10 +156,10 @@ export class Circle {
      * 0 is right side of the circle, running counter clockwise
      */
     public pointAtAngle(angle: number): Point {
-        return {
-            x: this.c.x + Math.abs(this.r) * Math.cos(angle),
-            y: this.c.y + Math.abs(this.r) * Math.sin(angle),
-        };
+        return v2(
+            this.c.x + Math.abs(this.r) * Math.cos(angle),
+            this.c.y + Math.abs(this.r) * Math.sin(angle)
+        );
     }
 
     /**

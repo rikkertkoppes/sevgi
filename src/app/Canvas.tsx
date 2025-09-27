@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { toArray, Tree } from "@rkmodules/rules";
-import { ScrollCanvas } from "@/components/ScrollCanvas";
 
 import "@rkmodules/rules/index.css";
 import styles from "./page.module.css";
 import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
+import { useGesture } from "@use-gesture/react";
 
 interface GeometryProps {
     g: BaseGeometry;
@@ -21,6 +21,37 @@ function Geometry({ g }: GeometryProps) {
             strokeLinejoin="round"
             strokeWidth={0.2}
         />
+    );
+}
+
+interface SVGScrollerProps {
+    children?: React.ReactNode;
+}
+function SVGScroller({ children }: SVGScrollerProps) {
+    const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = React.useState(1);
+
+    const bind = useGesture({
+        onDrag: ({ offset: [ox, oy] }) => {
+            setOffset({ x: ox, y: oy });
+        },
+        onWheel: ({ delta: [, dy] }) => {
+            setZoom((z) => Math.max(0.1, z - dy * 0.001 * z));
+        },
+    });
+
+    return (
+        <div className={styles.Scroll} {...bind()}>
+            <svg>
+                <g
+                    transform={`translate(${offset.x},${
+                        offset.y
+                    }) scale(${zoom},${-zoom})`}
+                >
+                    {children}
+                </g>
+            </svg>
+        </div>
     );
 }
 
@@ -105,16 +136,27 @@ export function Canvas({ model, selection }: CanvasProps) {
             <button className={styles.Download} onClick={handleDownload}>
                 Download SVG
             </button>
-            <ScrollCanvas className={styles.Scroll}>
-                <svg>
-                    <g transform="scale(1,-1)">
-                        {geometry.map((g, i) => (
-                            <Geometry g={g} key={i} />
-                        ))}
-                    </g>
-                </svg>
-                {/* <div dangerouslySetInnerHTML={{ __html: svg }} /> */}
-                {/* <div dangerouslySetInnerHTML={{ __html: selSvg }} />
+            <SVGScroller>
+                <line
+                    x1={-1000}
+                    y1={0}
+                    x2={1000}
+                    y2={0}
+                    className={styles.XAxis}
+                />
+                <line
+                    x1={0}
+                    y1={-1000}
+                    x2={0}
+                    y2={1000}
+                    className={styles.YAxis}
+                />
+                {geometry.map((g, i) => (
+                    <Geometry g={g} key={i} />
+                ))}
+            </SVGScroller>
+            {/* <div dangerouslySetInnerHTML={{ __html: svg }} /> */}
+            {/* <div dangerouslySetInnerHTML={{ __html: selSvg }} />
                 <svg>
                     {points.map((p, i) => (
                         <circle
@@ -126,7 +168,7 @@ export function Canvas({ model, selection }: CanvasProps) {
                         />
                     ))}
                 </svg> */}
-            </ScrollCanvas>
+            {/* </ScrollCanvas> */}
         </div>
     );
 }

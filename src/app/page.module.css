@@ -57,18 +57,22 @@
   flex: 1;
   background-color: white;
   color: black;
+  position: relative;
 }
 
 .Scroll {
   height: 100%;
   cursor: grab;
+  touch-action: none;
 }
 
-.Scroll svg {
+.Canvas svg {
   overflow: visible;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
 }
 
 .Data {
@@ -79,5 +83,18 @@
 .Download {
   position: absolute;
   right: 4px;
-  top: 4px;
+  top: -24px;
+}
+
+
+.XAxis {
+  stroke: red;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+.YAxis {
+  stroke: green;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
 }

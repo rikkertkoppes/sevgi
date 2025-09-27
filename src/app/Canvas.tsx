@@ -8,21 +8,13 @@ import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
 import { useGesture } from "@use-gesture/react";
 
 interface GeometryProps {
-    g: BaseGeometry;
+    d: string;
 }
-function Geometry({ g }: GeometryProps) {
-    if (!g) return null;
-    return (
-        <path
-            d={g.toSVG()}
-            stroke="black"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={0.2}
-        />
-    );
-}
+const Geometry = React.memo(({ d }: GeometryProps) => {
+    if (!d) return null;
+    return <path d={d} />;
+});
+Geometry.displayName = "Geometry";
 
 interface SVGScrollerProps {
     children?: React.ReactNode;
@@ -66,7 +58,7 @@ export function Canvas({ model, selection }: CanvasProps) {
 
     React.useEffect(() => {
         const models = toArray(model || {}) as BaseGeometry[];
-        console.log("result geometry", models);
+        // console.log("result geometry", models);
 
         // TODO: use model walker to iterate paths
         // then use pathToSVGPathData to create svg paths
@@ -151,9 +143,11 @@ export function Canvas({ model, selection }: CanvasProps) {
                     y2={1000}
                     className={styles.YAxis}
                 />
-                {geometry.map((g, i) => (
-                    <Geometry g={g} key={i} />
-                ))}
+                <g className={styles.Geometry}>
+                    {geometry.map((g, i) => (
+                        <Geometry d={g?.toSVG()} key={i} />
+                    ))}
+                </g>
             </SVGScroller>
             {/* <div dangerouslySetInnerHTML={{ __html: svg }} /> */}
             {/* <div dangerouslySetInnerHTML={{ __html: selSvg }} />

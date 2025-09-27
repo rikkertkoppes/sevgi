@@ -132,6 +132,9 @@ export class Arc extends Curve {
             this._end + angle
         );
     }
+    public scale(factor: number, center: Point) {
+        return new Arc(this.c.scale(factor, center), this._start, this._end);
+    }
 
     public split(t: number) {
         const a = this.angleAt(t);

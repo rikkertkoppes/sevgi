@@ -1,23 +1,23 @@
+import { v2 } from "@/Core/Geometry/Vector";
 import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-import { model } from "makerjs";
 
 export const scale: PrimitiveFunction = {
     name: "scale",
     label: "Scale",
-    description: "Scale a model",
+    description: "Scale a PolyLine with respect to a center point",
     inputs: {
-        shape: "Model",
+        shape: "PolyLine",
         scale: {
             type: "number",
             default: 0.5,
         },
         center: {
             type: "Point",
-            default: [0, 0],
+            default: v2(0, 0),
         },
     },
     outputs: {
-        shape: "Model",
+        shape: "PolyLine",
     },
     impl: async (inputs) => {
         return {
@@ -25,13 +25,10 @@ export const scale: PrimitiveFunction = {
                 [
                     inputs.shape,
                     inputs.scale,
-                    inputs.center || broadCast([[0, 0]]),
+                    inputs.center || broadCast(v2(0, 0)),
                 ],
                 ([m, s, c]) => {
-                    m = model.clone(m);
-                    model.originate(m, c);
-                    model.scale(m, s);
-                    return m;
+                    return m.scale(s, c);
                 },
                 true
             ),

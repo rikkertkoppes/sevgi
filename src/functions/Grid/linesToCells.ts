@@ -1,11 +1,13 @@
-import { IModel, IPoint, paths } from "makerjs";
+import { LineSegment } from "@/Core/Geometry/Line";
+import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { Point } from "@/Core/Geometry/Vector";
 
 // Assumed imports/types (as described by you):
 // type IPoint = [number, number];
 // namespace paths { export type Line = { origin: IPoint; end: IPoint }; }
 // type IModel = { paths: paths.Line[] };
 
-export function linesToCells(lines: paths.Line[]): IModel[] {
+export function linesToCells(lines: LineSegment[]): PolyLine[] {
     // Tunables for robustness on float inputs (snap + area threshold)
     const EPS_SNAP = 1e-9;
     const EPS_AREA = 1e-12;
@@ -23,18 +25,18 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
     }
 
     // --- 1) Snap & deduplicate vertices; deduplicate undirected edges ---
-    const vKey = (p: IPoint) =>
-        `${Math.round(p[0] / EPS_SNAP)}:${Math.round(p[1] / EPS_SNAP)}`;
+    const vKey = (p: Point) =>
+        `${Math.round(p.x / EPS_SNAP)}:${Math.round(p.y / EPS_SNAP)}`;
 
-    const vertexId = new Map<string, Vid>();
-    const vertices: IPoint[] = [];
+    const vertexIds = new Map<string, Vid>();
+    const vertices: Point[] = [];
 
-    const getVid = (p: IPoint): Vid => {
+    const getVertexId = (p: Point): Vid => {
         const key = vKey(p);
-        let id = vertexId.get(key);
+        let id = vertexIds.get(key);
         if (id === undefined) {
             id = vertices.length;
-            vertexId.set(key, id);
+            vertexIds.set(key, id);
             vertices.push(p);
         }
         return id;
@@ -43,13 +45,13 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
     // undirected edge key with canonical (min,max) vertex ids
     const eKey = (a: Vid, b: Vid) => (a < b ? `${a}_${b}` : `${b}_${a}`);
 
-    const undirectedLines: { a: Vid; b: Vid; src: paths.Line }[] = [];
+    const undirectedLines: { a: Vid; b: Vid; src: LineSegment }[] = [];
     const edgeSeen = new Map<string, number>(); // key -> index in undirectedLines
 
     for (let i = 0; i < lines.length; i++) {
-        const { origin, end } = lines[i];
-        const u = getVid(origin);
-        const v = getVid(end);
+        const { start, end } = lines[i];
+        const u = getVertexId(start);
+        const v = getVertexId(end);
         if (u === v) continue; // discard zero-length
         const key = eKey(u, v);
         if (!edgeSeen.has(key)) {
@@ -101,8 +103,8 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
         arr.sort((ha, hb) => {
             const a = vertices[H[ha].head];
             const b = vertices[H[hb].head];
-            const angA = atan2(a[1] - pv[1], a[0] - pv[0]);
-            const angB = atan2(b[1] - pv[1], b[0] - pv[0]);
+            const angA = atan2(a.y - pv.y, a.x - pv.x);
+            const angB = atan2(b.y - pv.y, b.x - pv.x);
             return angA - angB;
         });
 
@@ -132,7 +134,7 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
         for (let i = 0, n = vs.length; i < n; i++) {
             const p = vertices[vs[i]];
             const q = vertices[vs[(i + 1) % n]];
-            a += p[0] * q[1] - p[1] * q[0];
+            a += p.x * q.y - p.y * q.x;
         }
         return 0.5 * a;
     };
@@ -163,22 +165,20 @@ export function linesToCells(lines: paths.Line[]): IModel[] {
     // Convention here:
     //  - CCW area > 0  => bounded face (cell)
     //  - CW (area < 0) => likely the unbounded outer face
-    const cells: IModel[] = [];
+    const cells: PolyLine[] = [];
 
     for (const f of faces) {
         if (f.area <= EPS_AREA) continue; // drop outer face or degenerate loops
 
         // Build the list of boundary lines for this face using the directed lines
         // We keep them in traversal order (optional; you can sort/normalize if desired).
-        const modelLines: paths.Line[] = f.hedges.map((hid) => {
+        const modelLines: LineSegment[] = f.hedges.map((hid) => {
             const origin = vertices[H[hid].tail];
             const end = vertices[H[hid].head];
-            return new paths.Line(origin, end);
+            return new LineSegment(origin, end);
         });
 
-        cells.push({
-            paths: Object.fromEntries(modelLines.map((l, i) => [`e${i}`, l])),
-        });
+        cells.push(new PolyLine(modelLines));
     }
 
     return cells;

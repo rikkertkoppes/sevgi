@@ -1,17 +1,18 @@
+import { toRadians } from "@/Core/Geometry/Util";
+import { v2 } from "@/Core/Geometry/Vector";
 import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-import { model } from "makerjs";
 
 export const rotate: PrimitiveFunction = {
     name: "rotate",
     label: "Rotate",
-    description: "Rotate a model around a point",
+    description: "Rotate a PolyLine around a point",
     inputs: {
-        shape: "Model",
+        shape: "PolyLine",
         angle: { type: "number", default: 0 },
-        center: { type: "Point", default: [[0, 0]] },
+        center: { type: "Point", default: v2(0, 0) },
     },
     outputs: {
-        shape: "Model",
+        shape: "PolyLine",
     },
     impl: async (inputs) => {
         return {
@@ -19,13 +20,10 @@ export const rotate: PrimitiveFunction = {
                 [
                     inputs.shape,
                     inputs.angle,
-                    inputs.center || broadCast([[0, 0]]),
+                    inputs.center || broadCast(v2(0, 0)),
                 ],
                 ([m, a, p]) => {
-                    m = model.clone(m);
-                    model.rotate(m, a, p);
-
-                    return m;
+                    return m.rotate(toRadians(a), p);
                 },
                 true
             ),

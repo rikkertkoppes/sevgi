@@ -17,10 +17,15 @@ import {
 } from "./Vector";
 import { Line, LineSegment } from "./Line";
 import { normalizeAngle, TAU } from "./Util";
+import { Curve } from "./Curve";
 
 /** signed circle, negative radii are counter clockwise */
-export class Circle {
-    constructor(public c: Point, public r: number) {}
+export class Circle extends Curve {
+    public length: number;
+    constructor(public c: Point, public r: number) {
+        super();
+        this.length = Math.abs(r) * TAU;
+    }
 
     get clockwise() {
         return this.r > 0;
@@ -35,6 +40,25 @@ export class Circle {
      */
     public get handedness() {
         return Math.sign(this.r);
+    }
+
+    public pointAt(t: number): Point {
+        return this.pointAtAngle(t * TAU);
+    }
+    public tangentAt(t: number): Point {
+        const pt = this.pointAt(t);
+        const dir = this.directionAtPoint(pt);
+        return mult(Math.sign(this.r), dir);
+    }
+    public normalAt(t: number): Point {
+        return this.normalAtPoint(this.pointAt(t));
+    }
+    public offsetAt(t: number, d: number): Point {
+        return sum(this.pointAt(t), mult(d, this.normalAt(t)));
+    }
+    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
+    public curvatureAt(t: number): number {
+        return 1 / this.r;
     }
 
     public reverse() {
@@ -58,6 +82,21 @@ export class Circle {
     public rotate(a: number, c: Point) {
         return new Circle(rot(a, this.c, c), this.r);
     }
+    public scale(factor: number, c: Point) {
+        return new Circle(
+            sum(c, mult(factor, diff(this.c, c))),
+            this.r * factor
+        );
+    }
+
+    public findClosestPoint(p: Point) {
+        const v = diff(p, this.c);
+        const d = norm(v) - Math.abs(this.r);
+        const point = this.project(p);
+        const t = angle(v) / TAU;
+        return { t, point, distance: Math.abs(d) };
+    }
+
     public mirror(l: Line) {
         // mirror the center, invert the radius
         return new Circle(l.reflectPoint(this.c), -this.r);
@@ -255,6 +294,10 @@ export class Circle {
             `A ${r} ${r} 0 ${lf} ${sf} ${p2.x} ${p2.y} ` +
             `A ${r} ${r} 0 ${lf} ${sf} ${p1.x} ${p1.y}`
         );
+    }
+
+    public toString() {
+        return `<Circle>`;
     }
 
     /**

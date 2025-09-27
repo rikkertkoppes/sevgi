@@ -1,26 +1,25 @@
+import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-import { IModel, IPoint, model } from "makerjs";
 
 export const move: PrimitiveFunction = {
     name: "move",
     label: "Move",
-    description: "Move a model to an absolute poinl",
+    description: "Move a PolyLine by an offset",
     inputs: {
-        shape: "Model",
-        point: { type: "Point", default: [[0, 0]] },
+        shape: "PolyLine",
+        offset: { type: "Point", default: v2(0, 0) },
     },
     outputs: {
-        shape: "Model",
+        shape: "PolyLine",
     },
     impl: async (inputs) => {
         return {
             shape: binaryOnTree(
                 inputs.shape,
-                inputs.point,
-                (m: IModel, o: IPoint) => {
-                    m = model.clone(m);
-                    model.move(m, o);
-                    return m;
+                inputs.offset,
+                (m: PolyLine, o: Point) => {
+                    return m.translate(o);
                 },
                 true
             ),

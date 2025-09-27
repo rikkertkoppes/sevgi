@@ -1,6 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { IPoint, paths } from "makerjs";
-import { linesToCells } from "./liensToCells";
+import { linesToCells } from "./linesToCells";
+import { LineSegment } from "@/Core/Geometry/Line";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 
 export const hexGrid: PrimitiveFunction = {
     name: "hexGrid",
@@ -15,11 +16,11 @@ export const hexGrid: PrimitiveFunction = {
     outputs: {
         points: "Point",
         lines: "Line",
-        shapes: "Model",
+        shapes: "PolyLine",
     },
     impl: async (inputs, params) => {
-        const points: IPoint[] = [];
-        const lines: paths.Line[] = [];
+        const points: Point[] = [];
+        const lines: LineSegment[] = [];
 
         const nx = Math.floor(params.nx * 1.5) + 1;
         const ny = params.ny * 2 + 2;
@@ -34,37 +35,49 @@ export const hexGrid: PrimitiveFunction = {
                 const x = i * hSpace + dx;
                 const y = j * vSpace;
                 if ((isMid && i % 3 !== 1) || (isLower && i % 3 !== 2)) {
-                    points.push([x, y]);
+                    points.push(v2(x, y));
                 }
                 if (
                     i < pointsInRow - 1 &&
                     ((isLower && i % 3 === 0) || (isMid && i % 3 === 2))
                 ) {
                     // horizontal line
-                    lines.push(new paths.Line([x, y], [x + hSpace, y]));
+                    lines.push(new LineSegment(v2(x, y), v2(x + hSpace, y)));
                 }
                 if (isLower && i % 3 === 0 && j < ny - 1) {
                     // backward
                     lines.push(
-                        new paths.Line([x, y], [x - hSpace / 2, y + vSpace])
+                        new LineSegment(
+                            v2(x, y),
+                            v2(x - hSpace / 2, y + vSpace)
+                        )
                     );
                 }
                 if (isLower && i % 3 === 1 && j < ny - 1) {
                     // forward
                     lines.push(
-                        new paths.Line([x, y], [x + hSpace / 2, y + vSpace])
+                        new LineSegment(
+                            v2(x, y),
+                            v2(x + hSpace / 2, y + vSpace)
+                        )
                     );
                 }
                 if (isMid && i % 3 === 0 && j < ny - 1) {
                     // forward
                     lines.push(
-                        new paths.Line([x, y], [x + hSpace / 2, y + vSpace])
+                        new LineSegment(
+                            v2(x, y),
+                            v2(x + hSpace / 2, y + vSpace)
+                        )
                     );
                 }
                 if (isMid && i % 3 === 2 && j < ny - 1) {
                     // backward
                     lines.push(
-                        new paths.Line([x, y], [x - hSpace / 2, y + vSpace])
+                        new LineSegment(
+                            v2(x, y),
+                            v2(x - hSpace / 2, y + vSpace)
+                        )
                     );
                 }
             }

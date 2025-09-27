@@ -1,25 +1,25 @@
+import { LineSegment } from "@/Core/Geometry/Line";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-
-import { paths, IPoint } from "makerjs";
 
 export const line: PrimitiveFunction = {
     name: "line",
     label: "Line",
     description: "Creates a line",
     inputs: {
-        start: { type: "Point", default: [[0, 0]] },
-        end: { type: "Point", default: [[10, 10]] },
+        start: { type: "Point", default: v2(0, 0) },
+        end: { type: "Point", default: v2(10, 10) },
     },
     outputs: {
-        path: "Line",
+        line: "Line",
     },
     impl: async (inputs) => {
         return {
-            path: binaryOnTree(
+            line: binaryOnTree(
                 inputs.start,
                 inputs.end,
-                (o: IPoint, e: IPoint) => {
-                    return new paths.Line(o, e);
+                (o: Point, e: Point) => {
+                    return new LineSegment(o, e);
                 },
                 true
             ),

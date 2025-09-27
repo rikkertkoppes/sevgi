@@ -1,6 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { IPoint, paths } from "makerjs";
-import { linesToCells } from "./liensToCells";
+import { linesToCells } from "./linesToCells";
+import { LineSegment } from "@/Core/Geometry/Line";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 
 export const triGrid: PrimitiveFunction = {
     name: "triGrid",
@@ -15,11 +16,11 @@ export const triGrid: PrimitiveFunction = {
     outputs: {
         points: "Point",
         lines: "Line",
-        shapes: "Model",
+        shapes: "PolyLine",
     },
     impl: async (inputs, params) => {
-        const points: IPoint[] = [];
-        const lines: paths.Line[] = [];
+        const points: Point[] = [];
+        const lines: LineSegment[] = [];
 
         const nx = Math.ceil(params.nx / 2) + 1;
         const ny = params.ny + 1;
@@ -31,22 +32,28 @@ export const triGrid: PrimitiveFunction = {
             for (let i = 0; i < pointsInRow; i++) {
                 const x = i * hSpace + dx;
                 const y = j * vSpace;
-                points.push([x, y]);
+                points.push(v2(x, y));
                 if (i < pointsInRow - 1) {
                     // horizontal line
-                    lines.push(new paths.Line([x, y], [x + hSpace, y]));
+                    lines.push(new LineSegment(v2(x, y), v2(x + hSpace, y)));
                 }
                 if (j < ny - 1) {
                     if (j % 2 === 1 || i > 0) {
                         // backward tilted
                         lines.push(
-                            new paths.Line([x, y], [x - hSpace / 2, y + vSpace])
+                            new LineSegment(
+                                v2(x, y),
+                                v2(x - hSpace / 2, y + vSpace)
+                            )
                         );
                     }
                     if (i < nx - 1 || (j % 2 === 0 && params.nx % 2 === 0)) {
                         // forward tilted
                         lines.push(
-                            new paths.Line([x, y], [x + hSpace / 2, y + vSpace])
+                            new LineSegment(
+                                v2(x, y),
+                                v2(x + hSpace / 2, y + vSpace)
+                            )
                         );
                     }
                 }

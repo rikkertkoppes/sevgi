@@ -10,7 +10,6 @@
     },
     "dependencies": {
         "@rkmodules/rules": "^0.0.32",
-        "makerjs": "^0.18.1",
         "next": "15.5.2",
         "react": "^19.1.1",
         "react-dnd": "^16.0.1",

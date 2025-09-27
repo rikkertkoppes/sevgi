@@ -1,23 +1,19 @@
-import { mapTree, PrimitiveFunction, Tree } from "@rkmodules/rules";
-import { model, chain } from "makerjs";
+import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const mPoints: PrimitiveFunction = {
     name: "mPoints",
-    label: "Model Points",
-    description: "Find points in a model",
+    label: "PolyLine Points",
+    description: "Find points in a PolyLine",
     inputs: {
-        shape: "Model",
+        shape: "PolyLine",
     },
     outputs: {
         points: "Point",
     },
     impl: async (inputs) => {
-        const chains = mapTree(
-            inputs.shape,
-            (m) => model.findChains(m) as any
-        ) as Tree<MakerJs.IChain>;
         return {
-            points: mapTree(chains, (c) => chain.toKeyPoints(c)),
+            points: mapTree(inputs.shape, (s: PolyLine) => s.getPoints()),
         };
     },
 };

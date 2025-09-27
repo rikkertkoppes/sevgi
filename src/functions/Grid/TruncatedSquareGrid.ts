@@ -1,7 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { IPoint, paths } from "makerjs";
-import { linesToCells } from "./liensToCells";
+import { linesToCells } from "./linesToCells";
 import { Point, rot, sum, v2 } from "@/Core/Geometry/Vector";
+import { LineSegment } from "@/Core/Geometry/Line";
 
 export const truncatedSquareGrid: PrimitiveFunction = {
     name: "truncatedSquareGrid",
@@ -17,11 +17,11 @@ export const truncatedSquareGrid: PrimitiveFunction = {
     outputs: {
         points: "Point",
         lines: "Line",
-        shapes: "Model",
+        shapes: "PolyLine",
     },
     impl: async (inputs, params) => {
-        const points: IPoint[] = [];
-        const lines: paths.Line[] = [];
+        const points: Point[] = [];
+        const lines: LineSegment[] = [];
 
         const nx = params.nx;
         const ny = params.ny;
@@ -39,14 +39,11 @@ export const truncatedSquareGrid: PrimitiveFunction = {
                     pts.push(p);
                     v = rot(Math.PI / 4, v);
                 }
-                points.push(...pts.map(Point.toArray));
+                points.push(...pts);
                 lines.push(
                     ...pts.map((p1, i) => {
                         const p2 = pts[(i + 1) % pts.length];
-                        return new paths.Line(
-                            Point.toArray(p1),
-                            Point.toArray(p2)
-                        );
+                        return new LineSegment(p1, p2);
                     })
                 );
             }

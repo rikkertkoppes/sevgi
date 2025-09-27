@@ -1,12 +1,13 @@
+import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { mid } from "@/Core/Geometry/Vector";
 import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
-import { chain, model } from "makerjs";
 
 export const center: PrimitiveFunction = {
     name: "center",
     label: "Center",
-    description: "Center of a model",
+    description: "Center of a PolyLine",
     inputs: {
-        shape: "Model",
+        shape: "PolyLine",
     },
     outputs: {
         point: "Point",
@@ -14,23 +15,16 @@ export const center: PrimitiveFunction = {
         y: "number",
     },
     impl: async (inputs) => {
-        const point = mapTree(inputs.shape, (m) => {
-            const chains = model.findChains(m) as MakerJs.IChain[];
-            const points = chains.flatMap((c) => chain.toKeyPoints(c));
-            const center = points.reduce(
-                (acc, p) => [
-                    acc[0] + p[0] / points.length,
-                    acc[1] + p[1] / points.length,
-                ],
-                [0, 0]
-            ) as MakerJs.IPoint;
+        const point = mapTree(inputs.shape, (m: PolyLine) => {
+            const points = m.getPoints();
+            const center = mid(...points);
 
-            return [center];
+            return center;
         });
         return {
             point,
-            x: mapTree(point, (p) => p[0]),
-            y: mapTree(point, (p) => p[1]),
+            x: mapTree(point, (p) => p.x),
+            y: mapTree(point, (p) => p.y),
         };
     },
 };

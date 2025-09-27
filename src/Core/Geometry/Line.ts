@@ -43,6 +43,12 @@ export class LineSegment extends Curve {
             rot(angle, this.end, center)
         );
     }
+    public scale(factor: number, center: Point) {
+        return new LineSegment(
+            this.start.scale(factor, center),
+            this.end.scale(factor, center)
+        );
+    }
 
     public moveTo(point: Point) {
         return this.translate(diff(point, this.start));

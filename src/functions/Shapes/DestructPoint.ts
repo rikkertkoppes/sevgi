@@ -13,8 +13,8 @@ export const destructPoint: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            x: mapTree(inputs.point, (p) => p[0]),
-            y: mapTree(inputs.point, (p) => p[1]),
+            x: mapTree(inputs.point, (p) => p.x),
+            y: mapTree(inputs.point, (p) => p.y),
         };
     },
 };

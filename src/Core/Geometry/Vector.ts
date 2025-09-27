@@ -18,9 +18,20 @@ export class Point extends BaseGeometry {
     public rotate(angle: number, center: Point): Point {
         return rot(angle, this, center);
     }
+    public scale(factor: number, center: Point): Point {
+        return sum(mult(factor, diff(this, center)), center);
+    }
 
+    public toSVG() {
+        let path = fixedNum`M ${this.x} ${this.y}`;
+        path += " l 0, 0";
+        return path;
+    }
     public toString(): string {
         return fixedNum`<Point ${this.x}, ${this.y}>`;
+    }
+    public hash(): string {
+        return fixedNum`${this.x},${this.y}`;
     }
 
     public static is(p: any): p is Point {
@@ -33,8 +44,9 @@ export class Point extends BaseGeometry {
 
 export const v2 = (x: number, y: number): Point => new Point(x, y);
 export const fromArray = ([x, y]: number[]): Point => new Point(x, y);
-export const toDeg = (rad: number): number => (rad * 180) / Math.PI;
-export const toRad = (deg: number): number => (deg * Math.PI) / 180;
+export const fromPolar = (r: number, angle: number): Point => {
+    return v2(r * Math.cos(angle), r * Math.sin(angle));
+};
 
 export const snap = ({ x, y }: Point, gridX = 1, gridY = gridX): Point => {
     return v2(gridX * Math.round(x / gridX), gridY * Math.round(y / gridY));

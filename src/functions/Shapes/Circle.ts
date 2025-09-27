@@ -1,13 +1,13 @@
+import { Circle } from "@/Core/Geometry/Circle";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
-
-import { paths, IPoint } from "makerjs";
 
 export const circle: PrimitiveFunction = {
     name: "circle",
     label: "Circle",
     description: "Creates a circle",
     inputs: {
-        center: { type: "Point", default: [[0, 0]] },
+        center: { type: "Point", default: v2(0, 0) },
         radius: { type: "number", default: 10 },
     },
     outputs: {
@@ -17,8 +17,8 @@ export const circle: PrimitiveFunction = {
         const circle = binaryOnTree(
             inputs.center,
             inputs.radius,
-            (o: IPoint, r: number) => {
-                return new paths.Circle(o, r);
+            (o: Point, r: number) => {
+                return new Circle(o, r);
             },
             true
         );

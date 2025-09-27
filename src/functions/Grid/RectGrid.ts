@@ -1,6 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { IPoint, paths } from "makerjs";
-import { linesToCells } from "./liensToCells";
+import { linesToCells } from "./linesToCells";
+import { Point, v2 } from "@/Core/Geometry/Vector";
+import { LineSegment } from "@/Core/Geometry/Line";
 
 export const rectGrid: PrimitiveFunction = {
     name: "rectGrid",
@@ -15,11 +16,11 @@ export const rectGrid: PrimitiveFunction = {
     outputs: {
         points: "Point",
         lines: "Line",
-        shapes: "Model",
+        shapes: "PolyLine",
     },
     impl: async (inputs, params) => {
-        const points: IPoint[] = [];
-        const lines: paths.Line[] = [];
+        const points: Point[] = [];
+        const lines: LineSegment[] = [];
 
         const nx = params.nx + 1;
         const ny = params.ny + 1;
@@ -27,20 +28,20 @@ export const rectGrid: PrimitiveFunction = {
         const vSpace = params.size;
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
-                points.push([i * hSpace, j * vSpace]);
+                points.push(v2(i * hSpace, j * vSpace));
                 if (i < nx - 1) {
                     lines.push(
-                        new paths.Line(
-                            [i * hSpace, j * vSpace],
-                            [(i + 1) * hSpace, j * vSpace]
+                        new LineSegment(
+                            v2(i * hSpace, j * vSpace),
+                            v2((i + 1) * hSpace, j * vSpace)
                         )
                     );
                 }
                 if (j < ny - 1) {
                     lines.push(
-                        new paths.Line(
-                            [i * hSpace, j * vSpace],
-                            [i * hSpace, (j + 1) * vSpace]
+                        new LineSegment(
+                            v2(i * hSpace, j * vSpace),
+                            v2(i * hSpace, (j + 1) * vSpace)
                         )
                     );
                 }

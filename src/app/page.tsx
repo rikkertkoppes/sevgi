@@ -22,25 +22,25 @@ import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "./Canvas";
-import { Point } from "@/Core/Geometry/Vector";
+import { output } from "@/functions/Output";
 
 const engine = new Engine({
     ...Shapes,
     ...Models,
     ...Grid,
+    output,
 });
 
 const testFunction: GraphedFunction = {
     name: "test",
     body: {
-        mainModel: {
-            name: "model",
-            label: "Output",
+        output: {
+            name: "output",
             inputs: {},
         },
     },
     outputs: {
-        model: "<mainModel.shapes>",
+        model: "<output.output>",
     },
 };
 
@@ -89,7 +89,10 @@ export default function Home() {
         setPlacing(name);
     };
 
-    const handlePlace = (e: React.MouseEvent, pos: Point) => {
+    const handlePlace = (
+        e: React.MouseEvent,
+        pos: { x: number; y: number }
+    ) => {
         if (placing) {
             setFn(
                 engine.applyNodeAdd(fn, placing, (fn, id) => {

@@ -1,3 +1,4 @@
+import { v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const point: PrimitiveFunction = {
@@ -17,7 +18,7 @@ export const point: PrimitiveFunction = {
                 inputs.x,
                 inputs.y,
                 (x: number, y: number) => {
-                    return [x, y];
+                    return v2(x, y);
                 },
                 true
             ),

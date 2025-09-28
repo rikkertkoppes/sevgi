@@ -6,6 +6,7 @@ import "@rkmodules/rules/index.css";
 import styles from "./page.module.css";
 import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
 import { useGesture } from "@use-gesture/react";
+import { Point } from "@/Core/Geometry/Vector";
 
 interface GeometryProps {
     c: string;
@@ -61,45 +62,34 @@ function SVGScroller({ children }: SVGScrollerProps) {
     );
 }
 
+function serializeSVG(geometry: BaseGeometry[]) {
+    // todo: calculate proper viewBox
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">`;
+    geometry.forEach((g) => {
+        if (g instanceof Point) return;
+        svg += `<path d="${g.toSVG()}" style="stroke:black; stroke-width: 0.1" />`;
+    });
+    svg += `</svg>`;
+    return svg;
+}
+
 interface CanvasProps {
     model: Tree<BaseGeometry>;
     selection: Record<string, any>;
 }
 
 export function Canvas({ model, selection }: CanvasProps) {
-    const [svg, setSvg] = React.useState("");
     const [geometry, setGeometry] = React.useState<BaseGeometry[]>([]);
 
     React.useEffect(() => {
         const models = toArray(model || {}) as BaseGeometry[];
         // console.log("result geometry", models);
 
-        // TODO: use model walker to iterate paths
-        // then use pathToSVGPathData to create svg paths
-        // use own style annotations in the paths to add style
-        // output react elements
-        // can use memoization to only redraw when needed
-
-        // const finalModel: IModel = {
-        //     models: Object.fromEntries(
-        //         models.map((m: any, i: number) => [`m${i}`, m])
-        //     ),
-        // };
-
-        // setSvg(
-        //     exporter.toSVG(finalModel, {
-        //         useSvgPathOnly: false,
-        //         // flow: {
-        //         //     size: 1,
-        //         // },
-        //         strokeWidth: "0.2px",
-        //         origin: [0, 0],
-        //     })
-        // );
         setGeometry(models);
     }, [model]);
 
     const handleDownload = () => {
+        const svg = serializeSVG(geometry);
         const element = document.createElement("a");
         const file = new Blob([svg], { type: "image/svg+xml" });
         element.href = URL.createObjectURL(file);

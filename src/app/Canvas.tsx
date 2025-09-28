@@ -131,25 +131,13 @@ export function Canvas({ model, selection }: CanvasProps) {
                 <g className={styles.Geometry}>
                     {geometry.map((g, i) => {
                         if (!g) return null;
-                        return (
-                            <Geometry
-                                d={g.toSVG?.()}
-                                key={i}
-                                c={g.constructor.name}
-                            />
-                        );
+                        return <Geometry d={g.toSVG?.()} key={i} c={g.type} />;
                     })}
                 </g>
                 <g className={styles.Selection}>
                     {selectionGeometry.map((g, i) => {
                         if (!g) return null;
-                        return (
-                            <Geometry
-                                d={g.toSVG?.()}
-                                key={i}
-                                c={g.constructor.name}
-                            />
-                        );
+                        return <Geometry d={g.toSVG?.()} key={i} c={g.type} />;
                     })}
                 </g>
             </SVGScroller>

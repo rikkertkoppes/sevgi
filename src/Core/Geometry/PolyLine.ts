@@ -7,6 +7,7 @@ import { Point, same } from "./Vector";
 
 type JoinType = "miter" | "bevel" | "round" | "none";
 export class PolyLine extends Curve {
+    public type = "PolyLine";
     public length: number;
     private lengths: number[] = [];
     private offsets: number[] = [];

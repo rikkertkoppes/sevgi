@@ -5,6 +5,7 @@ import { Segment } from "./Segment";
 import { Arc } from "./Arc";
 
 export class LineSegment extends Segment {
+    public type = "LineSegment";
     public length;
     private _tangent;
     private _normal;

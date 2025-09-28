@@ -5,6 +5,7 @@ import { fixedNum } from "./Util";
  * class wrapper for a point
  */
 export class Point extends BaseGeometry {
+    public type = "Point";
     constructor(public x: number, public y: number) {
         super();
     }

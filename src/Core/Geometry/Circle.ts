@@ -21,6 +21,7 @@ import { Curve } from "./Curve";
 
 /** signed circle, negative radii are counter clockwise */
 export class Circle extends Curve {
+    public type = "Circle";
     public length: number;
     constructor(public c: Point, public r: number) {
         super();

@@ -9,6 +9,7 @@ const PI = Math.PI;
 const TWO_PI = 2 * PI;
 
 export class Arc extends Segment {
+    public type = "Arc";
     private zero: boolean; //zero length arc
     private full: boolean; //full circle
     private s: Point;

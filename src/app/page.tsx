@@ -165,7 +165,7 @@ export default function Home() {
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
-                            <Tab header="Model">
+                            <Tab header="Shape">
                                 <NodeButtons
                                     nodes={Models}
                                     handleAddNode={handleAddNode}

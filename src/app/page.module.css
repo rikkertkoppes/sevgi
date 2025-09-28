@@ -46,6 +46,16 @@
   flex: 2;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+.Error {
+  position: absolute;
+  bottom: 16px;
+  left: 100px;
+  right: 100px;
+  color: red;
+  padding: 4px;
+  background: #300;
 }
 
 .ResultPane {

@@ -84,6 +84,7 @@ export default function Home() {
     const updatePositions = useUpdatePositions(fn);
     const [data, setData] = React.useState<Record<string, any>>({});
     const [selection, setSelection] = React.useState<string | null>(null);
+    const [error, setError] = React.useState<string | null>(null);
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -116,7 +117,11 @@ export default function Home() {
 
     // run on every change (not always required, hence not in useFunction)
     React.useEffect(() => {
-        run({});
+        setError(null);
+        run({}).catch((e) => {
+            console.error(e);
+            setError((e as Error).message);
+        });
     }, [fn, run]);
 
     return (
@@ -180,6 +185,7 @@ export default function Home() {
                             onClick={handlePlace}
                             onSelect={handleSelect}
                         />
+                        {error && <div className={styles.Error}>{error}</div>}
                     </div>
                     <div className={styles.ResultPane}>
                         <Tabs>

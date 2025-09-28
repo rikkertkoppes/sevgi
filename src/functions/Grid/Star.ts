@@ -37,7 +37,7 @@ export const star: PrimitiveFunction = {
                     const angle = angles[Math.min(i, angles.length - 1)];
                     const distance =
                         distances[Math.min(i, distances.length - 1)];
-                    const lines = c.getEdges();
+                    const lines = c.getSegments();
 
                     const centers = lines.map((l) => mid(l.start, l.end));
                     const midpoint = mid(...centers);

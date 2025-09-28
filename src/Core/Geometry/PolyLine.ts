@@ -89,7 +89,7 @@ export class PolyLine extends Curve {
         return closest!;
     }
 
-    public getEdges() {
+    public getSegments() {
         return this.edges;
     }
 

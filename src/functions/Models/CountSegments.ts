@@ -14,7 +14,7 @@ export const countSegments: PrimitiveFunction = {
     impl: async (inputs) => {
         return {
             count: mapTree(inputs.shape, (m: PolyLine) => {
-                return m.getEdges().length;
+                return m.getSegments().length;
             }),
         };
     },

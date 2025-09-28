@@ -13,7 +13,7 @@ export const expolodePoly: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            segments: mapTree(inputs.shape, (s: PolyLine) => s.getEdges()),
+            segments: mapTree(inputs.shape, (s: PolyLine) => s.getSegments()),
         };
     },
 };

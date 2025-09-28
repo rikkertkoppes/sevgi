@@ -86,7 +86,7 @@ export function Canvas({ model, selection }: CanvasProps) {
 
     React.useEffect(() => {
         const geometry = toArray(model || {}) as BaseGeometry[];
-        // console.log("result geometry", models);
+        // console.log("result geometry", geometry);
 
         setGeometry(geometry);
     }, [model]);
@@ -133,9 +133,9 @@ export function Canvas({ model, selection }: CanvasProps) {
                         if (!g) return null;
                         return (
                             <Geometry
-                                d={g?.toSVG()}
+                                d={g.toSVG?.()}
                                 key={i}
-                                c={g?.constructor.name}
+                                c={g.constructor.name}
                             />
                         );
                     })}
@@ -145,9 +145,9 @@ export function Canvas({ model, selection }: CanvasProps) {
                         if (!g) return null;
                         return (
                             <Geometry
-                                d={g?.toSVG()}
+                                d={g.toSVG?.()}
                                 key={i}
-                                c={g?.constructor.name}
+                                c={g.constructor.name}
                             />
                         );
                     })}

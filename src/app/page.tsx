@@ -17,7 +17,7 @@ import styles from "./page.module.css";
 
 import "@rkmodules/rules/index.css";
 
-import Shapes from "@/functions/Shapes";
+import Curve from "@/functions/Curve";
 import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
@@ -25,7 +25,7 @@ import { Canvas } from "./Canvas";
 import { output } from "@/functions/Output";
 
 const engine = new Engine({
-    ...Shapes,
+    ...Curve,
     ...Models,
     ...Grid,
     output,
@@ -154,9 +154,9 @@ export default function Home() {
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
-                            <Tab header="Shapes">
+                            <Tab header="Curve">
                                 <NodeButtons
-                                    nodes={Shapes}
+                                    nodes={Curve}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>

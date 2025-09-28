@@ -1,5 +1,5 @@
 import { Circle } from "./Circle";
-import { Curve } from "./Curve";
+import { Segment } from "./Segment";
 import { fixedNum, normalizeAngle } from "./Util";
 import { Point, v2 } from "./Vector";
 import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
@@ -7,7 +7,7 @@ import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
 const PI = Math.PI;
 const TWO_PI = 2 * PI;
 
-export class Arc extends Curve {
+export class Arc extends Segment {
     private zero: boolean; //zero length arc
     private full: boolean; //full circle
     private s: Point;

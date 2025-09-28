@@ -1,9 +1,9 @@
 import { cross, Point, v2 } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
-import { Curve } from "./Curve";
+import { Segment } from "./Segment";
 
-export class LineSegment extends Curve {
+export class LineSegment extends Segment {
     public length;
     private _tangent;
     private _normal;

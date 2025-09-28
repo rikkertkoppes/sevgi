@@ -1,7 +1,8 @@
-import { cross, Point, v2 } from "./Vector";
+import { cross, Point, same, v2 } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
+import { Arc } from "./Arc";
 
 export class LineSegment extends Segment {
     public length;
@@ -94,7 +95,14 @@ export class LineSegment extends Segment {
         return 0;
     }
 
-    public intersectWith(other: LineSegment, eps: number = 1e-9): Point | null {
+    // checks if the point is on the line segment
+    public pointOn(p: Point): boolean {
+        const { point } = this.findClosestPoint(p);
+        return same(point, p);
+    }
+
+    private intersectWithLine(other: LineSegment): Point[] {
+        const eps: number = 1e-9;
         const r = diff(this.end, this.start); // direction vector of this segment
         const s = diff(other.end, other.start); // direction vector of other segment
 
@@ -103,7 +111,7 @@ export class LineSegment extends Segment {
 
         if (Math.abs(rxs) < eps) {
             // Parallel or collinear
-            return null;
+            return [];
         }
 
         const t = cross(q_p, s) / rxs;
@@ -111,10 +119,31 @@ export class LineSegment extends Segment {
 
         if (t >= -eps && t <= 1 + eps && u >= -eps && u <= 1 + eps) {
             // Intersection point lies within both segments
-            return sum(this.start, mult(t, r));
+            return [sum(this.start, mult(t, r))];
         }
 
-        return null;
+        return [];
+    }
+
+    private intersectWithArc(other: Arc): Point[] {
+        // find intersection with line and circle
+        const c = other.c;
+        const line = this.line;
+        const points = c.intersectWithLine(line);
+        // filter out the ones that are not on the segment and arc
+        return points.filter((p) => this.pointOn(p) && other.pointOn(p));
+        // To be implemented
+        return [];
+    }
+
+    public intersectWith(other: Segment): Point[] {
+        if (LineSegment.is(other)) {
+            return this.intersectWithLine(other);
+        } else if (Arc.is(other)) {
+            return this.intersectWithArc(other);
+        }
+        // segments are either arcs or lines, so no intersection possible
+        return [];
     }
 
     public toSVG() {
@@ -138,12 +167,8 @@ export class LineSegment extends Segment {
         return thing instanceof LineSegment;
     }
 
-    public static intersection(
-        a: LineSegment,
-        b: LineSegment,
-        eps: number = 1e-9
-    ): Point | null {
-        return a.intersectWith(b, eps);
+    public static intersection(a: LineSegment, b: LineSegment): Point[] {
+        return a.intersectWith(b);
     }
 }
 

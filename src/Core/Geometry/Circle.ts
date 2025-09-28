@@ -263,6 +263,24 @@ export class Circle extends Curve {
         return this.tangentToPoint(p).concat(this.tangentFromPoint(p));
     }
 
+    public intersectWithLine(line: Line) {
+        // get distance from center to line
+        const d = line.distanceToPoint(this.c);
+        // if distance is same as radius, one intersection (tangent)
+        if (Math.abs(Math.abs(d) - Math.abs(this.r)) < 1e-5) {
+            const p = line.project(this.c);
+            return [p];
+        }
+        // if distance is larger than radius, no intersection
+        if (Math.abs(d) > Math.abs(this.r)) return [];
+        // otherwise two intersections
+        const p = line.project(this.c);
+        const h = Math.sqrt(this.r * this.r - d * d);
+        const dir = line.direction();
+        const offset = mult(h, unit(dir));
+        return [sum(p, offset), diff(p, offset)];
+    }
+
     public getBoundingBox(): [Point, Point] {
         const r = Math.abs(this.r);
         const rr = v2(r, r);
@@ -538,5 +556,33 @@ export class Circle extends Curve {
     }
     static insideOrOn(c1: Circle, isIn: Circle) {
         return norm(diff(c1.c, isIn.c)) <= Math.abs(isIn.r) - Math.abs(c1.r);
+    }
+
+    static intersect(c1: Circle, c2: Circle): Point[] {
+        // if separated by more that sum of radii, no intersection
+        const d = norm(diff(c2.c, c1.c));
+        if (d > Math.abs(c1.r) + Math.abs(c2.r)) return [];
+        // if same, no intersection
+        if (Circle.same(c1, c2)) return [];
+        // if tangent, one intersection
+        if (Math.abs(d - (Math.abs(c1.r) + Math.abs(c2.r))) < 1e-5) {
+            const p = sum(
+                c1.c,
+                mult(
+                    Math.abs(c1.r) / (Math.abs(c1.r) + Math.abs(c2.r)),
+                    diff(c2.c, c1.c)
+                )
+            );
+            return [p];
+        }
+        // if one circle is contained in the other, no intersection
+        if (d < Math.abs(Math.abs(c1.r) - Math.abs(c2.r))) return [];
+        // otherwise two intersections
+        const a = (c1.r * c1.r - c2.r * c2.r + d * d) / (2 * d);
+        const h = Math.sqrt(c1.r * c1.r - a * a);
+        const p = sum(c1.c, mult(a / d, diff(c2.c, c1.c)));
+        const rx = -(c2.c.y - c1.c.y) * (h / d);
+        const ry = (c2.c.x - c1.c.x) * (h / d);
+        return [v2(p.x + rx, p.y + ry), v2(p.x - rx, p.y - ry)];
     }
 }

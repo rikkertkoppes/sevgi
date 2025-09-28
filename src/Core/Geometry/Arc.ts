@@ -1,4 +1,5 @@
 import { Circle } from "./Circle";
+import { LineSegment } from "./Line";
 import { Segment } from "./Segment";
 import { fixedNum, normalizeAngle } from "./Util";
 import { Point, v2 } from "./Vector";
@@ -66,7 +67,7 @@ export class Arc extends Segment {
     public get angle() {
         return PI - this.length / Math.abs(this.c.r);
     }
-    public on(point: Point) {
+    public pointOn(point: Point) {
         if (!this.c.pointOn(point)) {
             return false;
         }
@@ -187,6 +188,22 @@ export class Arc extends Segment {
     // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public curvatureAt(t: number) {
         return 1 / this.c.r;
+    }
+
+    private intersectWithArc(other: Arc): Point[] {
+        // find all intersections with the full circles
+        const points = Circle.intersect(this.c, other.c);
+        // filter out the ones that are not on both arcs
+        return points.filter((p) => this.pointOn(p) && other.pointOn(p));
+    }
+
+    public intersectWith(other: Segment): Point[] {
+        if (LineSegment.is(other)) {
+            return other.intersectWith(this);
+        } else if (Arc.is(other)) {
+            return this.intersectWithArc(other);
+        }
+        return [];
     }
 
     public toSVG() {

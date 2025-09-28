@@ -11,5 +11,7 @@ export abstract class Segment extends Curve {
     abstract end: Point;
     abstract offset(d: number): Segment;
 
+    abstract intersectWith(other: Segment): Point[];
+
     abstract toSVGRel(): string;
 }

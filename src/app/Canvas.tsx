@@ -67,7 +67,7 @@ function serializeSVG(geometry: BaseGeometry[]) {
     let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">`;
     geometry.forEach((g) => {
         if (g instanceof Point) return;
-        svg += `<path d="${g.toSVG()}" style="stroke:black; stroke-width: 0.1" />`;
+        svg += `<path d="${g.toSVG()}" style="stroke:black; stroke-width: 0.1; fill: none" />`;
     });
     svg += `</svg>`;
     return svg;

@@ -5,18 +5,18 @@ import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 export const move: PrimitiveFunction = {
     name: "move",
     label: "Move",
-    description: "Move a PolyLine by an offset",
+    description: "Move geometry by an offset",
     inputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
         offset: { type: "Point", default: v2(0, 0) },
     },
     outputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
     },
     impl: async (inputs) => {
         return {
-            shape: binaryOnTree(
-                inputs.shape,
+            geometry: binaryOnTree(
+                inputs.geometry,
                 inputs.offset,
                 (m: PolyLine, o: Point) => {
                     return m.translate(o);

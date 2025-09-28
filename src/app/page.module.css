@@ -18,10 +18,12 @@
   --color-Circle: #00c59e;
   --color-Arc: #00c59e;
   --color-Curve: #00c59e;
+  --color-Segment: #00c59e;
   --color-Path: #00c59e;
   --color-Model: #f0c;
   --color-PolyLine: #f0c;
   --color-any: silver;
+  --color-Geometry: #0af;
 }
 
 .Container.placing :global(.react-flow__pane.draggable) {

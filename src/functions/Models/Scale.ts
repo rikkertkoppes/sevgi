@@ -4,9 +4,9 @@ import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 export const scale: PrimitiveFunction = {
     name: "scale",
     label: "Scale",
-    description: "Scale a PolyLine with respect to a center point",
+    description: "Scale geometry with respect to a center point",
     inputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
         scale: {
             type: "number",
             default: 0.5,
@@ -17,13 +17,13 @@ export const scale: PrimitiveFunction = {
         },
     },
     outputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
     },
     impl: async (inputs) => {
         return {
-            shape: nAryOnTree(
+            geometry: nAryOnTree(
                 [
-                    inputs.shape,
+                    inputs.geometry,
                     inputs.scale,
                     inputs.center || broadCast(v2(0, 0)),
                 ],

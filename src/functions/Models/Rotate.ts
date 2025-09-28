@@ -5,20 +5,20 @@ import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 export const rotate: PrimitiveFunction = {
     name: "rotate",
     label: "Rotate",
-    description: "Rotate a PolyLine around a point",
+    description: "Rotate geometry around a point",
     inputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
         angle: { type: "number", default: 0 },
         center: { type: "Point", default: v2(0, 0) },
     },
     outputs: {
-        shape: "PolyLine",
+        geometry: "Geometry",
     },
     impl: async (inputs) => {
         return {
-            shape: nAryOnTree(
+            geometry: nAryOnTree(
                 [
-                    inputs.shape,
+                    inputs.geometry,
                     inputs.angle,
                     inputs.center || broadCast(v2(0, 0)),
                 ],

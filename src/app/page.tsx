@@ -134,7 +134,11 @@ export default function Home() {
                 <div className={styles.Panes}>
                     <div className={styles.FlowPane}>
                         <Tabs>
-                            <TabHeaders />
+                            <TabHeaders>
+                                <div className={styles.Version}>
+                                    v{process.env.NEXT_PUBLIC_APP_VERSION}
+                                </div>
+                            </TabHeaders>
                             <Tab header="List">
                                 <NodeButtons
                                     nodes={{ ...Lib.List, ...Lib.Sequence }}

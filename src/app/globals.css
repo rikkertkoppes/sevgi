@@ -4,6 +4,10 @@
   --background: #0a0a0a;
   --foreground: #ededed;
   --connection-color: #007bff;
+  --xy-controls-button-background-color: #222;
+  --xy-controls-button-border-color: #666;
+  --xy-attribution-background-color: #222;
+  --xy-controls-box-shadow: 0px 0px 0px 1px #666;
 }
 
 @media (prefers-color-scheme: dark) {

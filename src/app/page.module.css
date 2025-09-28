@@ -107,3 +107,12 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+:global(#cross) path {
+  stroke: red;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+.Canvas :global(.Point) {
+  marker-end: url(#cross);
+}

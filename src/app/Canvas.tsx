@@ -8,11 +8,12 @@ import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
 import { useGesture } from "@use-gesture/react";
 
 interface GeometryProps {
+    c: string;
     d: string;
 }
-const Geometry = React.memo(({ d }: GeometryProps) => {
+const Geometry = React.memo(({ d, c }: GeometryProps) => {
     if (!d) return null;
-    return <path d={d} />;
+    return <path d={d} className={c} />;
 });
 Geometry.displayName = "Geometry";
 
@@ -35,6 +36,19 @@ function SVGScroller({ children }: SVGScrollerProps) {
     return (
         <div className={styles.Scroll} {...bind()}>
             <svg>
+                <defs>
+                    <marker
+                        id="cross"
+                        viewBox="-10 -10 20 20"
+                        refX="0"
+                        refY="0"
+                        markerWidth="8"
+                        markerHeight="8"
+                        orient="auto-start-reverse"
+                    >
+                        <path d="M -10 -10 L 10 10 M -10 10 L 10 -10 z" />
+                    </marker>
+                </defs>
                 <g
                     transform={`translate(${offset.x},${
                         offset.y
@@ -144,9 +158,16 @@ export function Canvas({ model, selection }: CanvasProps) {
                     className={styles.YAxis}
                 />
                 <g className={styles.Geometry}>
-                    {geometry.map((g, i) => (
-                        <Geometry d={g?.toSVG()} key={i} />
-                    ))}
+                    {geometry.map((g, i) => {
+                        if (!g) return null;
+                        return (
+                            <Geometry
+                                d={g?.toSVG()}
+                                key={i}
+                                c={g?.constructor.name}
+                            />
+                        );
+                    })}
                 </g>
             </SVGScroller>
             {/* <div dangerouslySetInnerHTML={{ __html: svg }} /> */}
@@ -162,7 +183,6 @@ export function Canvas({ model, selection }: CanvasProps) {
                         />
                     ))}
                 </svg> */}
-            {/* </ScrollCanvas> */}
         </div>
     );
 }

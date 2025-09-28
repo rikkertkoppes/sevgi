@@ -12,11 +12,14 @@ export class PolyLine extends Curve {
         // TODO: order
         this.edges = lines;
         this.lengths = this.edges.map((e) => e.length);
-        this.offsets = this.lengths.reduce((acc, l) => {
-            const last = acc.length > 0 ? acc[acc.length - 1] : 0;
-            acc.push(last + l);
-            return acc;
-        }, [] as number[]);
+        this.offsets = this.lengths.reduce(
+            (acc, l) => {
+                const last = acc.length > 0 ? acc[acc.length - 1] : 0;
+                acc.push(last + l);
+                return acc;
+            },
+            [0] as number[]
+        );
         this.length = this.lengths.reduce((sum, l) => sum + l, 0);
     }
 
@@ -34,8 +37,9 @@ export class PolyLine extends Curve {
     }
 
     private getLocalT(globalT: number) {
+        globalT = Math.min(Math.max(globalT, 0), 1);
         const offset = globalT * this.length;
-        const edgeIndex = this.offsets.findLastIndex((o) => o >= offset);
+        const edgeIndex = this.offsets.findLastIndex((o) => o <= offset);
         const startOffset = this.offsets[edgeIndex];
         const localOffset = offset - startOffset;
         const t = localOffset / this.lengths[edgeIndex];
@@ -50,6 +54,10 @@ export class PolyLine extends Curve {
     public pointAt(t: number): Point {
         const { edgeIndex, t: localT } = this.getLocalT(t);
         return this.edges[edgeIndex].pointAt(localT);
+    }
+    public normalAt(t: number): Point {
+        const { edgeIndex, t: localT } = this.getLocalT(t);
+        return this.edges[edgeIndex].normalAt(localT);
     }
     public tangentAt(t: number): Point {
         const { edgeIndex, t: localT } = this.getLocalT(t);

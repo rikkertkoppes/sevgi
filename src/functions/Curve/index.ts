@@ -6,6 +6,7 @@ import { circle } from "./Circle";
 import { arc } from "./Arc";
 import { destructPoint } from "./DestructPoint";
 import { midpoint } from "./Midpoint";
+import { evaluateCurve } from "./EvaluateCurve";
 
 const primitives: Record<string, PrimitiveFunction> = {
     point,
@@ -14,6 +15,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     circle,
     arc,
     midpoint,
+    evaluateCurve,
 };
 
 export default primitives;

@@ -14,6 +14,7 @@ interface ClosestPointInfo {
 export abstract class Curve extends BaseGeometry {
     abstract length: number;
     abstract pointAt(t: number): Point;
+    abstract normalAt(t: number): Point;
     abstract tangentAt(t: number): Point;
     abstract offsetAt(t: number, distance: number): Point;
     abstract curvatureAt(t: number): number;

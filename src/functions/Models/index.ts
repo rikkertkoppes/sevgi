@@ -9,6 +9,8 @@ import { mPaths } from "./MPaths";
 import { center } from "./Center";
 import { countSegments } from "./CountSegments";
 import { rotate } from "./Rotate";
+import { expolodePoly } from "./ExplodePoly";
+import { polyFromPoints } from "./PolyFromPoints";
 
 const primitives: Record<string, PrimitiveFunction> = {
     polygon,
@@ -21,6 +23,8 @@ const primitives: Record<string, PrimitiveFunction> = {
     mPoints,
     mPaths,
     countSegments,
+    expolodePoly,
+    polyFromPoints,
 };
 
 export default primitives;

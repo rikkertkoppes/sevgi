@@ -122,4 +122,15 @@ export class PolyLine extends Curve {
     public static is(p: any): p is PolyLine {
         return p && Array.isArray(p.points) && p.points.every(Point.is);
     }
+
+    public static fromPoints(points: Point[], close = false): PolyLine {
+        const lines: LineSegment[] = [];
+        for (let i = 0; i < points.length - 1; i++) {
+            lines.push(new LineSegment(points[i], points[i + 1]));
+        }
+        if (close && points.length > 2) {
+            lines.push(new LineSegment(points[points.length - 1], points[0]));
+        }
+        return new PolyLine(lines);
+    }
 }

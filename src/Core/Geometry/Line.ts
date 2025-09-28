@@ -1,4 +1,4 @@
-import { Point, v2 } from "./Vector";
+import { cross, Point, v2 } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Curve } from "./Curve";
@@ -11,7 +11,7 @@ export class LineSegment extends Curve {
         super();
         this.length = norm(diff(start, end));
         this._tangent = unit(diff(end, start));
-        this._normal = unit(rot(Math.PI / 2, this.direction()));
+        this._normal = unit(rot(-Math.PI / 2, this.direction()));
     }
 
     public get line() {
@@ -94,6 +94,29 @@ export class LineSegment extends Curve {
         return 0;
     }
 
+    public intersectWith(other: LineSegment, eps: number = 1e-9): Point | null {
+        const r = diff(this.end, this.start); // direction vector of this segment
+        const s = diff(other.end, other.start); // direction vector of other segment
+
+        const rxs = cross(r, s);
+        const q_p = diff(other.start, this.start);
+
+        if (Math.abs(rxs) < eps) {
+            // Parallel or collinear
+            return null;
+        }
+
+        const t = cross(q_p, s) / rxs;
+        const u = cross(q_p, r) / rxs;
+
+        if (t >= -eps && t <= 1 + eps && u >= -eps && u <= 1 + eps) {
+            // Intersection point lies within both segments
+            return sum(this.start, mult(t, r));
+        }
+
+        return null;
+    }
+
     public toSVG() {
         const p = this.start;
         let path = fixedNum`M ${p.x} ${p.y}`;
@@ -113,6 +136,14 @@ export class LineSegment extends Curve {
 
     static is(thing: any): thing is LineSegment {
         return thing instanceof LineSegment;
+    }
+
+    public static intersection(
+        a: LineSegment,
+        b: LineSegment,
+        eps: number = 1e-9
+    ): Point | null {
+        return a.intersectWith(b, eps);
     }
 }
 

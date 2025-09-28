@@ -11,7 +11,11 @@ export const outline: PrimitiveFunction = {
         d: { type: "number", default: 1 },
     },
     params: {
-        inside: { type: "boolean", default: false },
+        join: {
+            type: "string",
+            options: ["miter", "round", "bevel", "none"],
+            default: "miter",
+        },
     },
     outputs: {
         shape: "PolyLine",
@@ -24,7 +28,7 @@ export const outline: PrimitiveFunction = {
 
                 (m: PolyLine, d: number) => {
                     if (params.inside) d = -d;
-                    return m.offset(d);
+                    return m.offset(d, params.join);
                 },
                 true
             ),

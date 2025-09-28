@@ -75,17 +75,20 @@ function serializeSVG(geometry: BaseGeometry[]) {
 
 interface CanvasProps {
     model: Tree<BaseGeometry>;
-    selection: Record<string, any>;
+    selection: Record<string, Tree<BaseGeometry>>;
 }
 
 export function Canvas({ model, selection }: CanvasProps) {
     const [geometry, setGeometry] = React.useState<BaseGeometry[]>([]);
+    const [selectionGeometry, setSelectionGeometry] = React.useState<
+        BaseGeometry[]
+    >([]);
 
     React.useEffect(() => {
-        const models = toArray(model || {}) as BaseGeometry[];
+        const geometry = toArray(model || {}) as BaseGeometry[];
         // console.log("result geometry", models);
 
-        setGeometry(models);
+        setGeometry(geometry);
     }, [model]);
 
     const handleDownload = () => {
@@ -99,33 +102,11 @@ export function Canvas({ model, selection }: CanvasProps) {
         document.body.removeChild(element); // Clean up
     };
 
-    // React.useEffect(() => {
-    //     const mainSel = selection[Object.keys(selection)[0]];
-    //     const points: IPoint[] = [];
-    //     const selModel: IModel = { paths: {}, models: {} };
-    //     if (mainSel) {
-    //         const items = toArray(mainSel);
-    //         console.log("focus items", items);
-    //         items.forEach((item, index) => {
-    //             if (isPoint(item)) {
-    //                 points.push(item);
-    //             } else if (isPath(item)) {
-    //                 selModel.paths!["p" + index] = item;
-    //             } else if (isModel(item)) {
-    //                 selModel.models!["m" + index] = item;
-    //             }
-    //         });
-    //     }
-    //     setPoints(points);
-    //     setSelSvg(
-    //         exporter.toSVG(selModel, {
-    //             useSvgPathOnly: false,
-    //             strokeWidth: "0.1px",
-    //             stroke: "#0af",
-    //             origin: [0, 0],
-    //         })
-    //     );
-    // }, [selection]);
+    React.useEffect(() => {
+        const mainSel = selection[Object.keys(selection)[0]];
+        const selGeometry = toArray(mainSel || {}) as BaseGeometry[];
+        setSelectionGeometry(selGeometry);
+    }, [selection]);
 
     return (
         <div className={styles.Canvas}>
@@ -159,20 +140,19 @@ export function Canvas({ model, selection }: CanvasProps) {
                         );
                     })}
                 </g>
+                <g className={styles.Selection}>
+                    {selectionGeometry.map((g, i) => {
+                        if (!g) return null;
+                        return (
+                            <Geometry
+                                d={g?.toSVG()}
+                                key={i}
+                                c={g?.constructor.name}
+                            />
+                        );
+                    })}
+                </g>
             </SVGScroller>
-            {/* <div dangerouslySetInnerHTML={{ __html: svg }} /> */}
-            {/* <div dangerouslySetInnerHTML={{ __html: selSvg }} />
-                <svg>
-                    {points.map((p, i) => (
-                        <circle
-                            key={i}
-                            cx={p[0]}
-                            cy={-p[1]}
-                            r={1}
-                            fill="#0af"
-                        />
-                    ))}
-                </svg> */}
         </div>
     );
 }

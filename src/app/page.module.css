@@ -111,11 +111,22 @@
   stroke-linejoin: round;
 }
 
-:global(#cross) path {
+.Canvas :global(.Point) {
   stroke: red;
+  marker-end: url(#cross);
+}
+
+:global(#cross) path {
+  stroke: context-stroke;
   stroke-width: 2px;
   vector-effect: non-scaling-stroke;
 }
-.Canvas :global(.Point) {
-  marker-end: url(#cross);
+
+.Selection path {
+  stroke: #0af !important;
+  stroke-width: 1px;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

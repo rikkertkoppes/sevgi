@@ -6,7 +6,7 @@ export const midpoint: PrimitiveFunction = {
     label: "Midpoint",
     description: "Returns the midpoint of a line or arc",
     inputs: {
-        curve: { type: "Line" },
+        curve: { type: "Curve" },
     },
     outputs: {
         point: "Point",

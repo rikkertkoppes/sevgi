@@ -88,7 +88,7 @@ export class PolyLine extends Curve {
         let closest: { t: number; point: Point; distance: number } | null =
             null;
         let accLength = 0;
-        this.segments.forEach((edge, i) => {
+        this.segments.forEach((edge) => {
             const cp = edge.findClosestPoint(p);
             if (!closest || cp.distance < closest.distance) {
                 closest = {

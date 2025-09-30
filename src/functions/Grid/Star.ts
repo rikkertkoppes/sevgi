@@ -23,12 +23,12 @@ export const star: PrimitiveFunction = {
         lines: "Line",
         shapes: "PolyLine",
     },
-    impl: async (inputs, params) => {
+    impl: async (inputs) => {
         // TODO: make angle and distance inputs to they can be varied
         // use nAryOnTreeBranch instead
         const lines = nAryOnTreeBranch(
             [inputs.shape, inputs.angle, inputs.distance],
-            (branches, paths) => {
+            (branches) => {
                 const trimmed: LineSegment[] = [];
                 const polies = branches[0] as PolyLine[];
                 const angles = branches[1] as number[];

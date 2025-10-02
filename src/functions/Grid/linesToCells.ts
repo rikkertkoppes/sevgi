@@ -9,7 +9,6 @@ import { Point } from "@/Core/Geometry/Vector";
 
 export function linesToCells(lines: LineSegment[]): PolyLine[] {
     // Tunables for robustness on float inputs (snap + area threshold)
-    const EPS_SNAP = 1e-9;
     const EPS_AREA = 1e-12;
 
     type Vid = number;
@@ -25,14 +24,11 @@ export function linesToCells(lines: LineSegment[]): PolyLine[] {
     }
 
     // --- 1) Snap & deduplicate vertices; deduplicate undirected edges ---
-    const vKey = (p: Point) =>
-        `${Math.round(p.x / EPS_SNAP)}:${Math.round(p.y / EPS_SNAP)}`;
-
     const vertexIds = new Map<string, Vid>();
     const vertices: Point[] = [];
 
     const getVertexId = (p: Point): Vid => {
-        const key = vKey(p);
+        const key = p.hash();
         let id = vertexIds.get(key);
         if (id === undefined) {
             id = vertices.length;

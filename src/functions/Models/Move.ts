@@ -1,4 +1,4 @@
-import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
 import { Point, v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 
@@ -16,10 +16,10 @@ export const move: PrimitiveFunction = {
     impl: async (inputs) => {
         return {
             geometry: binaryOnTree(
-                inputs.geometry,
+                inputs.geometry || {},
                 inputs.offset,
-                (m: PolyLine, o: Point) => {
-                    return m.translate(o);
+                (m: BaseGeometry, o: Point) => {
+                    return m?.translate(o);
                 },
                 true
             ),

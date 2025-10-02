@@ -23,12 +23,12 @@ export const outline: PrimitiveFunction = {
     impl: async (inputs, params) => {
         return {
             shape: binaryOnTree(
-                inputs.shape,
+                inputs.shape || {},
                 inputs.d,
 
                 (m: PolyLine, d: number) => {
                     if (params.inside) d = -d;
-                    return m.offset(d, params.join);
+                    return m?.offset(d, params.join);
                 },
                 true
             ),

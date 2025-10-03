@@ -11,16 +11,17 @@ export class Point extends BaseGeometry {
     }
 
     public clone(): Point {
-        return new Point(this.x, this.y);
+        return this.copyIdentity(new Point(this.x, this.y));
     }
+
     public translate(v: Point): Point {
-        return sum(this, v);
+        return this.copyIdentity(sum(this, v));
     }
     public rotate(angle: number, center: Point): Point {
-        return rot(angle, this, center);
+        return this.copyIdentity(rot(angle, this, center));
     }
     public scale(factor: number, center: Point): Point {
-        return sum(mult(factor, diff(this, center)), center);
+        return this.copyIdentity(sum(mult(factor, diff(this, center)), center));
     }
 
     public toSVG() {
@@ -139,6 +140,9 @@ export const same = (p1?: Point | null, p2?: Point | null): boolean => {
 export const mid = (...ps: Point[]): Point => {
     if (!ps.length) throw new Error("no points to average");
     return mult(1 / ps.length, sum(...ps));
+};
+export const lerp = (p1: Point, p2: Point, t: number): Point => {
+    return sum(mult(1 - t, p1), mult(t, p2));
 };
 export const colinear = (p1: Point, p2: Point, p3: Point) => {
     const a = diff(p2, p1);

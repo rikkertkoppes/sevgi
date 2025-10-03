@@ -136,7 +136,8 @@ export default function Home() {
                         <Tabs>
                             <TabHeaders>
                                 <div className={styles.Version}>
-                                    v{process.env.NEXT_PUBLIC_APP_VERSION}
+                                    <div className={styles.Title}>sevgi</div>v
+                                    {process.env.NEXT_PUBLIC_APP_VERSION}
                                 </div>
                             </TabHeaders>
                             <Tab header="List">

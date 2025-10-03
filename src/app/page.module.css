@@ -44,8 +44,19 @@
 
 .Version {
   flex: 1;
-  text-align: right;
   padding-right: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  overflow: visible;
+  max-height: 28px;
+}
+.Title {
+  font-family: 'King Malik';
+  font-size: 40px;
+  margin-top: -12px;
+  color: #0af;
 }
 
 .FlowPane {

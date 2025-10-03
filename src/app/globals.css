@@ -10,6 +10,12 @@
   --xy-controls-box-shadow: 0px 0px 0px 1px #666;
 }
 
+@font-face {
+  font-family: 'King Malik';
+  src: url(/KingMalik.woff2) format('woff2'),
+       url(/KingMalik.woff) format('woff');
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

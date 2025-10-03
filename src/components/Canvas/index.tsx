@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
 import { toArray, Tree } from "@rkmodules/rules";
+import { useGesture } from "@use-gesture/react";
+
+import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
+import { Point } from "@/Core/Geometry/Vector";
 
 import "@rkmodules/rules/index.css";
-import styles from "./page.module.css";
-import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
-import { useGesture } from "@use-gesture/react";
-import { Point } from "@/Core/Geometry/Vector";
+import styles from "./Canvas.module.css";
 
 interface GeometryProps {
     c: string;

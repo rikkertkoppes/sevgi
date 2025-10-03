@@ -21,7 +21,7 @@ import Curve from "@/functions/Curve";
 import Models from "@/functions/Models";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
-import { Canvas } from "./Canvas";
+import { Canvas } from "@/components/Canvas";
 import { output } from "@/functions/Output";
 
 const engine = new Engine({

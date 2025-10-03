@@ -1,0 +1,75 @@
+.Canvas {
+    flex: 1;
+    background-color: white;
+    color: black;
+    position: relative;
+}
+
+.Scroll {
+    height: 100%;
+    cursor: grab;
+    touch-action: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.Canvas svg {
+    overflow: visible;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 1px;
+}
+
+.Data {
+    overflow: auto;
+    flex: 1;
+}
+
+.Download {
+    position: absolute;
+    right: 4px;
+    top: -24px;
+}
+
+.XAxis {
+    stroke: red;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
+.YAxis {
+    stroke: green;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
+.Geometry path {
+    stroke: black;
+    stroke-width: 1px;
+    fill: none;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.Canvas :global(.Point) {
+    stroke: red;
+    marker-end: url(#cross);
+}
+
+:global(#cross) path {
+    stroke: context-stroke;
+    stroke-width: 2px;
+    vector-effect: non-scaling-stroke;
+}
+
+.Selection path {
+    stroke: #0af !important;
+    stroke-width: 1px;
+    fill: none;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}

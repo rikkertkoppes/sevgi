@@ -19,8 +19,8 @@ export const star: PrimitiveFunction = {
     },
     params: {},
     outputs: {
-        lines: "Line",
         shapes: "PolyLine",
+        lines: "Line",
     },
     impl: async (inputs) => {
         const lines = nAryOnTreeBranch(
@@ -64,8 +64,8 @@ export const star: PrimitiveFunction = {
         });
 
         return {
-            lines,
             shapes,
+            lines,
         };
     },
 };

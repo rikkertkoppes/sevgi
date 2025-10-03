@@ -1,6 +1,7 @@
+import { Arc } from "@/Core/Geometry/Arc";
 import { LineSegment } from "@/Core/Geometry/LineSegment";
-import { Point, v2 } from "@/Core/Geometry/Vector";
-import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import { v2 } from "@/Core/Geometry/Vector";
+import { nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const line: PrimitiveFunction = {
     name: "line",
@@ -9,17 +10,21 @@ export const line: PrimitiveFunction = {
     inputs: {
         start: { type: "Point", default: v2(0, 0) },
         end: { type: "Point", default: v2(10, 10) },
+        bulge: { type: "number", default: 0 },
     },
     outputs: {
         line: "Line",
     },
     impl: async (inputs) => {
         return {
-            line: binaryOnTree(
-                inputs.start,
-                inputs.end,
-                (o: Point, e: Point) => {
-                    return new LineSegment(o, e);
+            line: nAryOnTree(
+                [inputs.start, inputs.end, inputs.bulge],
+                ([o, e, s]) => {
+                    if (s !== 0) {
+                        return Arc.fromPoints(o, e, s);
+                    } else {
+                        return new LineSegment(o, e);
+                    }
                 },
                 true
             ),

@@ -3,7 +3,7 @@ import { Circle } from "./Circle";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { fixedNum, normalizeAngle } from "./Util";
-import { Point, v2 } from "./Vector";
+import { Point, rotateRight, v2 } from "./Vector";
 import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
 
 const PI = Math.PI;
@@ -251,5 +251,18 @@ export class Arc extends Segment {
 
     static is(thing: any): thing is Arc {
         return thing instanceof Arc;
+    }
+
+    static fromPoints(start: Point, end: Point, sagitta: number) {
+        const l = norm(diff(end, start));
+        const r = (l * l) / (8 * sagitta) + sagitta / 2;
+        // get the arc center point
+        const m = sum(start, mult(0.5, diff(end, start))); //midpoint
+        const n = mult((r - sagitta) / l, rotateRight(diff(end, start))); // normal
+        const c = sum(m, n); // center point
+        const circle = new Circle(c, r);
+        const startAngle = angle(diff(start, c));
+        const endAngle = angle(diff(end, c));
+        return new Arc(circle, startAngle, endAngle);
     }
 }

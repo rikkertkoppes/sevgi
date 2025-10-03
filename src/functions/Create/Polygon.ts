@@ -28,6 +28,10 @@ export const polygon: PrimitiveFunction = {
             ],
             ([o, n, r, a, or]) => {
                 const points: Point[] = [];
+                // when or is true, shrink r such that the polygon inner circle has radius r
+                if (!or) {
+                    r = r / Math.cos(Math.PI / n);
+                }
                 for (let i = 0; i < n; i++) {
                     const theta = (2 * Math.PI * i) / n + (a * Math.PI) / 180;
                     const x = r * Math.cos(theta);

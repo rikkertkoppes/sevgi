@@ -9,7 +9,6 @@ import {
     GraphedFunction,
     PrimitiveFunction,
     Lib,
-    useDraggableNode,
     useFunction,
     useUpdatePositions,
 } from "@rkmodules/rules";
@@ -24,6 +23,7 @@ import { output } from "@/functions/Output";
 
 import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
+import { DraggableButton } from "@/components/DraggableButton";
 
 const engine = new Engine({
     ...Create,
@@ -44,20 +44,6 @@ const testFunction: GraphedFunction = {
         model: "<output.output>",
     },
 };
-
-interface DraggableButtonProps {
-    name: string;
-    fn: PrimitiveFunction;
-    onClick?: (e: React.MouseEvent) => void;
-}
-function DraggableButton({ name, fn, onClick }: DraggableButtonProps) {
-    const ref = useDraggableNode(name, fn);
-    return (
-        <button ref={ref as any} title={fn.description} onClick={onClick}>
-            {fn.label || fn.name}
-        </button>
-    );
-}
 
 interface NodeButtonsProps {
     nodes: Record<string, PrimitiveFunction>;

@@ -41,14 +41,17 @@ export class LineSegment extends Segment {
 
     public translate(vector: Point) {
         return this.copyIdentity(
-            new LineSegment(sum(this.start, vector), sum(this.end, vector))
+            new LineSegment(
+                this.start.translate(vector),
+                this.end.translate(vector)
+            )
         );
     }
     public rotate(angle: number, center: Point) {
         return this.copyIdentity(
             new LineSegment(
-                rot(angle, this.start, center),
-                rot(angle, this.end, center)
+                this.start.rotate(angle, center),
+                this.end.rotate(angle, center)
             )
         );
     }
@@ -87,6 +90,7 @@ export class LineSegment extends Segment {
     }
 
     public pointAt(t: number) {
+        t = Math.max(0, Math.min(1, t));
         return sum(this.start, mult(t * this.length, this.direction()));
     }
     // eslint-disable-next-line "@typescript-eslint/no-unused-vars"

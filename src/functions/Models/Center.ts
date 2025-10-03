@@ -15,7 +15,7 @@ export const center: PrimitiveFunction = {
         y: "number",
     },
     impl: async (inputs) => {
-        const point = mapTree(inputs.shape, (m: PolyLine) => {
+        const point = mapTree(inputs.shape || {}, (m: PolyLine) => {
             const points = m.getPoints();
             const center = mid(...points);
 

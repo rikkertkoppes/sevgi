@@ -7,6 +7,12 @@ export abstract class BaseGeometry {
     abstract rotate(angle: number, center: Point): BaseGeometry;
     abstract scale(factor: number, center: Point): BaseGeometry;
 
+    abstract walk(
+        enter: (g: BaseGeometry) => BaseGeometry | void,
+        exit: (g: BaseGeometry) => BaseGeometry | void
+    ): void;
+    abstract flatten(): BaseGeometry[];
+
     abstract toString(): string;
     abstract toSVG(): any;
 }

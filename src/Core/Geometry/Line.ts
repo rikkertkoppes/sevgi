@@ -3,6 +3,7 @@ import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
 import { Arc } from "./Arc";
+import { BaseGeometry } from "./BaseGeometry";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";
@@ -145,6 +146,19 @@ export class LineSegment extends Segment {
         }
         // segments are either arcs or lines, so no intersection possible
         return [];
+    }
+
+    public walk(
+        enter: (g: BaseGeometry) => BaseGeometry | void,
+        exit: (g: BaseGeometry) => BaseGeometry | void
+    ): void {
+        enter(this);
+        this.start.walk(enter, exit);
+        this.end.walk(enter, exit);
+        exit(this);
+    }
+    public flatten(): BaseGeometry[] {
+        return [this, ...this.start.flatten(), ...this.end.flatten()];
     }
 
     public toSVG() {

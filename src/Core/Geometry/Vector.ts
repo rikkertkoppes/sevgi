@@ -24,6 +24,17 @@ export class Point extends BaseGeometry {
         return this.copyIdentity(sum(mult(factor, diff(this, center)), center));
     }
 
+    public walk(
+        enter: (g: BaseGeometry) => BaseGeometry | void,
+        exit: (g: BaseGeometry) => BaseGeometry | void
+    ): void {
+        enter(this);
+        exit(this);
+    }
+    public flatten(): Point[] {
+        return [this];
+    }
+
     public toSVG() {
         let path = fixedNum`M ${this.x} ${this.y}`;
         path += " l 0, 0";

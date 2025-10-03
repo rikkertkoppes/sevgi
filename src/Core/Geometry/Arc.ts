@@ -1,3 +1,4 @@
+import { BaseGeometry } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { LineSegment } from "./Line";
 import { Segment } from "./Segment";
@@ -205,6 +206,19 @@ export class Arc extends Segment {
             return this.intersectWithArc(other);
         }
         return [];
+    }
+
+    public walk(
+        enter: (g: BaseGeometry) => BaseGeometry | void,
+        exit: (g: BaseGeometry) => BaseGeometry | void
+    ): void {
+        enter(this);
+        this.start.walk(enter, exit);
+        this.end.walk(enter, exit);
+        exit(this);
+    }
+    public flatten(): BaseGeometry[] {
+        return [this, ...this.start.flatten(), ...this.end.flatten()];
     }
 
     public toSVG() {

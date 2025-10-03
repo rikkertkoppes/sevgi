@@ -1,4 +1,5 @@
 import { Arc } from "./Arc";
+import { BaseGeometry } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { Curve } from "./Curve";
 import { Line, LineSegment } from "./Line";
@@ -203,6 +204,18 @@ export class PolyLine extends Curve {
             index[e.end.hash()] = e.end;
         });
         return Object.values(index);
+    }
+
+    public walk(
+        enter: (g: BaseGeometry) => BaseGeometry | void,
+        exit: (g: BaseGeometry) => BaseGeometry | void
+    ): void {
+        enter(this);
+        this.segments.forEach((s) => s.walk(enter, exit));
+        exit(this);
+    }
+    public flatten(): BaseGeometry[] {
+        return [this, ...this.segments.flatMap((s) => s.flatten())];
     }
 
     public toSVG() {

@@ -3,7 +3,7 @@ import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const pointsFromPoly: PrimitiveFunction = {
     name: "pointsFromPoly",
-    label: "PolyLine Points",
+    label: "Points from Poly",
     description: "Get the points of a PolyLine",
     inputs: {
         shape: "PolyLine",

@@ -1,56 +1,93 @@
 :root {
-  /* --background: #ffffff;
-  --foreground: #171717; */
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --connection-color: #007bff;
-  --xy-controls-button-background-color: #222;
-  --xy-controls-button-border-color: #666;
-  --xy-attribution-background-color: #222;
-  --xy-controls-box-shadow: 0px 0px 0px 1px #666;
-}
+    --background: #fffaf6;
+    --foreground: #171717;
+    /* --background: #0a0a0a;
+    --foreground: #ededed; */
+    --line-color: #a77a55;
+    --accent: #0af;
+    --connection-color: #007bff;
+    --xy-controls-button-background-color: #ffede0;
+    --xy-controls-button-border-color: var(--line-color);
+    --xy-attribution-background-color: #ffede0;
+    --xy-controls-box-shadow: 0px 0px 0px 1px var(--line-color);
+    --xy-background-pattern-color: #91919a;
 
-@font-face {
-  font-family: 'King Malik';
-  src: url(/KingMalik.woff2) format('woff2'),
-       url(/KingMalik.woff) format('woff');
+    --tab-line: var(--line-color);
+    --tab-panel: var(--background);
+    --tab-background: #ffdec3;
+    --node-line: var(--line-color);
+    --node-background: #ffede0;
+    --node-select-line: #0af;
+    --node-active-line: #0af;
+
+    --color-red: crimson;
+    --color-green: green;
+    --color-path: var(--foreground);
+    --color-number: #aaf;
+    --color-string: #faa;
+    --color-boolean: #afa;
+    --color-Point: orange;
+    --color-Line: #00c59e;
+    --color-Circle: #00c59e;
+    --color-Arc: #00c59e;
+    --color-Curve: #00c59e;
+    --color-Segment: #00c59e;
+    --color-Path: #00c59e;
+    --color-Model: #f0c;
+    --color-PolyLine: #f0c;
+    --color-any: silver;
+    --color-Geometry: #0af;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #404040;
+        --foreground: #ededed;
+        --line-color: #666;
+        --accent: #0af;
+        --connection-color: #007bff;
+        --xy-controls-button-background-color: #222;
+        --xy-controls-button-border-color: var(--line-color);
+        --xy-attribution-background-color: #222;
+        --xy-controls-box-shadow: 0px 0px 0px 1px var(--line-color);
+
+        --tab-line: var(--line-color);
+        --tab-panel: var(--background);
+        --tab-background: #333;
+        --node-line: var(--line-color);
+        --node-background: #222;
+        --node-select-line: #0af;
+        --node-active-line: #0af;
+    }
+
+    html {
+        color-scheme: dark;
+    }
+}
+
+@font-face {
+    font-family: "King Malik";
+    src: url(/KingMalik.woff2) format("woff2"),
+        url(/KingMalik.woff) format("woff");
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  color-scheme: dark;
+    max-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+    color: inherit;
+    text-decoration: none;
 }

@@ -137,6 +137,29 @@ export function Canvas({ model, selection }: CanvasProps) {
                 Download SVG
             </button>
             <SVGScroller>
+                <pattern
+                    id="bkg"
+                    width={10}
+                    height={10}
+                    patternUnits="userSpaceOnUse"
+                    viewBox="-5 -5 10 10"
+                    x={-5}
+                    y={-5}
+                >
+                    <circle
+                        cx={0}
+                        cy={0}
+                        r={0.25}
+                        className={styles.BGPattern}
+                    />
+                </pattern>
+                <rect
+                    x={-1000}
+                    y={-1000}
+                    width={2000}
+                    height={2000}
+                    fill="url(#bkg)"
+                />
                 <line
                     x1={-1000}
                     y1={0}

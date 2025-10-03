@@ -1,8 +1,9 @@
 .Canvas {
     flex: 1;
-    background-color: white;
+    background-color: var(--background);
     color: black;
     position: relative;
+    border-left: 1px solid var(--line-color);
 }
 
 .Scroll {
@@ -11,6 +12,10 @@
     touch-action: none;
     overflow: hidden;
     position: relative;
+}
+
+.BGPattern {
+    fill: var(--xy-background-pattern-color);
 }
 
 .Canvas svg {
@@ -34,19 +39,19 @@
 }
 
 .XAxis {
-    stroke: red;
+    stroke: var(--color-red);
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
 }
 
 .YAxis {
-    stroke: green;
+    stroke: var(--color-green);
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
 }
 
 .Geometry path {
-    stroke: black;
+    stroke: var(--color-path);
     stroke-width: 1px;
     fill: none;
     vector-effect: non-scaling-stroke;
@@ -55,7 +60,7 @@
 }
 
 .Canvas :global(.Point) {
-    stroke: red;
+    stroke: var(--color-red);
     marker-end: url(#cross);
 }
 

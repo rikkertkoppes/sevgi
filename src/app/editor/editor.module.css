@@ -1,0 +1,65 @@
+.Container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.Container.placing :global(.react-flow__pane.draggable) {
+    cursor: crosshair;
+}
+
+.Header {
+    gap: 4px;
+    display: flex;
+    padding: 4px;
+}
+
+.Panes {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    background-color: var(--tab-background);
+    gap: 4px;
+}
+
+.Version {
+    flex: 1;
+    padding-right: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    overflow: visible;
+    max-height: 28px;
+}
+.Title {
+    font-family: "King Malik";
+    font-size: 40px;
+    margin-top: -12px;
+    color: #0af;
+}
+
+.FlowPane {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--background);
+}
+.Error {
+    position: absolute;
+    bottom: 16px;
+    left: 100px;
+    right: 100px;
+    color: red;
+    padding: 4px;
+    background: #300;
+}
+
+.ResultPane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--background);
+}

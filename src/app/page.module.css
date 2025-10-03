@@ -1,83 +1,25 @@
-.Container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    --tab-line: #888;
-    --tab-panel: black;
-    --tab-background: #333;
-    --node-line: #888;
-    --node-background: #222;
-    --node-select-line: #0af;
-    --node-active-line: #0af;
-
-    --color-number: #aaf;
-    --color-string: #faa;
-    --color-boolean: #afa;
-    --color-Point: orange;
-    --color-Line: #00c59e;
-    --color-Circle: #00c59e;
-    --color-Arc: #00c59e;
-    --color-Curve: #00c59e;
-    --color-Segment: #00c59e;
-    --color-Path: #00c59e;
-    --color-Model: #f0c;
-    --color-PolyLine: #f0c;
-    --color-any: silver;
-    --color-Geometry: #0af;
-}
-
-.Container.placing :global(.react-flow__pane.draggable) {
-    cursor: crosshair;
-}
-
-.Header {
-    gap: 4px;
-    display: flex;
-    padding: 4px;
-}
-
-.Panes {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-}
-
-.Version {
-    flex: 1;
-    padding-right: 16px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 12px;
-    overflow: visible;
-    max-height: 28px;
-}
-.Title {
+.Head {
+    text-align: center;
+    margin-bottom: 32px;
     font-family: "King Malik";
-    font-size: 40px;
-    margin-top: -12px;
-    color: #0af;
+    font-size: 200px;
+    color: var(--accent);
 }
 
-.FlowPane {
-    flex: 2;
+.Features {
     display: flex;
-    flex-direction: column;
-    position: relative;
-}
-.Error {
-    position: absolute;
-    bottom: 16px;
-    left: 100px;
-    right: 100px;
-    color: red;
-    padding: 4px;
-    background: #300;
+    justify-content: space-around;
 }
 
-.ResultPane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+.Feature {
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 16px;
+    min-width: 25%;
+}
+.Feature h3 {
+    font-weight: normal;
+    font-size: 32px;
+    text-align: center;
+    margin: 0 0 1em 0;
 }

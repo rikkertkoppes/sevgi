@@ -1,7 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
 import { linesToCells } from "./linesToCells";
 import { Point, rot, sum, v2 } from "@/Core/Geometry/Vector";
-import { LineSegment } from "@/Core/Geometry/Line";
+import { LineSegment } from "@/Core/Geometry/LineSegment";
 
 export const truncatedSquareGrid: PrimitiveFunction = {
     name: "truncatedSquareGrid",

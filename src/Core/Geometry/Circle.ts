@@ -15,7 +15,8 @@ import {
     sum,
     unit,
 } from "./Vector";
-import { Line, LineSegment } from "./Line";
+import { Line } from "./Line";
+import { LineSegment } from "./LineSegment";
 import { normalizeAngle, TAU } from "./Util";
 import { Curve } from "./Curve";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";

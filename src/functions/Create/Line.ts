@@ -1,4 +1,4 @@
-import { LineSegment } from "@/Core/Geometry/Line";
+import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { Point, v2 } from "@/Core/Geometry/Vector";
 import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 

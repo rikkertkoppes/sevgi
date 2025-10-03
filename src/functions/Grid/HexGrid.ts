@@ -1,6 +1,6 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
 import { linesToCells } from "./linesToCells";
-import { LineSegment } from "@/Core/Geometry/Line";
+import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { Point, v2 } from "@/Core/Geometry/Vector";
 
 export const hexGrid: PrimitiveFunction = {

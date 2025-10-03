@@ -2,7 +2,8 @@ import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { Curve } from "./Curve";
-import { Line, LineSegment } from "./Line";
+import { Line } from "./Line";
+import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { Point, same } from "./Vector";
 

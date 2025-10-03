@@ -5,7 +5,7 @@ import {
 } from "@rkmodules/rules";
 import { linesToCells } from "../Grid/linesToCells";
 import { mid, lerp } from "@/Core/Geometry/Vector";
-import { LineSegment } from "@/Core/Geometry/Line";
+import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { PolyLine } from "@/Core/Geometry/PolyLine";
 
 export const star: PrimitiveFunction = {

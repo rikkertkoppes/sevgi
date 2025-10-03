@@ -1,6 +1,6 @@
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
-import { LineSegment } from "./Line";
+import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { fixedNum, normalizeAngle } from "./Util";
 import { Point, v2 } from "./Vector";

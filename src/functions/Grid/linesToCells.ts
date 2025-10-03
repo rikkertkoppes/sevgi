@@ -1,4 +1,4 @@
-import { LineSegment } from "@/Core/Geometry/Line";
+import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { PolyLine } from "@/Core/Geometry/PolyLine";
 import { Point } from "@/Core/Geometry/Vector";
 

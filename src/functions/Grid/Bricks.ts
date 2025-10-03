@@ -15,11 +15,23 @@ export const bricks: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        points: "Point",
-        lines: "Line",
         shapes: "PolyLine",
+        lines: "Line",
+        points: "Point",
     },
     impl: async (inputs, params) => {
+        const pointsMap: Record<string, Point> = {};
+
+        function getUnique(p: Point) {
+            const h = p.hash();
+            if (pointsMap[h]) {
+                return pointsMap[h];
+            } else {
+                pointsMap[h] = p;
+                return p;
+            }
+        }
+
         const points: Point[] = [];
         const lines: LineSegment[] = [];
 
@@ -29,25 +41,18 @@ export const bricks: PrimitiveFunction = {
         const vSpace = params.height / (ny - 1);
         for (let j = 0; j < ny; j++) {
             for (let i = 0; i < nx; i++) {
-                points.push(v2(i * hSpace, j * vSpace));
+                const p = getUnique(v2(i * hSpace, j * vSpace));
+                points.push(p);
 
                 if (j % 2 === i % 2 && i < nx - 1) {
                     // horizontal line
-                    lines.push(
-                        new LineSegment(
-                            v2(i * hSpace, j * vSpace),
-                            v2((i + 1) * hSpace, j * vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2((i + 1) * hSpace, j * vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (j < ny - 1) {
                     // vertical line
-                    lines.push(
-                        new LineSegment(
-                            v2(i * hSpace, j * vSpace),
-                            v2(i * hSpace, (j + 1) * vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(i * hSpace, (j + 1) * vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
             }
         }
@@ -55,9 +60,9 @@ export const bricks: PrimitiveFunction = {
         const models = linesToCells(lines);
 
         return {
-            points: broadCast(points),
-            lines: broadCast(lines),
             shapes: broadCast(models),
+            lines: broadCast(lines),
+            points: broadCast(points),
         };
     },
 };

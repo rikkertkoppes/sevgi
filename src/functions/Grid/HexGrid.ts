@@ -14,11 +14,23 @@ export const hexGrid: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        points: "Point",
-        lines: "Line",
         shapes: "PolyLine",
+        lines: "Line",
+        points: "Point",
     },
     impl: async (inputs, params) => {
+        const pointsMap: Record<string, Point> = {};
+
+        function getUnique(p: Point) {
+            const h = p.hash();
+            if (pointsMap[h]) {
+                return pointsMap[h];
+            } else {
+                pointsMap[h] = p;
+                return p;
+            }
+        }
+
         const points: Point[] = [];
         const lines: LineSegment[] = [];
 
@@ -34,51 +46,37 @@ export const hexGrid: PrimitiveFunction = {
             for (let i = 0; i < pointsInRow; i++) {
                 const x = i * hSpace + dx;
                 const y = j * vSpace;
+                const p = getUnique(v2(x, y));
                 if ((isMid && i % 3 !== 1) || (isLower && i % 3 !== 2)) {
-                    points.push(v2(x, y));
+                    points.push(p);
                 }
                 if (
                     i < pointsInRow - 1 &&
                     ((isLower && i % 3 === 0) || (isMid && i % 3 === 2))
                 ) {
                     // horizontal line
-                    lines.push(new LineSegment(v2(x, y), v2(x + hSpace, y)));
+                    const p2 = getUnique(v2(x + hSpace, y));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (isLower && i % 3 === 0 && j < ny - 1) {
                     // backward
-                    lines.push(
-                        new LineSegment(
-                            v2(x, y),
-                            v2(x - hSpace / 2, y + vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(x - hSpace / 2, y + vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (isLower && i % 3 === 1 && j < ny - 1) {
                     // forward
-                    lines.push(
-                        new LineSegment(
-                            v2(x, y),
-                            v2(x + hSpace / 2, y + vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(x + hSpace / 2, y + vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (isMid && i % 3 === 0 && j < ny - 1) {
                     // forward
-                    lines.push(
-                        new LineSegment(
-                            v2(x, y),
-                            v2(x + hSpace / 2, y + vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(x + hSpace / 2, y + vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (isMid && i % 3 === 2 && j < ny - 1) {
                     // backward
-                    lines.push(
-                        new LineSegment(
-                            v2(x, y),
-                            v2(x - hSpace / 2, y + vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(x - hSpace / 2, y + vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
             }
         }
@@ -86,9 +84,9 @@ export const hexGrid: PrimitiveFunction = {
         const models = linesToCells(lines);
 
         return {
-            points: broadCast(points),
-            lines: broadCast(lines),
             shapes: broadCast(models),
+            lines: broadCast(lines),
+            points: broadCast(points),
         };
     },
 };

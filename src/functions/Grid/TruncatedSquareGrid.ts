@@ -15,11 +15,23 @@ export const truncatedSquareGrid: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        points: "Point",
-        lines: "Line",
         shapes: "PolyLine",
+        lines: "Line",
+        points: "Point",
     },
     impl: async (inputs, params) => {
+        const pointsMap: Record<string, Point> = {};
+
+        function getUnique(p: Point) {
+            const h = p.hash();
+            if (pointsMap[h]) {
+                return pointsMap[h];
+            } else {
+                pointsMap[h] = p;
+                return p;
+            }
+        }
+
         const points: Point[] = [];
         const lines: LineSegment[] = [];
 
@@ -30,12 +42,12 @@ export const truncatedSquareGrid: PrimitiveFunction = {
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
                 const pts: Point[] = [];
-                let p = v2(i * s, j * s);
+                let p = getUnique(v2(i * s, j * s));
                 pts.push(p);
                 let v = v2(sl, 0);
                 // create the octagon
                 for (let k = 1; k < 8; k++) {
-                    p = sum(p, v);
+                    p = getUnique(sum(p, v));
                     pts.push(p);
                     v = rot(Math.PI / 4, v);
                 }
@@ -52,9 +64,9 @@ export const truncatedSquareGrid: PrimitiveFunction = {
         const models = linesToCells(lines);
 
         return {
-            points: broadCast(points),
-            lines: broadCast(lines),
             shapes: broadCast(models),
+            lines: broadCast(lines),
+            points: broadCast(points),
         };
     },
 };

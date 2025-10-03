@@ -14,12 +14,23 @@ export const rectGrid: PrimitiveFunction = {
         ny: { type: "number", default: 5 },
     },
     outputs: {
-        points: "Point",
-        lines: "Line",
         shapes: "PolyLine",
+        lines: "Line",
+        points: "Point",
     },
     impl: async (inputs, params) => {
-        const points: Point[] = [];
+        const pointsMap: Record<string, Point> = {};
+
+        function getUnique(p: Point) {
+            const h = p.hash();
+            if (pointsMap[h]) {
+                return pointsMap[h];
+            } else {
+                pointsMap[h] = p;
+                return p;
+            }
+        }
+
         const lines: LineSegment[] = [];
 
         const nx = params.nx + 1;
@@ -28,22 +39,14 @@ export const rectGrid: PrimitiveFunction = {
         const vSpace = params.size;
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
-                points.push(v2(i * hSpace, j * vSpace));
+                const p = getUnique(v2(i * hSpace, j * vSpace));
                 if (i < nx - 1) {
-                    lines.push(
-                        new LineSegment(
-                            v2(i * hSpace, j * vSpace),
-                            v2((i + 1) * hSpace, j * vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2((i + 1) * hSpace, j * vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
                 if (j < ny - 1) {
-                    lines.push(
-                        new LineSegment(
-                            v2(i * hSpace, j * vSpace),
-                            v2(i * hSpace, (j + 1) * vSpace)
-                        )
-                    );
+                    const p2 = getUnique(v2(i * hSpace, (j + 1) * vSpace));
+                    lines.push(new LineSegment(p, p2));
                 }
             }
         }
@@ -51,9 +54,9 @@ export const rectGrid: PrimitiveFunction = {
         const models = linesToCells(lines);
 
         return {
-            points: broadCast(points),
-            lines: broadCast(lines),
             shapes: broadCast(models),
+            lines: broadCast(lines),
+            points: broadCast(Object.values(pointsMap)),
         };
     },
 };

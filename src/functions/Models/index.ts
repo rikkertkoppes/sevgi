@@ -9,6 +9,7 @@ import { countSegments } from "./CountSegments";
 import { rotate } from "./Rotate";
 import { expolodePoly } from "./ExplodePoly";
 import { polyFromPoints } from "./PolyFromPoints";
+import { mergeChanges } from "./MergeChanges";
 
 const primitives: Record<string, PrimitiveFunction> = {
     polygon,
@@ -21,6 +22,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     countSegments,
     expolodePoly,
     polyFromPoints,
+    mergeChanges,
 };
 
 export default primitives;

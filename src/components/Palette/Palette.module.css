@@ -1,0 +1,13 @@
+.Palette {
+    gap: 4px;
+    display: flex;
+    padding: 4px;
+}
+
+.Palette button {
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}

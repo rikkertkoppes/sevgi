@@ -7,7 +7,6 @@ import {
     Engine,
     Flow,
     GraphedFunction,
-    PrimitiveFunction,
     Lib,
     useFunction,
     useUpdatePositions,
@@ -19,11 +18,11 @@ import Modify from "@/functions/Modify";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
+import { Palette } from "@/components/Palette";
 import { output } from "@/functions/Output";
 
 import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
-import { DraggableButton } from "@/components/DraggableButton";
 
 const engine = new Engine({
     ...Create,
@@ -44,25 +43,6 @@ const testFunction: GraphedFunction = {
         model: "<output.output>",
     },
 };
-
-interface NodeButtonsProps {
-    nodes: Record<string, PrimitiveFunction>;
-    handleAddNode: (name: string) => void;
-}
-function NodeButtons({ nodes, handleAddNode }: NodeButtonsProps) {
-    return (
-        <div className={styles.Header}>
-            {Object.entries(nodes).map(([name, primitive]) => (
-                <DraggableButton
-                    key={name}
-                    name={name}
-                    fn={primitive}
-                    onClick={() => handleAddNode(name)}
-                />
-            ))}
-        </div>
-    );
-}
 
 export default function Home() {
     const [fn, setFn] = React.useState(testFunction);
@@ -130,43 +110,43 @@ export default function Home() {
                                 </div>
                             </TabHeaders>
                             <Tab header="List">
-                                <NodeButtons
+                                <Palette
                                     nodes={{ ...Lib.List, ...Lib.Sequence }}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Tree">
-                                <NodeButtons
+                                <Palette
                                     nodes={Lib.Tree}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Util">
-                                <NodeButtons
+                                <Palette
                                     nodes={Lib.Util}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Math">
-                                <NodeButtons
+                                <Palette
                                     nodes={{ ...Lib.Math, ...Lib.Logic }}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Create">
-                                <NodeButtons
+                                <Palette
                                     nodes={Create}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Modify">
-                                <NodeButtons
+                                <Palette
                                     nodes={Modify}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
                             <Tab header="Patterns">
-                                <NodeButtons
+                                <Palette
                                     nodes={Grid}
                                     handleAddNode={handleAddNode}
                                 />

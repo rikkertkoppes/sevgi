@@ -8,12 +8,6 @@
     cursor: crosshair;
 }
 
-.Header {
-    gap: 4px;
-    display: flex;
-    padding: 4px;
-}
-
 .Panes {
     flex: 1;
     display: flex;

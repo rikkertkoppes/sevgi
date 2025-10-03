@@ -3,18 +3,20 @@ import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
 import { Arc } from "./Arc";
-import { BaseGeometry } from "./BaseGeometry";
+import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";
-    public length;
     private _tangent;
     private _normal;
     constructor(public start: Point, public end: Point) {
         super();
-        this.length = norm(diff(start, end));
         this._tangent = unit(diff(end, start));
         this._normal = unit(rot(-Math.PI / 2, this.direction()));
+    }
+
+    public get length() {
+        return norm(diff(this.start, this.end));
     }
 
     public get line() {
@@ -38,23 +40,29 @@ export class LineSegment extends Segment {
     }
 
     public translate(vector: Point) {
-        return new LineSegment(sum(this.start, vector), sum(this.end, vector));
+        return this.copyIdentity(
+            new LineSegment(sum(this.start, vector), sum(this.end, vector))
+        );
     }
     public rotate(angle: number, center: Point) {
-        return new LineSegment(
-            rot(angle, this.start, center),
-            rot(angle, this.end, center)
+        return this.copyIdentity(
+            new LineSegment(
+                rot(angle, this.start, center),
+                rot(angle, this.end, center)
+            )
         );
     }
     public scale(factor: number, center: Point) {
-        return new LineSegment(
-            this.start.scale(factor, center),
-            this.end.scale(factor, center)
+        return this.copyIdentity(
+            new LineSegment(
+                this.start.scale(factor, center),
+                this.end.scale(factor, center)
+            )
         );
     }
 
     public moveTo(point: Point) {
-        return this.translate(diff(point, this.start));
+        return this.copyIdentity(this.translate(diff(point, this.start)));
     }
 
     public split(t: number) {
@@ -148,14 +156,20 @@ export class LineSegment extends Segment {
         return [];
     }
 
-    public walk(
-        enter: (g: BaseGeometry) => BaseGeometry | void,
-        exit: (g: BaseGeometry) => BaseGeometry | void
-    ): void {
-        enter(this);
-        this.start.walk(enter, exit);
-        this.end.walk(enter, exit);
-        exit(this);
+    public walk({ enter, exit }: WalkerOptions): this {
+        let r = this;
+        if (enter) {
+            r = enter(r) || r;
+        }
+        const newStart = r.start.walk({ enter, exit });
+        const newEnd = r.end.walk({ enter, exit });
+        if (newStart !== r.start || newEnd !== r.end) {
+            r = this.copyIdentity(new LineSegment(newStart, newEnd)) as this;
+        }
+        if (exit) {
+            r = exit(r) || r;
+        }
+        return r;
     }
     public flatten(): BaseGeometry[] {
         return [this, ...this.start.flatten(), ...this.end.flatten()];

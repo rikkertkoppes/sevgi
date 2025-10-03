@@ -1,5 +1,5 @@
 import { Arc } from "./Arc";
-import { BaseGeometry } from "./BaseGeometry";
+import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { Curve } from "./Curve";
 import { Line, LineSegment } from "./Line";
@@ -41,13 +41,19 @@ export class PolyLine extends Curve {
         return new PolyLine(this.segments.map((p) => p.clone()));
     }
     public translate(v: Point): PolyLine {
-        return new PolyLine(this.segments.map((p) => p.translate(v)));
+        return this.copyIdentity(
+            new PolyLine(this.segments.map((p) => p.translate(v)))
+        );
     }
     public rotate(angle: number, center: Point): PolyLine {
-        return new PolyLine(this.segments.map((p) => p.rotate(angle, center)));
+        return this.copyIdentity(
+            new PolyLine(this.segments.map((p) => p.rotate(angle, center)))
+        );
     }
     public scale(factor: number, center: Point): PolyLine {
-        return new PolyLine(this.segments.map((p) => p.scale(factor, center)));
+        return this.copyIdentity(
+            new PolyLine(this.segments.map((p) => p.scale(factor, center)))
+        );
     }
 
     private getLocalT(globalT: number) {
@@ -206,13 +212,19 @@ export class PolyLine extends Curve {
         return Object.values(index);
     }
 
-    public walk(
-        enter: (g: BaseGeometry) => BaseGeometry | void,
-        exit: (g: BaseGeometry) => BaseGeometry | void
-    ): void {
-        enter(this);
-        this.segments.forEach((s) => s.walk(enter, exit));
-        exit(this);
+    public walk({ enter, exit }: WalkerOptions): this {
+        let r = this;
+        if (enter) {
+            r = enter(r) || r;
+        }
+        const newSegments = this.segments.map((s) => s.walk({ enter, exit }));
+        if (newSegments.some((s, i) => s !== this.segments[i])) {
+            r = this.copyIdentity(new PolyLine(newSegments)) as this;
+        }
+        if (exit) {
+            r = exit(r) || r;
+        }
+        return r;
     }
     public flatten(): BaseGeometry[] {
         return [this, ...this.segments.flatMap((s) => s.flatten())];

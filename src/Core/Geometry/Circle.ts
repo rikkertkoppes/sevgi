@@ -18,6 +18,7 @@ import {
 import { Line, LineSegment } from "./Line";
 import { normalizeAngle, TAU } from "./Util";
 import { Curve } from "./Curve";
+import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 
 /** signed circle, negative radii are counter clockwise */
 export class Circle extends Curve {
@@ -300,6 +301,24 @@ export class Circle extends Curve {
     }
     public get bottom() {
         return { x: this.c.x, y: this.c.y + Math.abs(this.r) };
+    }
+
+    public walk({ enter, exit }: WalkerOptions): this {
+        let r = this;
+        if (enter) {
+            r = enter(r) || r;
+        }
+        const newCenter = r.c.walk({ enter, exit });
+        if (newCenter !== r.c) {
+            r = this.copyIdentity(new Circle(newCenter, r.r)) as this;
+        }
+        if (exit) {
+            r = exit(r) || r;
+        }
+        return r;
+    }
+    public flatten(): BaseGeometry[] {
+        return [this, ...this.c.flatten()];
     }
 
     public toSVG() {

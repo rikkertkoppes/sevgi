@@ -1,4 +1,4 @@
-import { BaseGeometry } from "./BaseGeometry";
+import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { fixedNum } from "./Util";
 
 /**
@@ -11,7 +11,7 @@ export class Point extends BaseGeometry {
     }
 
     public clone(): Point {
-        return this.copyIdentity(new Point(this.x, this.y));
+        return new Point(this.x, this.y);
     }
 
     public translate(v: Point): Point {
@@ -24,12 +24,15 @@ export class Point extends BaseGeometry {
         return this.copyIdentity(sum(mult(factor, diff(this, center)), center));
     }
 
-    public walk(
-        enter: (g: BaseGeometry) => BaseGeometry | void,
-        exit: (g: BaseGeometry) => BaseGeometry | void
-    ): void {
-        enter(this);
-        exit(this);
+    public walk({ enter, exit }: WalkerOptions): this {
+        let r = this;
+        if (enter) {
+            r = enter(r) || r;
+        }
+        if (exit) {
+            r = exit(r) || r;
+        }
+        return r;
     }
     public flatten(): Point[] {
         return [this];

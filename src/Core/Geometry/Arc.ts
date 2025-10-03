@@ -1,4 +1,4 @@
-import { BaseGeometry } from "./BaseGeometry";
+import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { LineSegment } from "./Line";
 import { Segment } from "./Segment";
@@ -208,14 +208,21 @@ export class Arc extends Segment {
         return [];
     }
 
-    public walk(
-        enter: (g: BaseGeometry) => BaseGeometry | void,
-        exit: (g: BaseGeometry) => BaseGeometry | void
-    ): void {
-        enter(this);
-        this.start.walk(enter, exit);
-        this.end.walk(enter, exit);
-        exit(this);
+    public walk({ enter, exit }: WalkerOptions): this {
+        let r = this;
+        if (enter) {
+            r = enter(r) || r;
+        }
+        const newStart = this.start.walk({ enter, exit });
+        const newEnd = this.end.walk({ enter, exit });
+        // TODO: make arc from new start and end
+        // if (newStart !== this.start || newEnd !== this.end) {
+        //     r = this.copyIdentity(new Arc(newStart, newEnd));
+        // }
+        if (exit) {
+            r = exit(r) || r;
+        }
+        return r;
     }
     public flatten(): BaseGeometry[] {
         return [this, ...this.start.flatten(), ...this.end.flatten()];

@@ -1,27 +1,21 @@
 import { PrimitiveFunction } from "@rkmodules/rules";
-import { polygon } from "./Polygon";
 import { move } from "./Move";
 import { scale } from "./Scale";
-import { mPoints } from "./MPoints";
-import { outline } from "./Outline";
-import { center } from "./Center";
 import { countSegments } from "./CountSegments";
 import { rotate } from "./Rotate";
-import { expolodePoly } from "./ExplodePoly";
-import { polyFromPoints } from "./PolyFromPoints";
 import { mergeChanges } from "./MergeChanges";
+import { destructPoint } from "./DestructPoint";
+import { evaluateCurve } from "./EvaluateCurve";
+import { intersections } from "./Intersections";
 
 const primitives: Record<string, PrimitiveFunction> = {
-    polygon,
+    destructPoint,
     move,
     rotate,
     scale,
-    center,
-    outline,
-    mPoints,
+    evaluateCurve,
     countSegments,
-    expolodePoly,
-    polyFromPoints,
+    intersections,
     mergeChanges,
 };
 

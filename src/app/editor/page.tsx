@@ -15,8 +15,8 @@ import {
 } from "@rkmodules/rules";
 import Link from "next/link";
 
-import Curve from "@/functions/Curve";
-import Models from "@/functions/Models";
+import Create from "@/functions/Create";
+import Modify from "@/functions/Modify";
 import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
@@ -26,8 +26,8 @@ import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
 
 const engine = new Engine({
-    ...Curve,
-    ...Models,
+    ...Create,
+    ...Modify,
     ...Grid,
     output,
 });
@@ -167,15 +167,15 @@ export default function Home() {
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
-                            <Tab header="Curve">
+                            <Tab header="Create">
                                 <NodeButtons
-                                    nodes={Curve}
+                                    nodes={Create}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>
-                            <Tab header="Shape">
+                            <Tab header="Modify">
                                 <NodeButtons
-                                    nodes={Models}
+                                    nodes={Modify}
                                     handleAddNode={handleAddNode}
                                 />
                             </Tab>

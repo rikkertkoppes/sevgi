@@ -1,10 +1,10 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
 import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
 
-export const mPoints: PrimitiveFunction = {
-    name: "mPoints",
+export const pointsFromPoly: PrimitiveFunction = {
+    name: "pointsFromPoly",
     label: "PolyLine Points",
-    description: "Find points in a PolyLine",
+    description: "Get the points of a PolyLine",
     inputs: {
         shape: "PolyLine",
     },

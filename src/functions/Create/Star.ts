@@ -3,7 +3,7 @@ import {
     nAryOnTreeBranch,
     PrimitiveFunction,
 } from "@rkmodules/rules";
-import { linesToCells } from "./linesToCells";
+import { linesToCells } from "../Grid/linesToCells";
 import { mid, lerp } from "@/Core/Geometry/Vector";
 import { LineSegment } from "@/Core/Geometry/Line";
 import { PolyLine } from "@/Core/Geometry/PolyLine";

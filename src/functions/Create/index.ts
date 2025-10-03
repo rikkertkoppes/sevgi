@@ -13,6 +13,7 @@ import { polyFromPoints } from "./PolyFromPoints";
 import { center } from "./Center";
 import { star } from "./Star";
 import { evaluateCurve } from "./EvaluateCurve";
+import { subdivideCurve } from "./SubdivideCurve";
 
 const primitives: Record<string, PrimitiveFunction> = {
     point,
@@ -22,7 +23,9 @@ const primitives: Record<string, PrimitiveFunction> = {
     midpoint,
     center,
     polygon,
+    outline,
     pointsFromPoly,
+    subdivideCurve,
     evaluateCurve,
     expolodePoly,
     polyFromPoints,

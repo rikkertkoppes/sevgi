@@ -14,7 +14,7 @@ export class PolyLine extends Curve {
     private lengths: number[] = [];
     private offsets: number[] = [];
     private segments: Segment[] = [];
-    private closed = false;
+    protected closed = false;
     private joined = false;
     constructor(segments: Segment[]) {
         super();

@@ -4,11 +4,16 @@
     font-family: "King Malik";
     font-size: 200px;
     color: var(--accent);
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Features {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 0px 5%;
 }
 
 .Feature {
@@ -23,4 +28,21 @@
     font-size: 32px;
     text-align: center;
     margin: 0 0 1em 0;
+}
+
+.Start {
+    padding: 20px 5%;
+}
+
+.Start h1 {
+    font-size: 48px;
+    font-weight: normal;
+    margin-bottom: 16px;
+}
+
+.Start img {
+    max-width: 100%;
+    border: 1px solid var(--line-color);
+    border-radius: 8px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.5);
 }

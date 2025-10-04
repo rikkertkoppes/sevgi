@@ -97,22 +97,16 @@ function serializeSVG(geometry: BaseGeometry[]) {
 }
 
 interface CanvasProps {
-    model: Tree<BaseGeometry>;
+    geometry: Tree<BaseGeometry>;
     selection: Record<string, Tree<BaseGeometry>>;
 }
 
-export function Canvas({ model, selection }: CanvasProps) {
-    const [geometry, setGeometry] = React.useState<BaseGeometry[]>([]);
+export function Canvas({ geometry: geoTree, selection }: CanvasProps) {
     const [selectionGeometry, setSelectionGeometry] = React.useState<
         BaseGeometry[]
     >([]);
 
-    React.useEffect(() => {
-        const geometry = toArray(model || {}) as BaseGeometry[];
-        // console.log("result geometry", geometry);
-
-        setGeometry(geometry);
-    }, [model]);
+    const geometry = toArray(geoTree || {}) as BaseGeometry[];
 
     const handleDownload = () => {
         const svg = serializeSVG(geometry);

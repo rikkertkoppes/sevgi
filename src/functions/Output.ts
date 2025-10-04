@@ -10,7 +10,7 @@ export const output: PrimitiveFunction = {
     outputs: {},
     impl: async (inputs) => {
         return {
-            output: inputs.geometry,
+            geometry: inputs.geometry,
         };
     },
 };

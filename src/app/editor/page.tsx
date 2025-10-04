@@ -40,7 +40,7 @@ const testFunction: GraphedFunction = {
         },
     },
     outputs: {
-        model: "<output.output>",
+        geometry: "<output.geometry>",
     },
 };
 
@@ -166,7 +166,7 @@ export default function Home() {
                             <TabHeaders />
                             <Tab header="Canvas">
                                 <Canvas
-                                    model={result?.model}
+                                    geometry={result?.geometry}
                                     selection={
                                         selection ? data[selection] || {} : {}
                                     }

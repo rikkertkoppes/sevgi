@@ -13,7 +13,7 @@
     display: flex;
     overflow: hidden;
     background-color: var(--tab-background);
-    gap: 4px;
+    gap: 6px;
 }
 
 .Version {
@@ -39,6 +39,12 @@
     flex-direction: column;
     position: relative;
     background-color: var(--background);
+}
+.FlowPanel {
+    border-right: 1px solid var(--line-color);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .Error {
     position: absolute;

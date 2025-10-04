@@ -99,8 +99,8 @@ export default function Home() {
                 })}
             >
                 <div className={styles.Panes}>
-                    <div className={styles.FlowPane}>
-                        <Tabs>
+                    <Tabs>
+                        <div className={styles.FlowPane}>
                             <TabHeaders>
                                 <div className={styles.Version}>
                                     <div className={styles.Title}>
@@ -109,58 +109,62 @@ export default function Home() {
                                     v{process.env.NEXT_PUBLIC_APP_VERSION}
                                 </div>
                             </TabHeaders>
-                            <Tab header="List">
-                                <Palette
-                                    nodes={{ ...Lib.List, ...Lib.Sequence }}
-                                    handleAddNode={handleAddNode}
+                            <div className={styles.FlowPanel}>
+                                <Tab header="List">
+                                    <Palette
+                                        nodes={{ ...Lib.List, ...Lib.Sequence }}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Tree">
+                                    <Palette
+                                        nodes={Lib.Tree}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Util">
+                                    <Palette
+                                        nodes={Lib.Util}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Math">
+                                    <Palette
+                                        nodes={{ ...Lib.Math, ...Lib.Logic }}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Create">
+                                    <Palette
+                                        nodes={Create}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Modify">
+                                    <Palette
+                                        nodes={Modify}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Patterns">
+                                    <Palette
+                                        nodes={Grid}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Flow
+                                    function={fn}
+                                    engine={engine}
+                                    onChange={setFn}
+                                    onClick={handlePlace}
+                                    onSelect={handleSelect}
                                 />
-                            </Tab>
-                            <Tab header="Tree">
-                                <Palette
-                                    nodes={Lib.Tree}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                            <Tab header="Util">
-                                <Palette
-                                    nodes={Lib.Util}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                            <Tab header="Math">
-                                <Palette
-                                    nodes={{ ...Lib.Math, ...Lib.Logic }}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                            <Tab header="Create">
-                                <Palette
-                                    nodes={Create}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                            <Tab header="Modify">
-                                <Palette
-                                    nodes={Modify}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                            <Tab header="Patterns">
-                                <Palette
-                                    nodes={Grid}
-                                    handleAddNode={handleAddNode}
-                                />
-                            </Tab>
-                        </Tabs>
-                        <Flow
-                            function={fn}
-                            engine={engine}
-                            onChange={setFn}
-                            onClick={handlePlace}
-                            onSelect={handleSelect}
-                        />
-                        {error && <div className={styles.Error}>{error}</div>}
-                    </div>
+                                {error && (
+                                    <div className={styles.Error}>{error}</div>
+                                )}
+                            </div>
+                        </div>
+                    </Tabs>
                     <div className={styles.ResultPane}>
                         <Tabs>
                             <TabHeaders />

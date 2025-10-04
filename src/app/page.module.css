@@ -16,6 +16,7 @@
     border-radius: 16px;
     padding: 16px;
     min-width: 25%;
+    line-height: 2em;
 }
 .Feature h3 {
     font-weight: normal;

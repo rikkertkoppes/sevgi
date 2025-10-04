@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 
 export default function Home() {
     return (
-        <div>
+        <div className={styles.Landing}>
             <div className={styles.Head}>
                 <Link href="/editor">sevgi</Link>
             </div>
@@ -15,12 +15,16 @@ export default function Home() {
                     <h3>Free</h3>
                     <ul>
                         <li>Open source and free to use.</li>
+                        <li>Constribute with code</li>
+                        <li>Or join the discussion</li>
+                        <li>Or donate to support Sevgi</li>
                     </ul>
                 </div>
                 <div className={styles.Feature}>
                     <h3>SVG Export</h3>
                     <ul>
                         <li>Export your designs as SVG files.</li>
+                        <li>Perfect for laser cutting</li>
                     </ul>
                 </div>
                 <div className={styles.Feature}>

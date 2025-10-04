@@ -7,7 +7,7 @@ export const evaluateCurve: PrimitiveFunction = {
     description: "Evaluate a curve at a given parameter t",
     inputs: {
         curve: "Curve",
-        t: { type: "number", default: 0.5 },
+        t: { type: "number", default: 0.5, min: 0, max: 1, step: 0.01 },
     },
     outputs: {
         point: "Point",

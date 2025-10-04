@@ -1,10 +1,10 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
 import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
 
-export const expolodePoly: PrimitiveFunction = {
-    name: "expolodePoly",
-    label: "Explode Poly",
-    description: "Explode a PolyLine into its segments",
+export const segmentsFromPoly: PrimitiveFunction = {
+    name: "segmentsFromPoly",
+    label: "Segments from Poly",
+    description: "Get the segments of a PolyLine",
     inputs: {
         shape: "PolyLine",
     },

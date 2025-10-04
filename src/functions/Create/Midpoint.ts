@@ -13,7 +13,7 @@ export const midpoint: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            point: mapTree(inputs.curve, (p: Curve) => {
+            point: mapTree(inputs.curve || {}, (p: Curve) => {
                 return p.pointAt(0.5);
             }),
         };

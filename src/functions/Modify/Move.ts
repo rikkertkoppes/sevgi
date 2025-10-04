@@ -1,6 +1,6 @@
 import { BaseGeometry } from "@/Core/Geometry/BaseGeometry";
 import { Point, v2 } from "@/Core/Geometry/Vector";
-import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import { binaryOnTree, DISCARD, PrimitiveFunction } from "@rkmodules/rules";
 
 export const move: PrimitiveFunction = {
     name: "move",
@@ -19,7 +19,7 @@ export const move: PrimitiveFunction = {
                 inputs.geometry || {},
                 inputs.offset,
                 (m: BaseGeometry, o: Point) => {
-                    return m?.translate(o);
+                    return m?.translate(o) || DISCARD;
                 },
                 true
             ),

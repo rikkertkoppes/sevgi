@@ -13,7 +13,7 @@ export const pointsFromPoly: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            points: mapTree(inputs.shape, (s: PolyLine) => s.getPoints()),
+            points: mapTree(inputs.shape || {}, (s: PolyLine) => s.getPoints()),
         };
     },
 };

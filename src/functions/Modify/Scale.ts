@@ -1,5 +1,10 @@
 import { v2 } from "@/Core/Geometry/Vector";
-import { broadCast, nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import {
+    broadCast,
+    DISCARD,
+    nAryOnTree,
+    PrimitiveFunction,
+} from "@rkmodules/rules";
 
 export const scale: PrimitiveFunction = {
     name: "scale",
@@ -23,12 +28,12 @@ export const scale: PrimitiveFunction = {
         return {
             geometry: nAryOnTree(
                 [
-                    inputs.geometry,
+                    inputs.geometry || {},
                     inputs.scale,
                     inputs.center || broadCast(v2(0, 0)),
                 ],
                 ([m, s, c]) => {
-                    return m.scale(s, c);
+                    return m?.scale(s, c) || DISCARD;
                 },
                 true
             ),

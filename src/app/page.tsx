@@ -8,16 +8,48 @@ export default function Home() {
     return (
         <div className={styles.Landing}>
             <div className={styles.Head}>
-                <Link href="/editor">sevgi</Link>
+                <Link href="/editor" className={styles.Logo}>
+                    sevgi
+                </Link>
+                <div className={styles.Row}>
+                    <Link href="/editor" className={styles.Launch}>
+                        Open the editor
+                    </Link>
+                </div>
             </div>
+
             <div className={styles.Features}>
                 <div className={styles.Feature}>
                     <h3>Free</h3>
                     <ul>
                         <li>Open source and free to use.</li>
-                        <li>Constribute with code</li>
-                        <li>Or join the discussion</li>
-                        <li>Or donate to support Sevgi</li>
+                        <li>
+                            Constribute{" "}
+                            <a
+                                href="https://github.com/rikkertkoppes/sevgi/"
+                                target="_blank"
+                            >
+                                with code
+                            </a>
+                        </li>
+                        <li>
+                            ...or join the{" "}
+                            <a
+                                href="https://github.com/rikkertkoppes/sevgi/issues"
+                                target="_blank"
+                            >
+                                discussion
+                            </a>
+                        </li>
+                        <li>
+                            ...or{" "}
+                            <a
+                                href="https://github.com/sponsors/rikkertkoppes"
+                                target="_blank"
+                            >
+                                donate to support Sevgi
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div className={styles.Feature}>
@@ -82,6 +114,7 @@ export default function Home() {
                         alt="Circle Node with Grid input and preview panels open"
                     />
                 </p>
+                {/* <h1>Things to Draw</h1> */}
             </div>
         </div>
     );

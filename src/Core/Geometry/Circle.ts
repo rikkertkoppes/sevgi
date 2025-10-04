@@ -79,14 +79,16 @@ export class Circle extends Curve {
     }
 
     public translate(v: Point) {
-        return new Circle(this.c.translate(v), this.r);
+        return this.copyIdentity(new Circle(this.c.translate(v), this.r));
     }
 
     public rotate(a: number, c: Point) {
-        return new Circle(this.c.rotate(a, c), this.r);
+        return this.copyIdentity(new Circle(this.c.rotate(a, c), this.r));
     }
     public scale(factor: number, c: Point) {
-        return new Circle(this.c.scale(factor, c), this.r * factor);
+        return this.copyIdentity(
+            new Circle(this.c.scale(factor, c), this.r * factor)
+        );
     }
 
     public findClosestPoint(p: Point) {

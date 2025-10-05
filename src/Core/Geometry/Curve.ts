@@ -13,6 +13,9 @@ interface ClosestPointInfo {
 
 export abstract class Curve extends BaseGeometry {
     protected closed: boolean = false;
+    public get isClosed(): boolean {
+        return this.closed;
+    }
     abstract length: number;
     abstract pointAt(t: number): Point;
     abstract normalAt(t: number): Point;

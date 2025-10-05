@@ -24,6 +24,7 @@ import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 /** signed circle, negative radii are counter clockwise */
 export class Circle extends Curve {
     public type = "Circle";
+    protected closed = true;
     public length: number;
     constructor(public c: Point, public r: number) {
         super();

@@ -9,7 +9,7 @@ export const subdivideCurve: PrimitiveFunction = {
         curve: "Curve",
     },
     params: {
-        n: { type: "number", default: 3 },
+        n: { type: "number", default: 3, min: 1, step: 1 },
     },
     outputs: {
         points: "Point",
@@ -17,11 +17,12 @@ export const subdivideCurve: PrimitiveFunction = {
     impl: async (inputs, params) => {
         return {
             points: mapTree(inputs.curve || {}, (s: Curve) => {
+                const n = s.isClosed ? params.n + 1 : params.n;
+                if (n < 2) return [s.pointAt(0)];
                 const ts = Array.from(
                     { length: params.n },
-                    (_, i) => i / (params.n - 1)
+                    (_, i) => i / (n - 1)
                 );
-                console.log(ts);
                 return ts.map((t) => s.pointAt(t));
             }),
         };

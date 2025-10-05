@@ -63,6 +63,7 @@ export default function Home() {
                     <h3>Node-based</h3>
                     <ul>
                         <li>Visual programming with a node-based interface.</li>
+                        <li>Non destructive editing.</li>
                     </ul>
                 </div>
             </div>

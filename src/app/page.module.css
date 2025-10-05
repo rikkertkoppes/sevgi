@@ -42,7 +42,7 @@ a.Logo {
     font-size: 24px;
     text-decoration: none !important;
     margin-bottom: 32px;
-    min-width: 25%;
+    min-width: 30%;
     box-sizing: border-box;
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.5);
 }
@@ -55,16 +55,25 @@ a.Logo {
     display: flex;
     justify-content: space-between;
     padding: 0px 5%;
+    flex-wrap: wrap;
+    gap: 24px;
 }
 
 .Feature {
     border: 1px solid var(--accent);
     border-radius: 16px;
     padding: 16px;
-    width: 25%;
+    width: 30%;
     box-sizing: border-box;
     line-height: 2em;
 }
+
+@media (max-width: 900px) {
+    .Feature {
+        width: 100%;
+    }
+}
+
 .Feature h3 {
     font-weight: normal;
     font-size: 32px;

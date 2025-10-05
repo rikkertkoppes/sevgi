@@ -61,7 +61,7 @@ a.Logo {
     border: 1px solid var(--accent);
     border-radius: 16px;
     padding: 16px;
-    min-width: 25%;
+    width: 25%;
     box-sizing: border-box;
     line-height: 2em;
 }

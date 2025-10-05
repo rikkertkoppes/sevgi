@@ -52,6 +52,7 @@ export default function Home() {
     const [data, setData] = React.useState<Record<string, any>>({});
     const [selection, setSelection] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
+    const [vertical, setVertical] = React.useState(false);
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -96,6 +97,7 @@ export default function Home() {
             <div
                 className={classNames(styles.Container, {
                     [styles.placing]: !!placing,
+                    [styles.vertical]: !!vertical,
                 })}
             >
                 <div className={styles.Panes}>
@@ -103,6 +105,11 @@ export default function Home() {
                         <div className={styles.FlowPane}>
                             <TabHeaders>
                                 <div className={styles.Version}>
+                                    <button
+                                        onClick={() => setVertical(!vertical)}
+                                    >
+                                        x
+                                    </button>
                                     <div className={styles.Title}>
                                         <Link href="/">sevgi</Link>
                                     </div>

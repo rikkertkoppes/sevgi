@@ -4,6 +4,8 @@
     color: black;
     position: relative;
     border-left: 1px solid var(--line-color);
+    border-right: 1px solid var(--line-color);
+    border-bottom: 1px solid var(--line-color);
 }
 
 .Scroll {

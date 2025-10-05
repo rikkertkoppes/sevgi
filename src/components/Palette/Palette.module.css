@@ -10,11 +10,11 @@
     align-items: center;
     justify-content: flex-end;
     border: 1px solid var(--page);
-    background: #6b6b6b;
+    background: var(--button-color);
     border-radius: 4px;
 }
 .Palette button:hover {
-    background: #7b7b7b;
+    background: var(--button-hover);
 }
 
 .Palette svg {

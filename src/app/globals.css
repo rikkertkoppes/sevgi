@@ -13,6 +13,9 @@
     --xy-controls-box-shadow: 0px 0px 0px 1px var(--line-color);
     --xy-background-pattern-color: #91919a;
 
+    --button-color: #efefef;
+    --button-hover: #e5e5e5;
+
     --tab-line: var(--line-color);
     --tab-panel: var(--background);
     --tab-background: #ffdec3;
@@ -52,6 +55,9 @@
         --xy-controls-button-border-color: var(--line-color);
         --xy-attribution-background-color: #222;
         --xy-controls-box-shadow: 0px 0px 0px 1px var(--line-color);
+
+        --button-color: #6b6b6b;
+        --button-hover: #7b7b7b;
 
         --tab-line: var(--line-color);
         --tab-panel: var(--background);

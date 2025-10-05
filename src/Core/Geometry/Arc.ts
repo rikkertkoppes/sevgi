@@ -208,6 +208,10 @@ export class Arc extends Segment {
         return [];
     }
 
+    public getPoints() {
+        return [this.start, this.end];
+    }
+
     public walk({ enter, exit }: WalkerOptions): this {
         let r = this;
         if (enter) {

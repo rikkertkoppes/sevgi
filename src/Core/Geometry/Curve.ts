@@ -23,4 +23,6 @@ export abstract class Curve extends BaseGeometry {
     abstract offsetAt(t: number, distance: number): Point;
     abstract curvatureAt(t: number): number;
     abstract findClosestPoint(p: Point): ClosestPointInfo;
+
+    abstract getPoints(): Point[];
 }

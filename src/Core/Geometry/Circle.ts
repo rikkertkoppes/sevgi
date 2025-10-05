@@ -304,6 +304,10 @@ export class Circle extends Curve {
         return { x: this.c.x, y: this.c.y + Math.abs(this.r) };
     }
 
+    public getPoints() {
+        return [];
+    }
+
     public walk({ enter, exit }: WalkerOptions): this {
         let r = this;
         if (enter) {

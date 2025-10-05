@@ -55,6 +55,20 @@ function SVGScroller({ children }: SVGScrollerProps) {
             }));
             setZoom(newZoom);
         },
+        onPinch: ({ origin: [ox, oy], offset: [s, a], event }) => {
+            const svg = svgRef.current;
+            if (!svg) return;
+            const pt = getSvgPoint(svg, ox, oy);
+            if (!pt) return;
+            const newZoom = Math.max(0.1, s);
+            // adjust offset to zoom arount pinch origin
+            setOffset((offset) => ({
+                x: (newZoom * (offset.x - pt.x)) / zoom + pt.x,
+                y: (newZoom * (offset.y - pt.y)) / zoom + pt.y,
+            }));
+            setZoom(newZoom);
+            event.preventDefault();
+        },
     });
 
     return (

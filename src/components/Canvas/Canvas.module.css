@@ -62,7 +62,7 @@
 }
 
 .Canvas :global(.Point) {
-    stroke: var(--color-red);
+    stroke: var(--color-Point);
     marker-end: url(#cross);
 }
 

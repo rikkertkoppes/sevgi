@@ -6,10 +6,14 @@
         "dev": "next dev --turbopack",
         "build": "next build --turbopack",
         "start": "next start",
-        "lint": "eslint"
+        "lint": "eslint",
+        "svg": "tsx ./buildSvg.ts"
+    },
+    "engines": {
+        "node": ">=22.0.0"
     },
     "dependencies": {
-        "@rkmodules/rules": "^0.0.42",
+        "@rkmodules/rules": "^0.0.43",
         "@use-gesture/react": "^10.3.1",
         "next": "15.5.2",
         "react": "^19.1.1",
@@ -22,8 +26,11 @@
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "cheerio": "^1.1.0",
         "eslint": "^9",
         "eslint-config-next": "15.5.2",
+        "svgo": "^4.0.0",
+        "tsx": "^4.20.6",
         "typescript": "^5"
     }
 }

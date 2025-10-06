@@ -2,6 +2,7 @@
     gap: 4px;
     display: flex;
     padding: 4px;
+    --icon-accent: var(--accent);
 }
 
 .Palette button {
@@ -20,8 +21,5 @@
 .Palette svg {
     width: 32px;
     height: 32px;
-    stroke: var(--foreground);
-    fill: var(--background);
     margin: 4px;
-    --icon-accent: var(--accent);
 }

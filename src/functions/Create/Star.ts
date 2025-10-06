@@ -14,8 +14,8 @@ export const star: PrimitiveFunction = {
     description: "Creates star pattern in a cell",
     inputs: {
         shape: { type: "PolyLine" },
-        factor: { type: "number", default: 0.5 },
-        distance: { type: "number", default: 0 },
+        factor: { type: "number", default: 0.5, step: 0.1 },
+        distance: { type: "number", default: 0, step: 0.1 },
     },
     params: {},
     outputs: {

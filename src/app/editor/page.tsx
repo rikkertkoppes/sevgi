@@ -1,9 +1,8 @@
 "use client";
 import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import classNames from "classnames";
 import {
+    DDContext,
     Engine,
     Flow,
     GraphedFunction,
@@ -93,12 +92,13 @@ export default function Home() {
     }, [fn, run]);
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DDContext>
             <div
                 className={classNames(styles.Container, {
                     [styles.placing]: !!placing,
                     [styles.vertical]: !!vertical,
                 })}
+                suppressHydrationWarning={true}
             >
                 <div className={styles.Panes}>
                     <Tabs>
@@ -187,6 +187,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-        </DndProvider>
+        </DDContext>
     );
 }

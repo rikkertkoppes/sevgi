@@ -1,7 +1,7 @@
 import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
-import { Curve } from "./Curve";
+import { ClosestPointInfo, Curve } from "./Curve";
 import { Line } from "./Line";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
@@ -92,7 +92,7 @@ export class PolyLine extends Curve {
         const { edgeIndex, t: localT } = this.getLocalT(t);
         return this.segments[edgeIndex].curvatureAt(localT);
     }
-    public findClosestPoint(p: Point) {
+    public findClosestPoint(p: Point): ClosestPointInfo {
         let closest: { t: number; point: Point; distance: number } | null =
             null;
         let accLength = 0;

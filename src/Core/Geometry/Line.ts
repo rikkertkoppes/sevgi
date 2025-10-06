@@ -57,7 +57,9 @@ export class Line {
     public isParallelWith(other: Line): boolean {
         if (this.b === 0 && other.b === 0) return true; //both vertical
         if (this.b === 0 || other.b === 0) return false; // only one vertical
-        return this.a / this.b === other.a / other.b;
+        const s1 = this.a / this.b;
+        const s2 = other.a / other.b;
+        return Math.abs(s1 - s2) < 1e-9; // true if same-ish slope
     }
     public intersectWith(other: Line): Point | null {
         if (!other) return null;

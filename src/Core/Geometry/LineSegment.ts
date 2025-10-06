@@ -5,6 +5,7 @@ import { Segment } from "./Segment";
 import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Line } from "./Line";
+import { ClosestPointInfo } from "./Curve";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";
@@ -74,7 +75,7 @@ export class LineSegment extends Segment {
         return [new LineSegment(this.start, p), new LineSegment(p, this.end)];
     }
 
-    public findClosestPoint(p: Point) {
+    public findClosestPoint(p: Point): ClosestPointInfo {
         let t = dot(diff(p, this.start), this.direction()) / this.length;
         t = Math.max(0, Math.min(1, t));
         const point = this.pointAt(t);

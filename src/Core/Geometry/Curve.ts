@@ -5,7 +5,7 @@
 import { BaseGeometry } from "./BaseGeometry";
 import { Point } from "./Vector";
 
-interface ClosestPointInfo {
+export interface ClosestPointInfo {
     t: number;
     point: Point;
     distance: number;

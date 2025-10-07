@@ -217,8 +217,8 @@ export class Arc extends Segment {
         if (enter) {
             r = enter(r) || r;
         }
-        const newStart = this.start.walk({ enter, exit });
-        const newEnd = this.end.walk({ enter, exit });
+        // const newStart = this.start.walk({ enter, exit });
+        // const newEnd = this.end.walk({ enter, exit });
         // TODO: make arc from new start and end
         // if (newStart !== this.start || newEnd !== this.end) {
         //     r = this.copyIdentity(new Arc(newStart, newEnd));

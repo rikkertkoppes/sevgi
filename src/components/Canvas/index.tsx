@@ -55,7 +55,7 @@ function SVGScroller({ children }: SVGScrollerProps) {
             }));
             setZoom(newZoom);
         },
-        onPinch: ({ origin: [ox, oy], offset: [s, a], event }) => {
+        onPinch: ({ origin: [ox, oy], offset: [s], event }) => {
             const svg = svgRef.current;
             if (!svg) return;
             const pt = getSvgPoint(svg, ox, oy);

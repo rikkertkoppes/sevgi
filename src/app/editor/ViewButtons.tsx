@@ -1,16 +1,16 @@
+"use client";
 import React from "react";
 import { getClientCookieFlags, toggleCookieFlag } from "../../cookies/client";
 
 import styles from "./editor.module.css";
 
-export function ViewButtons() {
+export default function ViewButtons() {
     const [flags, setFlags] = React.useState(getClientCookieFlags());
     const toggleVertical = () => {
         toggleCookieFlag("verticalView");
         setFlags(getClientCookieFlags());
     };
     const symbol = flags.verticalView ? "viewHorizontal" : "viewVertical";
-    console.log(flags);
 
     return (
         <div className={styles.ViewButtons}>

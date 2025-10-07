@@ -11,6 +11,7 @@ import {
     useUpdatePositions,
 } from "@rkmodules/rules";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import Create from "@/functions/Create";
 import Modify from "@/functions/Modify";
@@ -19,7 +20,7 @@ import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
 import { Palette } from "@/components/Palette";
 import { output } from "@/functions/Output";
-import { ViewButtons } from "./ViewButtons";
+const ViewButtons = dynamic(() => import("./ViewButtons"), { ssr: false });
 
 import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
@@ -111,6 +112,24 @@ export default function Home() {
                                 </div>
                             </TabHeaders>
                             <div className={styles.FlowPanel}>
+                                <Tab header="Create">
+                                    <Palette
+                                        nodes={Create}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Modify">
+                                    <Palette
+                                        nodes={Modify}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
+                                <Tab header="Patterns">
+                                    <Palette
+                                        nodes={Grid}
+                                        handleAddNode={handleAddNode}
+                                    />
+                                </Tab>
                                 <Tab header="List">
                                     <Palette
                                         nodes={{ ...Lib.List, ...Lib.Sequence }}
@@ -132,24 +151,6 @@ export default function Home() {
                                 <Tab header="Math">
                                     <Palette
                                         nodes={{ ...Lib.Math, ...Lib.Logic }}
-                                        handleAddNode={handleAddNode}
-                                    />
-                                </Tab>
-                                <Tab header="Create">
-                                    <Palette
-                                        nodes={Create}
-                                        handleAddNode={handleAddNode}
-                                    />
-                                </Tab>
-                                <Tab header="Modify">
-                                    <Palette
-                                        nodes={Modify}
-                                        handleAddNode={handleAddNode}
-                                    />
-                                </Tab>
-                                <Tab header="Patterns">
-                                    <Palette
-                                        nodes={Grid}
                                         handleAddNode={handleAddNode}
                                     />
                                 </Tab>

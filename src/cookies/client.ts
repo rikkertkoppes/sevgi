@@ -1,6 +1,7 @@
 const FLAGS_COOKIE_NAME = "flags";
 
 export function getClientCookieFlags(): Record<string, boolean> {
+    if (typeof document === "undefined") return {};
     const cookies = document.cookie.split("; ").reduce((acc, cook) => {
         const [name, value] = cook.split("=");
         acc[name] = value;

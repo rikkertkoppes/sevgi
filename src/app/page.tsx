@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 
 import styles from "./page.module.css";
@@ -76,7 +77,7 @@ export default function Home() {
                     call those elements <i>nodes</i>.
                 </p>
                 <p>
-                    <img src="/img/circle.png" alt="Circle Node" />
+                    <Image src="/img/circle.png" alt="Circle Node" />
                 </p>
                 <p>
                     Above is a `Circle` node connected to the output. It draws a
@@ -87,7 +88,7 @@ export default function Home() {
                     change its center point:
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/point-circle.png"
                         alt="Circle Node with Point input"
                     />
@@ -98,7 +99,7 @@ export default function Home() {
                     <i>very fast</i>.
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/trigrid-circle.png"
                         alt="Circle Node with Grid input"
                     />
@@ -110,7 +111,7 @@ export default function Home() {
                     parameter is highlighted on the canvas:
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/trigrid-circle-preview.png"
                         alt="Circle Node with Grid input and preview panels open"
                     />
@@ -134,7 +135,7 @@ export default function Home() {
                     input for the cirle. Look for orangey functions and outputs.
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/hexgrid-center-circle.png"
                         alt="Hexgrid of circles"
                     />
@@ -152,7 +153,7 @@ export default function Home() {
                     create a nice pattern that can be laser cut:
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/hexgrid-star-outline.png"
                         alt="Star pattern in a hexgrid"
                     />
@@ -165,7 +166,7 @@ export default function Home() {
                     variations:
                 </p>
                 <p>
-                    <img
+                    <Image
                         src="/img/sqgrid-destruct-calc-circle.png"
                         alt="Star pattern in a hexgrid"
                     />

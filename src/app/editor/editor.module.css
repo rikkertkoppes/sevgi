@@ -67,12 +67,12 @@
     background-color: var(--background);
 }
 
-.vertical .Panes {
+:global(.verticalView) .Panes {
     flex-direction: column;
 }
-.vertical .FlowPane {
+:global(.verticalView) .FlowPane {
     flex: 1;
 }
-.vertical .ResultPane {
+:global(.verticalView) .ResultPane {
     flex: 1.5;
 }

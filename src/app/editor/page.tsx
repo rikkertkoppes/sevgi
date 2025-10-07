@@ -19,6 +19,7 @@ import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
 import { Palette } from "@/components/Palette";
 import { output } from "@/functions/Output";
+import { toggleCookieFlag } from "../../cookies/client";
 
 import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
@@ -51,7 +52,10 @@ export default function Home() {
     const [data, setData] = React.useState<Record<string, any>>({});
     const [selection, setSelection] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
-    const [vertical, setVertical] = React.useState(false);
+
+    const toggleVertical = () => {
+        toggleCookieFlag("verticalView");
+    };
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -96,20 +100,14 @@ export default function Home() {
             <div
                 className={classNames(styles.Container, {
                     [styles.placing]: !!placing,
-                    [styles.vertical]: !!vertical,
                 })}
-                suppressHydrationWarning={true}
             >
                 <div className={styles.Panes}>
                     <Tabs>
                         <div className={styles.FlowPane}>
                             <TabHeaders>
                                 <div className={styles.Version}>
-                                    <button
-                                        onClick={() => setVertical(!vertical)}
-                                    >
-                                        x
-                                    </button>
+                                    <button onClick={toggleVertical}>x</button>
                                     <div className={styles.Title}>
                                         <Link href="/">sevgi</Link>
                                     </div>

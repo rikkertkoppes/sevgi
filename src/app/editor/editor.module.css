@@ -76,3 +76,21 @@
 :global(.verticalView) .ResultPane {
     flex: 1.5;
 }
+
+.ViewButtons {
+    display: flex;
+    gap: 8px;
+}
+.ViewButtons button {
+    box-sizing: border-box;
+    height: 21px;
+    width: 23px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ViewButtons svg {
+    width: 20px;
+    height: 20px;
+}

@@ -1,6 +1,6 @@
 const FLAGS_COOKIE_NAME = "flags";
 
-export async function getClientCookieFlags(): Promise<Record<string, boolean>> {
+export function getClientCookieFlags(): Record<string, boolean> {
     const cookies = document.cookie.split("; ").reduce((acc, cook) => {
         const [name, value] = cook.split("=");
         acc[name] = value;
@@ -15,8 +15,8 @@ export async function getClientCookieFlags(): Promise<Record<string, boolean>> {
     }
 }
 
-export async function toggleCookieFlag(name: string, value?: boolean) {
-    const flags = await getClientCookieFlags();
+export function toggleCookieFlag(name: string, value?: boolean) {
+    const flags = getClientCookieFlags();
     const newValue = value ?? !flags[name];
     const newFlags = { ...flags, [name]: newValue };
     const json = JSON.stringify(newFlags);

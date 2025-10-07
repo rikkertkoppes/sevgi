@@ -19,7 +19,7 @@ import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
 import { Palette } from "@/components/Palette";
 import { output } from "@/functions/Output";
-import { toggleCookieFlag } from "../../cookies/client";
+import { ViewButtons } from "./ViewButtons";
 
 import styles from "./editor.module.css";
 import "@rkmodules/rules/index.css";
@@ -52,10 +52,6 @@ export default function Home() {
     const [data, setData] = React.useState<Record<string, any>>({});
     const [selection, setSelection] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
-
-    const toggleVertical = () => {
-        toggleCookieFlag("verticalView");
-    };
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -107,7 +103,7 @@ export default function Home() {
                         <div className={styles.FlowPane}>
                             <TabHeaders>
                                 <div className={styles.Version}>
-                                    <button onClick={toggleVertical}>x</button>
+                                    <ViewButtons />
                                     <div className={styles.Title}>
                                         <Link href="/">sevgi</Link>
                                     </div>

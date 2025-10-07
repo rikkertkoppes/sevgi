@@ -1,5 +1,10 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
-import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
+import {
+    graftTree,
+    mapTree,
+    PrimitiveFunction,
+    trimTree,
+} from "@rkmodules/rules";
 
 export const pointsFromPoly: PrimitiveFunction = {
     name: "pointsFromPoly",
@@ -8,12 +13,20 @@ export const pointsFromPoly: PrimitiveFunction = {
     inputs: {
         curve: "Curve",
     },
+    params: {
+        merge: { type: "boolean", default: false, label: "merge" },
+    },
     outputs: {
         points: "Point",
     },
-    impl: async (inputs) => {
+    impl: async (inputs, params) => {
+        const curve = graftTree(inputs.curve || {});
+        let points = mapTree(curve || {}, (s: PolyLine) => s.getPoints());
+        if (params.merge) {
+            points = trimTree(points);
+        }
         return {
-            points: mapTree(inputs.curve || {}, (s: PolyLine) => s.getPoints()),
+            points,
         };
     },
 };

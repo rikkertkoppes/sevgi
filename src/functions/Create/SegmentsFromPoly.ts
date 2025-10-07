@@ -1,5 +1,10 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
-import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
+import {
+    graftTree,
+    mapTree,
+    PrimitiveFunction,
+    trimTree,
+} from "@rkmodules/rules";
 
 export const segmentsFromPoly: PrimitiveFunction = {
     name: "segmentsFromPoly",
@@ -8,14 +13,20 @@ export const segmentsFromPoly: PrimitiveFunction = {
     inputs: {
         shape: "PolyLine",
     },
+    params: {
+        merge: { type: "boolean", default: false, label: "merge" },
+    },
     outputs: {
         segments: "Curve",
     },
-    impl: async (inputs) => {
+    impl: async (inputs, params) => {
+        const shape = graftTree(inputs.shape || {});
+        let segments = mapTree(shape, (s: PolyLine) => s.getSegments());
+        if (params.merge) {
+            segments = trimTree(segments);
+        }
         return {
-            segments: mapTree(inputs.shape || {}, (s: PolyLine) =>
-                s.getSegments()
-            ),
+            segments,
         };
     },
 };

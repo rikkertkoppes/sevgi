@@ -1,5 +1,5 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
-import { mapTree, PrimitiveFunction } from "@rkmodules/rules";
+import { DISCARD, mapTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const countSegments: PrimitiveFunction = {
     name: "countSegments",
@@ -13,8 +13,8 @@ export const countSegments: PrimitiveFunction = {
     },
     impl: async (inputs) => {
         return {
-            count: mapTree(inputs.shape, (m: PolyLine) => {
-                return m.getSegments().length;
+            count: mapTree(inputs.shape || {}, (m: PolyLine) => {
+                return m?.getSegments().length || DISCARD;
             }),
         };
     },

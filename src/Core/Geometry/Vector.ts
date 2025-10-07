@@ -94,6 +94,8 @@ export const cross = (
 export const norm = (p: Point): number => Math.sqrt(dot(p, p));
 /** angle of a vector */
 export const angle = ({ x, y }: Point): number => Math.atan2(y, x);
+/** direction from an angle */
+export const dir = (a: number): Point => v2(Math.cos(a), Math.sin(a));
 /** absolute value of all components */
 export const abs = ({ x, y }: Point): Point => v2(Math.abs(x), Math.abs(y));
 /** minumum components of all points */

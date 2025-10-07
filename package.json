@@ -13,7 +13,7 @@
         "node": ">=22.0.0"
     },
     "dependencies": {
-        "@rkmodules/rules": "^0.0.55",
+        "@rkmodules/rules": "^0.0.60",
         "@use-gesture/react": "^10.3.1",
         "next": "15.5.2",
         "react": "^19.1.1",

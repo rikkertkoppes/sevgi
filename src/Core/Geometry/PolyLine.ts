@@ -213,6 +213,10 @@ export class PolyLine extends Curve {
         return Object.values(index);
     }
 
+    public interSectWithLineSegment(segment: LineSegment): Point[] {
+        return this.segments.flatMap((s) => s.intersectWith(segment));
+    }
+
     public walk({ enter, exit }: WalkerOptions): this {
         let r = this;
         if (enter) {

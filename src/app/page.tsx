@@ -77,7 +77,12 @@ export default function Home() {
                     call those elements <i>nodes</i>.
                 </p>
                 <p>
-                    <Image src="/img/circle.png" alt="Circle Node" />
+                    <Image
+                        src="/img/circle.png"
+                        alt="Circle Node"
+                        width={2559}
+                        height={716}
+                    />
                 </p>
                 <p>
                     Above is a `Circle` node connected to the output. It draws a
@@ -91,6 +96,8 @@ export default function Home() {
                     <Image
                         src="/img/point-circle.png"
                         alt="Circle Node with Point input"
+                        width={2559}
+                        height={716}
                     />
                 </p>
                 <p>
@@ -102,6 +109,8 @@ export default function Home() {
                     <Image
                         src="/img/trigrid-circle.png"
                         alt="Circle Node with Grid input"
+                        width={2559}
+                        height={716}
                     />
                 </p>
                 <p>
@@ -114,6 +123,8 @@ export default function Home() {
                     <Image
                         src="/img/trigrid-circle-preview.png"
                         alt="Circle Node with Grid input and preview panels open"
+                        width={2559}
+                        height={939}
                     />
                 </p>
                 <h1>What can I do with...</h1>
@@ -138,6 +149,8 @@ export default function Home() {
                     <Image
                         src="/img/hexgrid-center-circle.png"
                         alt="Hexgrid of circles"
+                        width={2559}
+                        height={738}
                     />
                 </p>
                 <h2>Patterns</h2>
@@ -156,6 +169,8 @@ export default function Home() {
                     <Image
                         src="/img/hexgrid-star-outline.png"
                         alt="Star pattern in a hexgrid"
+                        width={2559}
+                        height={738}
                     />
                 </p>
                 <h2>Math</h2>
@@ -169,6 +184,8 @@ export default function Home() {
                     <Image
                         src="/img/sqgrid-destruct-calc-circle.png"
                         alt="Star pattern in a hexgrid"
+                        width={2559}
+                        height={738}
                     />
                 </p>
             </div>

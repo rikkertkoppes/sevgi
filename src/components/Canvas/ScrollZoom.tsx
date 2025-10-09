@@ -57,7 +57,7 @@ export function SVGScroller({ children }: SVGScrollerProps) {
             event.preventDefault();
         },
         onDoubleClick: ({ event }) => {
-            let dy = event.shiftKey ? 1 / 2 : 2;
+            const dy = event.shiftKey ? 1 / 2 : 2;
             const svg = svgRef.current;
             if (!svg) return;
             const pt = getSvgPoint(svg, event.pageX, event.pageY);

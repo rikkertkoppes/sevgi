@@ -1,5 +1,6 @@
 // "use client";
 import React from "react";
+import classNames from "classnames";
 import { useGesture } from "@use-gesture/react";
 
 import styles from "./Canvas.module.css";
@@ -22,6 +23,7 @@ export function SVGScroller({ children }: SVGScrollerProps) {
     const svgRef = React.useRef<SVGSVGElement>(null);
     const [offset, setOffset] = React.useState({ x: 0, y: 0 });
     const [zoom, setZoom] = React.useState(1);
+    const [zooming, setZooming] = React.useState(false);
 
     const bind = useGesture({
         onDrag: ({ delta: [dx, dy] }) => {
@@ -54,6 +56,22 @@ export function SVGScroller({ children }: SVGScrollerProps) {
             setZoom(newZoom);
             event.preventDefault();
         },
+        onDoubleClick: ({ event }) => {
+            let dy = event.shiftKey ? 1 / 2 : 2;
+            const svg = svgRef.current;
+            if (!svg) return;
+            const pt = getSvgPoint(svg, event.pageX, event.pageY);
+            if (!pt) return;
+            const newZoom = Math.max(0.1, dy * zoom);
+            // adjust offset to zoom arount mouse position
+            setOffset((offset) => ({
+                x: (newZoom * (offset.x - pt.x)) / zoom + pt.x,
+                y: (newZoom * (offset.y - pt.y)) / zoom + pt.y,
+            }));
+            setZoom(newZoom);
+            setZooming(true);
+            setTimeout(() => setZooming(false), 200);
+        },
     });
 
     return (
@@ -73,6 +91,7 @@ export function SVGScroller({ children }: SVGScrollerProps) {
                     </marker>
                 </defs>
                 <g
+                    className={classNames({ [styles.TransformBox]: zooming })}
                     transform={`translate(${offset.x},${
                         offset.y
                     }) scale(${zoom},${-zoom})`}

@@ -29,6 +29,10 @@
     height: 1px;
 }
 
+.TransformBox {
+    transition: transform 0.2s;
+}
+
 .Data {
     overflow: auto;
     flex: 1;

@@ -256,10 +256,6 @@ export class Arc extends Segment {
         );
     }
 
-    public toString(): string {
-        return `<Arc>`;
-    }
-
     static is(thing: any): thing is Arc {
         return thing instanceof Arc;
     }

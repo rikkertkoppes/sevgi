@@ -297,10 +297,6 @@ export class PolyLine extends Curve {
         return path;
     }
 
-    public toString(): string {
-        return `<PolyLine>`;
-    }
-
     public static is(p: any): p is PolyLine {
         return p && Array.isArray(p.points) && p.points.every(Point.is);
     }

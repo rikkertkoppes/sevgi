@@ -12,7 +12,7 @@ export const point: PrimitiveFunction = {
     outputs: {
         point: "Point",
     },
-    impl: async (inputs) => {
+    impl: async function PointImpl(inputs) {
         return {
             point: binaryOnTree(
                 inputs.x,

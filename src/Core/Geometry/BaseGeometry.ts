@@ -26,6 +26,8 @@ export abstract class BaseGeometry {
     abstract walk({ enter, exit }: WalkerOptions): this;
     abstract flatten(): BaseGeometry[];
 
-    abstract toString(): string;
+    toString(): string {
+        return `<${this.type}>`;
+    }
     abstract toSVG(): any;
 }

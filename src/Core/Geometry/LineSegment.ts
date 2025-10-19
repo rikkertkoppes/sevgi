@@ -205,10 +205,6 @@ export class LineSegment extends Segment {
         return fixedNum`L ${p.x} ${p.y}`;
     }
 
-    public toString(): string {
-        return `<LineSegment>`;
-    }
-
     static is(thing: any): thing is LineSegment {
         return thing instanceof LineSegment;
     }

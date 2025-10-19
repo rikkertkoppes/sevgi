@@ -339,10 +339,6 @@ export class Circle extends Curve {
         );
     }
 
-    public toString() {
-        return `<Circle>`;
-    }
-
     /**
      * construct a circle from two points and a tangent direction through the first
      */

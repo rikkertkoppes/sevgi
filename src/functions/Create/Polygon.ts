@@ -1,7 +1,5 @@
-import { LineSegment } from "@/Core/Geometry/LineSegment";
-import { PolyLine } from "@/Core/Geometry/PolyLine";
-import { Transform } from "@/Core/Geometry/Transform";
-import { Point, sum, v2 } from "@/Core/Geometry/Vector";
+import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
+import { v2 } from "@/Core/Geometry/Vector";
 import { nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 
 export const polygon: PrimitiveFunction = {
@@ -18,7 +16,7 @@ export const polygon: PrimitiveFunction = {
     outputs: {
         shape: "PolyLine",
     },
-    impl: async (inputs) => {
+    impl: async function PolygonImpl(inputs) {
         const shape = nAryOnTree(
             [
                 inputs.center,
@@ -28,26 +26,7 @@ export const polygon: PrimitiveFunction = {
                 inputs.useOuter,
             ],
             ([o, n, r, a, or]) => {
-                const points: Point[] = [];
-                // when or is true, shrink r such that the polygon inner circle has radius r
-                if (!or) {
-                    r = r / Math.cos(Math.PI / n);
-                }
-                for (let i = 0; i < n; i++) {
-                    const theta = (2 * Math.PI * i) / n + (a * Math.PI) / 180;
-                    const x = r * Math.cos(theta);
-                    const y = r * Math.sin(theta);
-                    points.push(sum(o, v2(x, y)));
-                }
-
-                const lines = points.map((p, i) => {
-                    const other = points[(i + 1) % points.length];
-                    return new LineSegment(p, other);
-                });
-
-                const poly = new PolyLine(lines);
-
-                return poly;
+                return RegularPolygon.from(o, n, r, a, or);
             },
             true
         );

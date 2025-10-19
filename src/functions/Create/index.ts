@@ -14,6 +14,7 @@ import { center } from "./Center";
 import { star } from "./Star";
 import { evaluateCurve } from "./EvaluateCurve";
 import { subdivideCurve } from "./SubdivideCurve";
+import { rectangle } from "./Rectangle";
 
 const primitives: Record<string, PrimitiveFunction> = {
     point,
@@ -21,6 +22,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     circle,
     arc,
     polygon,
+    rectangle,
     midpoint,
     evaluateCurve,
     center,

@@ -1,4 +1,4 @@
-import { cross, Point, same } from "./Vector";
+import { cross, Point, same, Transform } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
@@ -39,6 +39,12 @@ export class LineSegment extends Segment {
 
     public clone() {
         return new LineSegment(this.start, this.end);
+    }
+
+    public transform(T: Transform) {
+        return this.copyIdentity(
+            new LineSegment(this.start.transform(T), this.end.transform(T))
+        );
     }
 
     public translate(vector: Point) {

@@ -3,7 +3,7 @@ import { Circle } from "./Circle";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { fixedNum, normalizeAngle } from "./Util";
-import { Point, rotateRight, v2 } from "./Vector";
+import { Point, rotateRight, Transform, v2 } from "./Vector";
 import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
 
 const PI = Math.PI;
@@ -123,6 +123,12 @@ export class Arc extends Segment {
 
     public clone() {
         return new Arc(this.c.clone(), this._start, this._end);
+    }
+
+    public transform(T: Transform) {
+        return this.copyIdentity(
+            Arc.fromPoints(this.start.transform(T), this.end.transform(T), 0)
+        );
     }
 
     public translate(vector: Point) {

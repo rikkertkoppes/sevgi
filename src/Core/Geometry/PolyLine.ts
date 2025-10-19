@@ -41,6 +41,12 @@ export class PolyLine extends Curve {
     public clone(): PolyLine {
         return new PolyLine(this.segments.map((p) => p.clone()));
     }
+    public transform(T: Transform): PolyLine {
+        return this.copyIdentity(
+            new PolyLine(this.segments.map((p) => p.transform(T)))
+        );
+    }
+
     public translate(v: Point): PolyLine {
         return this.copyIdentity(
             new PolyLine(this.segments.map((p) => p.translate(v)))

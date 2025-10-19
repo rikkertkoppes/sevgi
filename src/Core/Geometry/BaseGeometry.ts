@@ -1,5 +1,5 @@
 import { uid } from "./Util";
-import { Point } from "./Vector";
+import { Point, Transform } from "./Vector";
 
 export interface WalkerOptions {
     enter?: <G extends BaseGeometry>(g: G) => G | void;
@@ -17,6 +17,7 @@ export abstract class BaseGeometry {
     }
     abstract type: string;
     abstract clone(): BaseGeometry;
+    abstract transform(T: Transform): BaseGeometry;
     abstract translate(v: Point): BaseGeometry;
     abstract rotate(angle: number, center: Point): BaseGeometry;
     abstract scale(factor: number, center: Point): BaseGeometry;

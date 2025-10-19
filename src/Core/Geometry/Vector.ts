@@ -14,6 +14,11 @@ export class Point extends BaseGeometry {
         return new Point(this.x, this.y);
     }
 
+    public transform(T: Transform): Point {
+        // console.log("transform point", this, T, transform(this, T));
+        return this.copyIdentity(transform(this, T));
+    }
+
     public translate(v: Point): Point {
         return this.copyIdentity(sum(this, v));
     }

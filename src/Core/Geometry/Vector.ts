@@ -217,3 +217,19 @@ export const xfmult = (
         e1 * b2 + f1 * d2 + f2,
     ];
 };
+
+export const inverse = ([a, b, c, d, e, f]: Transform): Transform => {
+    const det = a * d - b * c;
+    if (Math.abs(det) < 1e-10) {
+        throw new Error("matrix not invertible");
+    }
+    const idet = 1 / det;
+    return [
+        d * idet,
+        -b * idet,
+        -c * idet,
+        a * idet,
+        (c * f - d * e) * idet,
+        (b * e - a * f) * idet,
+    ];
+};

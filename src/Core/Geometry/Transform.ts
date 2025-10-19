@@ -1,6 +1,9 @@
+import { store } from "./GeoData";
+import { fixedNum } from "./Util";
 import { Point } from "./Vector";
 
 export class Transform {
+    public hash: string;
     constructor(
         public a: number,
         public b: number,
@@ -8,7 +11,9 @@ export class Transform {
         public d: number,
         public e: number,
         public f: number
-    ) {}
+    ) {
+        this.hash = fixedNum`${a},${b},${c},${d},${e},${f}`;
+    }
 
     /**
      * applies this transform followed by other
@@ -41,12 +46,18 @@ export class Transform {
     }
 
     public inverse(): Transform {
+        // check cache
+        const prop = store.getProp(this.hash, "inverse");
+        if (prop) {
+            return prop;
+        }
+
         const det = this.a * this.d - this.b * this.c;
         if (Math.abs(det) < 1e-10) {
             throw new Error("matrix not invertible");
         }
         const idet = 1 / det;
-        return new Transform(
+        const t = new Transform(
             this.d * idet,
             -this.b * idet,
             -this.c * idet,
@@ -54,6 +65,8 @@ export class Transform {
             (this.c * this.f - this.d * this.e) * idet,
             (this.b * this.e - this.a * this.f) * idet
         );
+        store.setProp(this.hash, "inverse", t);
+        return t;
     }
 
     public static fromTranslation(p: Point): Transform {

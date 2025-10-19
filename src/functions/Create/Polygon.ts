@@ -1,5 +1,6 @@
 import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { Transform } from "@/Core/Geometry/Transform";
 import { Point, sum, v2 } from "@/Core/Geometry/Vector";
 import { nAryOnTree, PrimitiveFunction } from "@rkmodules/rules";
 

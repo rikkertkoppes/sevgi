@@ -1,4 +1,5 @@
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
+import { Transform } from "./Transform";
 import { fixedNum } from "./Util";
 
 /**
@@ -17,7 +18,7 @@ export class Point extends BaseGeometry {
 
     public transform(T: Transform): Point {
         // console.log("transform point", this, T, transform(this, T));
-        return this.copyIdentity(transform(this, T));
+        return this.copyIdentity(T.apply(this));
     }
 
     public translate(v: Point): Point {
@@ -59,6 +60,11 @@ export class Point extends BaseGeometry {
     public static toArray(p: Point): [number, number] {
         return [p.x, p.y];
     }
+
+    public static ZERO = new Point(0, 0);
+    public static ONE = new Point(1, 1);
+    public static UNIT_X = new Point(1, 0);
+    public static UNIT_Y = new Point(0, 1);
 }
 
 export const v2 = (x: number, y: number): Point => new Point(x, y);
@@ -83,8 +89,6 @@ export const constrain = ({ x, y }: Point, tl: Point, br: Point): Point => {
         Math.min(br.y, Math.max(tl.y, y))
     );
 };
-
-export type Transform = [number, number, number, number, number, number];
 
 export const dot = ({ x: ax, y: ay }: Point, { x: bx, y: by }: Point): number =>
     ax * bx + ay * by;
@@ -179,57 +183,4 @@ export const mirror = (p: Point, axis: "" | "x" | "y" | "xy"): Point => {
         default:
             return p;
     }
-};
-
-/**
- * matrix transformation
- *
- *  |x|   |a c e| |x|
- *  |y| = |b d f| |y|
- *  |1|   |0 0 1| |1|
- */
-export const transform = (
-    { x, y }: Point,
-    [a, b, c, d, e, f]: number[]
-): Point => {
-    return v2(a * x + c * y + e, b * x + d * y + f);
-};
-export const transformDom = (
-    { x, y }: Point,
-    { a, b, c, d, e, f }: DOMMatrix
-): // m: DOMMatrix
-Point => {
-    // let p = new DOMPoint(x, y);
-    // return p.matrixTransform(m);
-    return v2(a * x + c * y + e, b * x + d * y + f);
-};
-
-export const xfmult = (
-    [a1, b1, c1, d1, e1, f1]: Transform,
-    [a2, b2, c2, d2, e2, f2]: Transform
-): Transform => {
-    return [
-        a1 * a2 + b1 * c2,
-        a1 * b2 + d2 * b1,
-        c1 * a2 + d1 * c2,
-        c1 * b2 + d1 * d2,
-        e1 * a2 + f1 * c2 + e2,
-        e1 * b2 + f1 * d2 + f2,
-    ];
-};
-
-export const inverse = ([a, b, c, d, e, f]: Transform): Transform => {
-    const det = a * d - b * c;
-    if (Math.abs(det) < 1e-10) {
-        throw new Error("matrix not invertible");
-    }
-    const idet = 1 / det;
-    return [
-        d * idet,
-        -b * idet,
-        -c * idet,
-        a * idet,
-        (c * f - d * e) * idet,
-        (b * e - a * f) * idet,
-    ];
 };

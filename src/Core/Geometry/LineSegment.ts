@@ -1,4 +1,4 @@
-import { cross, Point, same, Transform } from "./Vector";
+import { cross, Point, same } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
 import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
@@ -6,6 +6,7 @@ import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Line } from "./Line";
 import { ClosestPointInfo } from "./Curve";
+import { Transform } from "./Transform";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";

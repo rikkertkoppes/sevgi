@@ -2,8 +2,9 @@ import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
+import { Transform } from "./Transform";
 import { fixedNum, normalizeAngle } from "./Util";
-import { Point, rotateRight, Transform, v2 } from "./Vector";
+import { Point, rotateRight, v2 } from "./Vector";
 import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
 
 const PI = Math.PI;

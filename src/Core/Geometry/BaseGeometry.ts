@@ -1,5 +1,6 @@
+import { Transform } from "./Transform";
 import { uid } from "./Util";
-import { Point, Transform } from "./Vector";
+import { Point } from "./Vector";
 
 export interface WalkerOptions {
     enter?: <G extends BaseGeometry>(g: G) => G | void;

@@ -1,14 +1,14 @@
 import { store } from "./GeoData";
 import { LineSegment } from "./LineSegment";
-import { PolyLine } from "./PolyLine";
+import { JoinType, PolyLine } from "./PolyLine";
 import { Transform } from "./Transform";
 import { mid, Point, v2 } from "./Vector";
 
 export class Rectangle extends PolyLine {
     public type = "Rectangle";
 
-    // assume normalized width and height, aspect = height/width
-    protected constructor(aspect: number) {
+    // assume normalized width, aspect = height/width
+    protected constructor(private aspect: number) {
         const hw = 1 / 2;
         const hh = aspect / 2;
         const points: Point[] = [
@@ -25,7 +25,36 @@ export class Rectangle extends PolyLine {
         super(lines);
     }
 
-    // TODO: offset can be spacial cased for insets and mitered outsets, just adjust the transform
+    get width() {
+        const s = this.T.scale;
+        return s.x;
+    }
+    get height() {
+        const s = this.T.scale;
+        return s.y * this.aspect;
+    }
+    get center() {
+        return this.T.translation;
+    }
+
+    // offset can be special cased for insets and mitered outsets, just adjust the transform
+    public offset(
+        distance: number,
+        joinType: JoinType = "round"
+    ): Rectangle | PolyLine {
+        if (distance === 0) return this;
+        if (distance < 0) {
+            const w = this.width + 2 * distance;
+            const h = this.height + 2 * distance;
+            return Rectangle.fromDimensions(this.center, w, h);
+        }
+        if (distance > 0 && joinType === "miter") {
+            const w = this.width + 2 * distance;
+            const h = this.height + 2 * distance;
+            return Rectangle.fromDimensions(this.center, w, h);
+        }
+        return super.offset(distance, joinType);
+    }
 
     static fromBounds(lowerLeft: Point, upperRight: Point): Rectangle {
         const width = upperRight.x - lowerLeft.x;

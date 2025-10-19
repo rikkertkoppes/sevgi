@@ -9,7 +9,7 @@ import { Segment } from "./Segment";
 import { Transform } from "./Transform";
 import { Point, same } from "./Vector";
 
-type JoinType = "miter" | "bevel" | "round" | "none";
+export type JoinType = "miter" | "bevel" | "round" | "none";
 export class PolyLine extends Curve {
     public type = "PolyLine";
     public length: number = 0;

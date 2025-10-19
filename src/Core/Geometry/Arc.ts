@@ -128,7 +128,7 @@ export class Arc extends Segment {
 
     public transform(T: Transform) {
         return this.copyIdentity(
-            Arc.fromPoints(this.start.transform(T), this.end.transform(T), 0)
+            new Arc(this.c.transform(T), this._start, this._end)
         );
     }
 

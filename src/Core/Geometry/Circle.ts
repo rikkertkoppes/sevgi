@@ -20,6 +20,7 @@ import { LineSegment } from "./LineSegment";
 import { normalizeAngle, TAU } from "./Util";
 import { Curve } from "./Curve";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
+import { Transform } from "./Transform";
 
 /** signed circle, negative radii are counter clockwise */
 export class Circle extends Curve {
@@ -79,6 +80,11 @@ export class Circle extends Curve {
         return new Circle(this.c, this.r - d);
     }
 
+    public transform(T: Transform) {
+        return this.copyIdentity(
+            new Circle(T.apply(this.c), this.r * T.scale.x)
+        );
+    }
     public translate(v: Point) {
         return this.copyIdentity(new Circle(this.c.translate(v), this.r));
     }

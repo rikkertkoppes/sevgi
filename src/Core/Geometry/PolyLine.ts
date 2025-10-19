@@ -2,25 +2,37 @@ import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { ClosestPointInfo, Curve } from "./Curve";
+import { store } from "./GeoData";
 import { Line } from "./Line";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
+import { Transform } from "./Transform";
 import { Point, same } from "./Vector";
 
 type JoinType = "miter" | "bevel" | "round" | "none";
 export class PolyLine extends Curve {
     public type = "PolyLine";
-    public length: number;
+    public length: number = 0;
     private lengths: number[] = [];
     private offsets: number[] = [];
     private segments: Segment[] = [];
     protected closed = false;
     private joined = false;
+    private points: Point[] = [];
+    public first: Point = new Point(0, 0);
+    public last: Point = new Point(0, 0);
+    public T: Transform = Transform.ONE;
+    public Ti: Transform = Transform.ONE;
+
     constructor(segments: Segment[]) {
         super();
+
+        if (!segments.length) return this;
         // TODO: order
         this.segments = segments;
+        // the lengths of each segment
         this.lengths = this.segments.map((e) => e.length);
+        // the start of each segment in world space
         this.offsets = this.lengths.reduce(
             (acc, l) => {
                 const last = acc.length > 0 ? acc[acc.length - 1] : 0;
@@ -29,31 +41,54 @@ export class PolyLine extends Curve {
             },
             [0] as number[]
         );
+        // total length
         this.length = this.lengths.reduce((sum, l) => sum + l, 0);
         const jointsClosed = this.segments.map((s, i) => {
             const next = this.segments[(i + 1) % this.segments.length];
             return same(s.end, next.start);
         });
-        this.joined = jointsClosed.slice(0, -1).every((v) => v); // don't care about last to first joint
+        // all segments connected? don't care about last to first joint
+        this.joined = jointsClosed.slice(0, -1).every((v) => v);
+        // all segments connected and last to first joint too?
         this.closed = jointsClosed.every((v) => v);
+        // get the unique points
+        const index: Record<string, Point> = {};
+        this.segments.forEach((e) => {
+            index[e.start.hash] = e.start;
+            index[e.end.hash] = e.end;
+        });
+        this.points = Object.values(index);
+        this.first = this.points[0];
+        this.last = this.points[this.points.length - 1];
+
+        this.hash = this.segments.map((s) => s.hash).join("|");
     }
 
     public clone(): PolyLine {
         return new PolyLine(this.segments.map((p) => p.clone()));
     }
-    public transform(T: Transform): PolyLine {
-        return this.copyIdentity(
-            new PolyLine(this.segments.map((p) => p.transform(T)))
-        );
+    private shallowCopy(): this {
+        const c = Object.create(Object.getPrototypeOf(this));
+        Object.assign(c, this);
+        return c;
+    }
+
+    public transform(t: Transform): this {
+        const c = this.shallowCopy();
+        c.T = t;
+        c.Ti = t.inverse();
+        return c;
     }
 
     public translate(v: Point): PolyLine {
         return this.copyIdentity(
-            new PolyLine(this.segments.map((p) => p.translate(v)))
+            this.transform(Transform.fromTranslation(v).multiply(this.T))
+            // new PolyLine(this.segments.map((p) => p.translate(v)))
         );
     }
     public rotate(angle: number, center: Point): PolyLine {
         return this.copyIdentity(
+            // this.transform(Transform.fromRotation(angle, center).multiply(this.T))
             new PolyLine(this.segments.map((p) => p.rotate(angle, center)))
         );
     }
@@ -121,6 +156,13 @@ export class PolyLine extends Curve {
     }
 
     public offset(d: number, joinType: JoinType = "round"): PolyLine {
+        const propKey = `offset_${d}_${joinType}`;
+        // check if a stored offset exists
+        const prop = store.getProp(this.hash, propKey);
+        if (prop) {
+            return (prop as PolyLine).transform(this.T);
+        }
+
         if (this.segments.length === 0) return new PolyLine([]);
 
         // 1) Offset each edge individually
@@ -207,16 +249,15 @@ export class PolyLine extends Curve {
             result.push(curr);
         }
 
-        return new PolyLine(result);
+        const newPoly = new PolyLine(result);
+        newPoly.T = this.T;
+        newPoly.Ti = this.Ti;
+        store.setProp(this.hash, propKey, newPoly);
+        return newPoly;
     }
 
     public getPoints() {
-        const index: Record<string, Point> = {};
-        this.segments.forEach((e) => {
-            index[e.start.hash()] = e.start;
-            index[e.end.hash()] = e.end;
-        });
-        return Object.values(index);
+        return this.points;
     }
 
     public interSectWithLineSegment(segment: LineSegment): Point[] {
@@ -242,11 +283,12 @@ export class PolyLine extends Curve {
     }
 
     public toSVG() {
+        const segments = this.segments.map((s) => s.transform(this.T));
         if (!this.joined) {
-            return this.segments.map((l) => l.toSVG()).join(" ");
+            return segments.map((l) => l.toSVG()).join(" ");
         }
 
-        const [first, ...rest] = this.segments;
+        const [first, ...rest] = segments;
         const path = first.toSVG() + rest.map((l) => l.toSVGRel()).join(" ");
         if (this.closed) {
             return path + " z";

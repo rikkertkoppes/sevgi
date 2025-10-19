@@ -10,12 +10,10 @@ import { Transform } from "./Transform";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";
-    private _tangent;
-    private _normal;
+    private _tangent: Point | null = null;
+    private _normal: Point | null = null;
     constructor(public start: Point, public end: Point) {
         super();
-        this._tangent = unit(diff(end, start));
-        this._normal = unit(rot(-Math.PI / 2, this.direction()));
         this.hash = `line|${this.start.hash}|${this.end.hash}`;
     }
 
@@ -32,10 +30,16 @@ export class LineSegment extends Segment {
     }
 
     public direction() {
+        if (!this._tangent) {
+            this._tangent = unit(diff(this.end, this.start));
+        }
         return this._tangent;
     }
 
     public normal() {
+        if (!this._normal) {
+            this._normal = unit(rot(-Math.PI / 2, this.direction()));
+        }
         return this._normal;
     }
 

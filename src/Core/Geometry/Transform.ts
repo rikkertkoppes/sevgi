@@ -4,7 +4,8 @@ import { Point, v2 } from "./Vector";
 
 export class Transform {
     public hash: string;
-    constructor(
+    private _scale: Point | null = null;
+    private _rotation: number | null = null;
         public a: number,
         public b: number,
         public c: number,
@@ -67,6 +68,24 @@ export class Transform {
         );
         store.setProp(this.hash, "inverse", t);
         return t;
+    }
+
+    public get translation(): Point {
+        return new Point(this.e, this.f);
+    }
+    public get scale(): Point {
+        if (!this._scale) {
+            const sx = Math.sqrt(this.a * this.a + this.b * this.b);
+            const sy = Math.sqrt(this.c * this.c + this.d * this.d);
+            this._scale = new Point(sx, sy);
+        }
+        return this._scale;
+    }
+    public get rotation(): number {
+        if (this._rotation === null) {
+            this._rotation = Math.atan2(this.b, this.a);
+        }
+        return this._rotation;
     }
 
     public static fromTranslation(p: Point): Transform {

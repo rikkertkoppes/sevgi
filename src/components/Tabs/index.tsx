@@ -90,17 +90,25 @@ export const Tab: React.FC<TabProps> = ({ header, children }) => {
 };
 
 interface TabHeadersProps {
+    className?: string;
     position?: "top" | "bottom" | "left" | "right";
     children?: React.ReactNode;
 }
 export const TabHeaders: React.FC<TabHeadersProps> = ({
+    className,
     position,
     children,
 }: TabHeadersProps) => {
     const { activeTabIndex, setActiveTabIndex, tabs } = useTabContext();
 
     return (
-        <div className={classNames(styles.Tabs, styles[position || ""])}>
+        <div
+            className={classNames(
+                className,
+                styles.Tabs,
+                styles[position || ""]
+            )}
+        >
             {tabs.map((tab, index) => (
                 <div
                     key={tab.id}

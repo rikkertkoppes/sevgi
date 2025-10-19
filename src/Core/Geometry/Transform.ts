@@ -6,6 +6,7 @@ export class Transform {
     public hash: string;
     private _scale: Point | null = null;
     private _rotation: number | null = null;
+    private constructor(
         public a: number,
         public b: number,
         public c: number,
@@ -123,6 +124,16 @@ export class Transform {
 
     public static fromDOM(m: DOMMatrix): Transform {
         return new Transform(m.a, m.b, m.c, m.d, m.e, m.f);
+    }
+    public static fromElements(
+        a: number,
+        b: number,
+        c: number,
+        d: number,
+        e: number,
+        f: number
+    ): Transform {
+        return new Transform(a, b, c, d, e, f);
     }
 
     public static ONE = new Transform(1, 0, 0, 1, 0, 0);

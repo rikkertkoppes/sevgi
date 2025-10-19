@@ -174,7 +174,7 @@ export function linesToCells(lines: LineSegment[]): PolyLine[] {
             return new LineSegment(origin, end);
         });
 
-        cells.push(new PolyLine(modelLines));
+        cells.push(PolyLine.from(modelLines));
     }
 
     return cells;

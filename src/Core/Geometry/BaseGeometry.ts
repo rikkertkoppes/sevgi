@@ -9,6 +9,7 @@ export interface WalkerOptions {
 
 export abstract class BaseGeometry {
     public _id: string;
+    public hash: string = "";
     constructor() {
         this._id = uid();
     }

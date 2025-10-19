@@ -16,6 +16,7 @@ export class LineSegment extends Segment {
         super();
         this._tangent = unit(diff(end, start));
         this._normal = unit(rot(-Math.PI / 2, this.direction()));
+        this.hash = `line|${this.start.hash}|${this.end.hash}`;
     }
 
     public get length() {

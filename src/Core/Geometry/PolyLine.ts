@@ -7,7 +7,7 @@ import { Line } from "./Line";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { Transform } from "./Transform";
-import { Point, same } from "./Vector";
+import { diff, Point, same } from "./Vector";
 
 export type JoinType = "miter" | "bevel" | "round" | "none";
 export class PolyLine extends Curve {
@@ -165,11 +165,14 @@ export class PolyLine extends Curve {
 
         if (this.segments.length === 0) return new PolyLine([]);
 
+        const s = this.T.scale;
+        d = d / Math.max(Math.abs(s.x), Math.abs(s.y));
+
         // 1) Offset each edge individually
         const raw = this.segments.map((e) => e.offset(d));
 
         // 2) Stitch with trimming or chamfering
-        const result: Segment[] = [];
+        const segments: Segment[] = [];
 
         // Start with a copy of the first offset edge
         let curr = raw[0];
@@ -196,7 +199,7 @@ export class PolyLine extends Curve {
 
                 curr.end = joints[0];
                 next.start = joints[0];
-                result.push(curr);
+                segments.push(curr);
             } else {
                 switch (joinType) {
                     case "miter": {
@@ -205,10 +208,10 @@ export class PolyLine extends Curve {
                             // Commit the extended prev; move on with extended curr
                             curr.end = p;
                             next.start = p;
-                            result.push(curr);
+                            segments.push(curr);
                         } else {
                             // parallel lines - just join them
-                            result.push(curr);
+                            segments.push(curr);
                         }
                         break;
                     }
@@ -216,8 +219,8 @@ export class PolyLine extends Curve {
                         // create chamfer
                         const chamfer = new LineSegment(curr.end, next.start);
 
-                        result.push(curr);
-                        result.push(chamfer);
+                        segments.push(curr);
+                        segments.push(chamfer);
                         break;
                     }
                     case "round": {
@@ -229,13 +232,13 @@ export class PolyLine extends Curve {
                             endLine.angle() - (dir * Math.PI) / 2,
                             startLine.angle() - (dir * Math.PI) / 2
                         );
-                        result.push(curr);
-                        result.push(arc);
+                        segments.push(curr);
+                        segments.push(arc);
                         break;
                     }
                     case "none": {
                         // leave gaps
-                        result.push(curr);
+                        segments.push(curr);
                         break;
                     }
                 }
@@ -246,14 +249,13 @@ export class PolyLine extends Curve {
 
         // Push the last carried segment, unless the poly is closed, in which case this segment is the first and was already pushed
         if (!this.closed) {
-            result.push(curr);
+            segments.push(curr);
         }
 
-        const newPoly = new PolyLine(result);
-        newPoly.T = this.T;
-        newPoly.Ti = this.Ti;
+        const newPoly = new PolyLine(segments);
         store.setProp(this.hash, propKey, newPoly);
-        return newPoly;
+
+        return newPoly.transform(this.T);
     }
 
     public getPoints() {

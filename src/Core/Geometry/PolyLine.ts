@@ -24,7 +24,7 @@ export class PolyLine extends Curve {
     public T: Transform = Transform.ONE;
     public Ti: Transform = Transform.ONE;
 
-    constructor(segments: Segment[]) {
+    protected constructor(segments: Segment[]) {
         super();
 
         if (!segments.length) return this;

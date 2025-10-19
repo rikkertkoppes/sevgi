@@ -23,7 +23,7 @@ export const truncatedSquareGrid: PrimitiveFunction = {
         const pointsMap: Record<string, Point> = {};
 
         function getUnique(p: Point) {
-            const h = p.hash();
+            const h = p.hash;
             if (pointsMap[h]) {
                 return pointsMap[h];
             } else {

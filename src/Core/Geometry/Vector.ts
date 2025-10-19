@@ -8,6 +8,7 @@ export class Point extends BaseGeometry {
     public type = "Point";
     constructor(public x: number, public y: number) {
         super();
+        this.hash = fixedNum`${x},${y}`;
     }
 
     public clone(): Point {
@@ -50,9 +51,6 @@ export class Point extends BaseGeometry {
     }
     public toString(): string {
         return fixedNum`<Point ${this.x}, ${this.y}>`;
-    }
-    public hash(): string {
-        return fixedNum`${this.x},${this.y}`;
     }
 
     public static is(p: any): p is Point {

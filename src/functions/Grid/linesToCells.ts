@@ -28,7 +28,7 @@ export function linesToCells(lines: LineSegment[]): PolyLine[] {
     const vertices: Point[] = [];
 
     const getVertexId = (p: Point): Vid => {
-        const key = p.hash();
+        const key = p.hash;
         let id = vertexIds.get(key);
         if (id === undefined) {
             id = vertices.length;

@@ -3,6 +3,8 @@
     "version": "0.2.3",
     "private": true,
     "scripts": {
+        "test": "jest",
+        "test:watch": "jest --watch",
         "dev": "next dev --turbopack",
         "build": "next build --turbopack",
         "start": "next start",
@@ -23,13 +25,16 @@
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
+        "@types/jest": "^30.0.0",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "cheerio": "^1.1.0",
         "eslint": "^9",
         "eslint-config-next": "15.5.2",
+        "jest": "^30.2.0",
         "svgo": "^4.0.0",
+        "ts-jest": "^29.4.4",
         "tsx": "^4.20.6",
         "typescript": "^5"
     }

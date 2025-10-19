@@ -311,4 +311,25 @@ export class PolyLine extends Curve {
         }
         return new PolyLine(lines);
     }
+
+    static from(segments: Segment[]): PolyLine {
+        const first = segments[0];
+        const last = segments[segments.length - 1];
+
+        const fp = first.start;
+        const lp = same(last.end, first.start) ? last.start : last.end;
+        // normalize the polyline, by setting the first point to origin and last point to (1,0)
+        // calculate the transformation matrix first by moving the first point to the origin and scaling and rotating souch that the second point is at (1,0)
+        const d = diff(fp, lp);
+
+        const T = Transform.fromElements(d.x, d.y, -d.y, d.x, fp.x, fp.y);
+        const Ti = T.inverse();
+        // console.log("matrices", this.first, this.T, this.Ti);
+
+        const segs = segments.map((s) => s.transform(Ti));
+
+        const poly = new PolyLine(segs);
+        // store.setProp(hash, "from", poly);
+        return poly.transform(T);
+    }
 }

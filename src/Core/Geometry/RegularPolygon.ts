@@ -1,6 +1,7 @@
 import { store } from "./GeoData";
 import { LineSegment } from "./LineSegment";
 import { PolyLine } from "./PolyLine";
+import { Segment } from "./Segment";
 import { Transform } from "./Transform";
 import { toRadians } from "./Util";
 import { Point, v2 } from "./Vector";
@@ -29,17 +30,31 @@ export class RegularPolygon extends PolyLine {
 
     // TODO: offset can be spacial cased for insets and mitered outsets, just adjust the transform
 
+    static from(segments: Segment[]): PolyLine;
     static from(
         center: Point,
         sides: number,
         radius: number,
+        angle?: number,
+        useOuter?: boolean
+    ): RegularPolygon;
+    static from(
+        arg1: Segment[] | Point,
+        sides?: number,
+        radius?: number,
         angle = 0,
         useOuter = false
-    ): RegularPolygon {
+    ): PolyLine | RegularPolygon {
+        // Delegate to base behavior when called with segments
+        if (Array.isArray(arg1)) {
+            return super.from(arg1);
+        }
+
+        const center = arg1 as Point;
         // when useOuter is true, radius is the radius of the outer circle
         // so when false, we need to adjust the radius to fit the polygon inside
         if (!useOuter) {
-            radius = radius / Math.cos(Math.PI / sides);
+            radius = radius! / Math.cos(Math.PI / sides!);
         }
         const transform = Transform.from(center, toRadians(angle), radius);
 
@@ -49,7 +64,7 @@ export class RegularPolygon extends PolyLine {
             return (prop as RegularPolygon).transform(transform);
         }
 
-        const poly = new RegularPolygon(sides);
+        const poly = new RegularPolygon(sides!);
         store.setProp(hash, "from", poly);
 
         return poly.transform(transform);

@@ -1,6 +1,6 @@
 import { store } from "./GeoData";
 import { fixedNum } from "./Util";
-import { Point } from "./Vector";
+import { Point, v2 } from "./Vector";
 
 export class Transform {
     public hash: string;
@@ -79,18 +79,24 @@ export class Transform {
         return new Transform(cos, sin, -sin, cos, 0, 0);
     }
 
-    public static fromScaling(sx: number, sy: number): Transform {
-        return new Transform(sx, 0, 0, sy, 0, 0);
+    public static fromScaling(s: number | Point): Transform {
+        const scale = typeof s === "number" ? v2(s, s) : s;
+        return new Transform(scale.x, 0, 0, scale.y, 0, 0);
     }
 
-    public static from(t = Point.ZERO, r = 0, s = Point.ONE): Transform {
+    public static from(
+        t = Point.ZERO,
+        r = 0,
+        s: number | Point = Point.ONE
+    ): Transform {
         const cos = r ? Math.cos(r) : 1;
         const sin = r ? Math.sin(r) : 0;
+        const scale = typeof s === "number" ? v2(s, s) : s;
         return new Transform(
-            s.x * cos,
-            s.x * sin,
-            -s.y * sin,
-            s.y * cos,
+            scale.x * cos,
+            scale.x * sin,
+            -scale.y * sin,
+            scale.y * cos,
             t.x,
             t.y
         );

@@ -1,4 +1,5 @@
 import {
+    DISCARD,
     mapTreeBranch,
     nAryOnTreeBranch,
     PrimitiveFunction,
@@ -28,6 +29,7 @@ export const star: PrimitiveFunction = {
             (branches) => {
                 const lines: LineSegment[] = [];
                 const polies = branches[0] as PolyLine[];
+                if (!polies) return DISCARD;
                 const factors = branches[1] as number[];
                 const distances = branches[2] as number[];
                 polies.forEach((c, i) => {

@@ -1,7 +1,6 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { linesToCells } from "./linesToCells";
-import { Point, v2 } from "@/Core/Geometry/Vector";
-import { LineSegment } from "@/Core/Geometry/LineSegment";
+import { v2 } from "@/Core/Geometry/Vector";
+import { Rectangle } from "@/Core/Geometry/Rectangle";
 
 export const rectGrid: PrimitiveFunction = {
     name: "rectGrid",
@@ -19,44 +18,35 @@ export const rectGrid: PrimitiveFunction = {
         points: "Point",
     },
     impl: async (inputs, params) => {
-        const pointsMap: Record<string, Point> = {};
-
-        function getUnique(p: Point) {
-            const h = p.hash;
-            if (pointsMap[h]) {
-                return pointsMap[h];
-            } else {
-                pointsMap[h] = p;
-                return p;
-            }
-        }
-
-        const lines: LineSegment[] = [];
-
-        const nx = params.nx + 1;
-        const ny = params.ny + 1;
+        const nx = params.nx;
+        const ny = params.ny;
+        const s = params.size;
+        const hs = s / 2;
         const hSpace = params.size;
         const vSpace = params.size;
+        const shapes = [];
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
-                const p = getUnique(v2(i * hSpace, j * vSpace));
-                if (i < nx - 1) {
-                    const p2 = getUnique(v2((i + 1) * hSpace, j * vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (j < ny - 1) {
-                    const p2 = getUnique(v2(i * hSpace, (j + 1) * vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
+                const c = v2(hs + i * hSpace, hs + j * vSpace);
+                const r = Rectangle.fromDimensions(c, s, s);
+                shapes.push(r);
             }
         }
 
-        const models = linesToCells(lines);
+        const segments = shapes.flatMap((s) => s.getSegments());
+        const uniqueSegments = Array.from(
+            new Map(segments.map((s) => [s.hash, s])).values()
+        );
+
+        const points = uniqueSegments.flatMap((s) => [s.start, s.end]);
+        const uniquePoints = Array.from(
+            new Map(points.map((p) => [p.hash, p])).values()
+        );
 
         return {
-            shapes: broadCast(models),
-            lines: broadCast(lines),
-            points: broadCast(Object.values(pointsMap)),
+            shapes: broadCast(shapes),
+            lines: broadCast(uniqueSegments),
+            points: broadCast(uniquePoints),
         };
     },
 };

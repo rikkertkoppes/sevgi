@@ -23,6 +23,7 @@ export class PolyLine extends Curve {
     public last: Point = new Point(0, 0);
     public T: Transform = Transform.ONE;
     public Ti: Transform = Transform.ONE;
+    private _worldSegments: Segment[] | null = null;
 
     protected constructor(segments: Segment[]) {
         super();
@@ -151,8 +152,14 @@ export class PolyLine extends Curve {
         return closest!;
     }
 
+    /**
+     * @returns the segments in world coordinates
+     */
     public getSegments() {
-        return this.segments;
+        if (!this._worldSegments) {
+            this._worldSegments = this.segments.map((s) => s.transform(this.T));
+        }
+        return this._worldSegments;
     }
 
     public offset(d: number, joinType: JoinType = "round"): PolyLine {
@@ -285,12 +292,12 @@ export class PolyLine extends Curve {
     }
 
     public toSVG() {
-        const segments = this.segments.map((s) => s.transform(this.T));
+        const worldSegments = this.getSegments();
         if (!this.joined) {
-            return segments.map((l) => l.toSVG()).join(" ");
+            return worldSegments.map((l) => l.toSVG()).join(" ");
         }
 
-        const [first, ...rest] = segments;
+        const [first, ...rest] = worldSegments;
         const path = first.toSVG() + rest.map((l) => l.toSVGRel()).join(" ");
         if (this.closed) {
             return path + " z";
@@ -331,6 +338,8 @@ export class PolyLine extends Curve {
         const segs = segments.map((s) => s.transform(Ti));
 
         const poly = new PolyLine(segs);
+        // directly store the world segments to avoid recomputing
+        poly._worldSegments = segments;
         // store.setProp(hash, "from", poly);
         return poly.transform(T);
     }

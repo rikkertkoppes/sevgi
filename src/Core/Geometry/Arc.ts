@@ -4,8 +4,8 @@ import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
 import { Transform } from "./Transform";
 import { fixedNum, normalizeAngle } from "./Util";
-import { Point, rotateRight, v2 } from "./Vector";
-import { angle, diff, mult, norm, rotateLeft, sum } from "./Vector";
+import { Point, rotateLeft, v2 } from "./Vector";
+import { angle, diff, mult, norm, sum } from "./Vector";
 
 const PI = Math.PI;
 const TWO_PI = 2 * PI;
@@ -181,6 +181,7 @@ export class Arc extends Segment {
         const a = this.angleAt(t);
         return this.c.pointAtAngle(a);
     }
+    // overwrite normalAt as it is easier to calculate than the tangent
     public tangentAt(t: number) {
         const n = this.normalAt(t);
         return rotateLeft(n);
@@ -189,10 +190,7 @@ export class Arc extends Segment {
         // outward normal from circle
         const n = this.c.normalAtPoint(this.pointAt(t));
         // flip if clockwise to point to right of direction of travel
-        return mult(-this.c.handedness, n);
-    }
-    public offsetAt(t: number, d: number) {
-        return sum(this.pointAt(t), mult(d, this.normalAt(t)));
+        return mult(this.c.handedness, n);
     }
     // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public curvatureAt(t: number) {
@@ -265,7 +263,7 @@ export class Arc extends Segment {
         const r = (l * l) / (8 * sagitta) + sagitta / 2;
         // get the arc center point
         const m = sum(start, mult(0.5, diff(end, start))); //midpoint
-        const n = mult((r - sagitta) / l, rotateRight(diff(end, start))); // normal
+        const n = mult((r - sagitta) / l, rotateLeft(diff(end, start))); // normal
         const c = sum(m, n); // center point
         const circle = new Circle(c, r);
         const startAngle = angle(diff(start, c));

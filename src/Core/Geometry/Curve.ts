@@ -3,7 +3,7 @@
  */
 
 import { BaseGeometry } from "./BaseGeometry";
-import { Point } from "./Vector";
+import { mult, Point, rotateRight, sum } from "./Vector";
 
 export interface ClosestPointInfo {
     t: number;
@@ -18,9 +18,13 @@ export abstract class Curve extends BaseGeometry {
     }
     abstract length: number;
     abstract pointAt(t: number): Point;
-    abstract normalAt(t: number): Point;
     abstract tangentAt(t: number): Point;
-    abstract offsetAt(t: number, distance: number): Point;
+    normalAt(t: number): Point {
+        return rotateRight(this.tangentAt(t));
+    }
+    offsetAt(t: number, distance: number): Point {
+        return sum(this.pointAt(t), mult(distance, this.normalAt(t)));
+    }
     abstract curvatureAt(t: number): number;
     abstract findClosestPoint(p: Point): ClosestPointInfo;
 

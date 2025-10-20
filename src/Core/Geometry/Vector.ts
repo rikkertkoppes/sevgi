@@ -144,10 +144,10 @@ export const rot = (a: number, p: Point, around?: Point): Point => {
     return sum(around, v2(pc.x * ca - pc.y * sa, pc.x * sa + pc.y * ca));
 };
 export const rotateRight = ({ x, y }: Point): Point => {
-    return v2(-y, x);
+    return v2(y, -x);
 };
 export const rotateLeft = ({ x, y }: Point): Point => {
-    return v2(y, -x);
+    return v2(-y, x);
 };
 export const unit = (p: Point): Point => {
     const n = norm(p);

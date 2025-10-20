@@ -1,5 +1,5 @@
-import { cross, Point, same } from "./Vector";
-import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
+import { cross, Point, rotateRight, same } from "./Vector";
+import { sum, mult, unit, diff, dot, norm } from "./Vector";
 import { Segment } from "./Segment";
 import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
@@ -10,7 +10,6 @@ import { Transform } from "./Transform";
 export class LineSegment extends Segment {
     public type = "LineSegment";
     private _tangent: Point | null = null;
-    private _normal: Point | null = null;
     private _isZeroLength: boolean;
     constructor(public start: Point, public end: Point) {
         super();
@@ -38,10 +37,7 @@ export class LineSegment extends Segment {
     }
 
     public normal() {
-        if (!this._normal) {
-            this._normal = unit(rot(-Math.PI / 2, this.direction()));
-        }
-        return this._normal;
+        return rotateRight(this.direction());
     }
 
     public clone() {
@@ -111,13 +107,6 @@ export class LineSegment extends Segment {
     // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public tangentAt(t: number) {
         return this.direction();
-    }
-    // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
-    public normalAt(t: number) {
-        return this.normal();
-    }
-    public offsetAt(t: number, d: number) {
-        return sum(this.pointAt(t), mult(d, this.normalAt(t)));
     }
     // eslint-disable-next-line "@typescript-eslint/no-unused-vars"
     public curvatureAt(t: number) {

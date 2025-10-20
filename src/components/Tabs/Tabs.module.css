@@ -4,9 +4,11 @@
     background-color: var(--tab-background);
     position: relative;
     align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .Tabs::before {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;

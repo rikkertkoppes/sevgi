@@ -41,6 +41,7 @@
     flex-direction: column;
     position: relative;
     background-color: var(--background);
+    overflow: hidden;
 }
 .FlowPanel {
     border-left: 1px solid var(--line-color);
@@ -76,6 +77,18 @@
 }
 :global(.verticalView) .ResultPane {
     flex: 1.5;
+}
+
+@media (orientation: portrait) {
+    .Panes {
+        flex-direction: column;
+    }
+    .FlowPane {
+        flex: 1;
+    }
+    .ResultPane {
+        flex: 1;
+    }
 }
 
 .ViewButtons {

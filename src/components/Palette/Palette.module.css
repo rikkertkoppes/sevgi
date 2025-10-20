@@ -3,6 +3,7 @@
     display: flex;
     padding: 4px;
     --icon-accent: var(--accent);
+    overflow-x: auto;
 }
 
 .Palette button {

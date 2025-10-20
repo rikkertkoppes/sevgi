@@ -46,12 +46,12 @@ export class Point extends BaseGeometry {
     }
 
     public toSVG() {
-        let path = fixedNum`M ${this.x} ${this.y}`;
+        let path = `M ${this.hash}`;
         path += " l 0, 0";
         return path;
     }
     public toString(): string {
-        return fixedNum`<Point ${this.x}, ${this.y}>`;
+        return `<Point ${this.hash}>`;
     }
 
     public static is(p: any): p is Point {

@@ -1,16 +1,16 @@
 import { store } from "./GeoData";
 import { LineSegment } from "./LineSegment";
-import { PolyLine } from "./PolyLine";
+import { JoinType, PolyLine } from "./PolyLine";
 import { Segment } from "./Segment";
 import { Transform } from "./Transform";
-import { toRadians } from "./Util";
+import { toDegrees, toRadians } from "./Util";
 import { Point, v2 } from "./Vector";
 
 export class RegularPolygon extends PolyLine {
     public type = "RegularPolygon";
 
     // assume normalized radius
-    protected constructor(n: number) {
+    protected constructor(private n: number) {
         // calculate the segments
         const points: Point[] = [];
         for (let i = 0; i < n; i++) {
@@ -28,7 +28,37 @@ export class RegularPolygon extends PolyLine {
         super(lines);
     }
 
-    // TODO: offset can be spacial cased for insets and mitered outsets, just adjust the transform
+    get radius() {
+        return this.T.scale.x;
+    }
+
+    get angle() {
+        return toDegrees(this.T.rotation);
+    }
+
+    get center() {
+        return this.T.translation;
+    }
+
+    // offset can be spacial cased for insets and mitered outsets, just adjust the transform
+    public offset(
+        distance: number,
+        joinType: JoinType = "round"
+    ): RegularPolygon | PolyLine {
+        if (distance === 0) return this;
+        const dr = distance / Math.cos(Math.PI / this.n);
+        const r = this.radius + dr;
+        if (distance < 0 || joinType === "miter") {
+            return RegularPolygon.from(
+                this.center,
+                this.n,
+                r,
+                this.angle,
+                true
+            );
+        }
+        return super.offset(distance, joinType);
+    }
 
     static from(segments: Segment[]): PolyLine;
     static from(

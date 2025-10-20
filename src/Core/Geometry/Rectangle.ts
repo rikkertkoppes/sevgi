@@ -43,12 +43,7 @@ export class Rectangle extends PolyLine {
         joinType: JoinType = "round"
     ): Rectangle | PolyLine {
         if (distance === 0) return this;
-        if (distance < 0) {
-            const w = this.width + 2 * distance;
-            const h = this.height + 2 * distance;
-            return Rectangle.fromDimensions(this.center, w, h);
-        }
-        if (distance > 0 && joinType === "miter") {
+        if (distance < 0 || joinType === "miter") {
             const w = this.width + 2 * distance;
             const h = this.height + 2 * distance;
             return Rectangle.fromDimensions(this.center, w, h);

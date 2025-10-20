@@ -1,5 +1,6 @@
 import { Curve } from "./Curve";
-import { Point, Transform } from "./Vector";
+import { Transform } from "./Transform";
+import { Point } from "./Vector";
 
 export abstract class Segment extends Curve {
     abstract clone(): Segment;

@@ -9,7 +9,7 @@ export class Point extends BaseGeometry {
     public type = "Point";
     constructor(public x: number, public y: number) {
         super();
-        this.hash = fixedNum`${x},${y}`;
+        this.hash = fixedNum`${x} ${y}`;
     }
 
     public clone(): Point {

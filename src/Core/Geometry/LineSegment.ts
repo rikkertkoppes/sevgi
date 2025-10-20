@@ -1,6 +1,5 @@
 import { cross, Point, same } from "./Vector";
 import { sum, mult, unit, rot, diff, dot, norm } from "./Vector";
-import { fixedNum } from "./Util";
 import { Segment } from "./Segment";
 import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
@@ -12,9 +11,11 @@ export class LineSegment extends Segment {
     public type = "LineSegment";
     private _tangent: Point | null = null;
     private _normal: Point | null = null;
+    private _isZeroLength: boolean;
     constructor(public start: Point, public end: Point) {
         super();
         this.hash = `line|${this.start.hash}|${this.end.hash}`;
+        this._isZeroLength = this.start.hash === this.end.hash;
     }
 
     public get length() {
@@ -199,15 +200,15 @@ export class LineSegment extends Segment {
 
     public toSVG() {
         const p = this.start;
-        let path = fixedNum`M ${p.x} ${p.y}`;
-        if (this.length) {
+        let path = `M ${p.hash}`;
+        if (!this._isZeroLength) {
             path += ` ${this.toSVGRel()}`;
         }
         return path;
     }
     public toSVGRel() {
         const p = this.end;
-        return fixedNum`L ${p.x} ${p.y}`;
+        return `L ${p.hash}`;
     }
 
     static is(thing: any): thing is LineSegment {

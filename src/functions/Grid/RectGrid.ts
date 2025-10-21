@@ -9,8 +9,8 @@ export const rectGrid: PrimitiveFunction = {
     inputs: {},
     params: {
         size: { type: "number", default: 10 },
-        nx: { type: "number", default: 5 },
-        ny: { type: "number", default: 5 },
+        nx: { type: "number", default: 5, min: 1, step: 1 },
+        ny: { type: "number", default: 5, min: 1, step: 1 },
     },
     outputs: {
         shapes: "PolyLine",
@@ -28,7 +28,7 @@ export const rectGrid: PrimitiveFunction = {
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
                 const c = v2(hs + i * hSpace, hs + j * vSpace);
-                const r = Rectangle.fromDimensions(c, s, s);
+                const r = Rectangle.fromDimensions(c, s, s).makeUnique();
                 shapes.push(r);
             }
         }

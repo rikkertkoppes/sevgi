@@ -82,6 +82,9 @@ export class Transform {
         }
         return this._scale;
     }
+    /**
+     * rotation in radians
+     */
     public get rotation(): number {
         if (this._rotation === null) {
             this._rotation = Math.atan2(this.b, this.a);

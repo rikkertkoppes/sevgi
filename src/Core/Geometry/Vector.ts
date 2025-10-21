@@ -18,17 +18,17 @@ export class Point extends BaseGeometry {
 
     public transform(T: Transform): Point {
         // console.log("transform point", this, T, transform(this, T));
-        return this.copyIdentity(T.apply(this));
+        return this.copyAncestry(T.apply(this));
     }
 
     public translate(v: Point): Point {
-        return this.copyIdentity(sum(this, v));
+        return this.copyAncestry(sum(this, v));
     }
     public rotate(angle: number, center: Point): Point {
-        return this.copyIdentity(rot(angle, this, center));
+        return this.copyAncestry(rot(angle, this, center));
     }
     public scale(factor: number, center: Point): Point {
-        return this.copyIdentity(sum(mult(factor, diff(this, center)), center));
+        return this.copyAncestry(sum(mult(factor, diff(this, center)), center));
     }
 
     public walk({ enter, exit }: WalkerOptions): this {

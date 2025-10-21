@@ -84,15 +84,15 @@ export class PolyLine extends Curve {
     }
 
     public translate(v: Point): PolyLine {
-        return this.copyIdentity(this.transform(Transform.fromTranslation(v)));
+        return this.copyAncestry(this.transform(Transform.fromTranslation(v)));
     }
     public rotate(angle: number, center: Point): PolyLine {
-        return this.copyIdentity(
+        return this.copyAncestry(
             this.transform(Transform.fromRotation(angle, center))
         );
     }
     public scale(factor: number, center: Point): PolyLine {
-        return this.copyIdentity(
+        return this.copyAncestry(
             this.transform(Transform.fromScaling(factor, center))
         );
     }
@@ -285,7 +285,7 @@ export class PolyLine extends Curve {
         }
         const newSegments = this.segments.map((s) => s.walk({ enter, exit }));
         if (newSegments.some((s, i) => s !== this.segments[i])) {
-            r = this.copyIdentity(new PolyLine(newSegments)) as this;
+            r = this.copyAncestry(new PolyLine(newSegments)) as this;
         }
         if (exit) {
             r = exit(r) || r;

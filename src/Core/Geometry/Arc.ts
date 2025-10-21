@@ -127,7 +127,7 @@ export class Arc extends Segment {
     }
 
     public transform(T: Transform) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new Arc(this.c.transform(T), this._start, this._end)
         );
     }

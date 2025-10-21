@@ -22,7 +22,7 @@ export const mergeChanges: PrimitiveFunction = {
                     const changeIndex = Object.fromEntries(
                         changes
                             .flatMap((c) => c.flatten())
-                            .map((c) => [c._id, c])
+                            .map((c) => [c.ancestryId, c])
                     );
                     // console.log("flat changes", changeIndex);
                     return intos.map((into) => {
@@ -41,14 +41,14 @@ export const mergeChanges: PrimitiveFunction = {
                         // check all geometry, if ids match with any of the changes, replace it
                         return into.walk({
                             enter: (g) => {
-                                if (changeIndex[g._id]) {
+                                if (changeIndex[g.ancestryId]) {
                                     // console.log(
                                     //     "enter replacing",
                                     //     g,
                                     //     "with",
                                     //     changeIndex[g._id]
                                     // );
-                                    return changeIndex[g._id] as any;
+                                    return changeIndex[g.ancestryId] as any;
                                 }
                                 return g;
                             },

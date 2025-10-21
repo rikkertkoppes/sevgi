@@ -9,22 +9,27 @@ export interface WalkerOptions {
 
 export abstract class BaseGeometry {
     /**
+     * this is a unique id for this geometry instance
+     */
+    public id: string;
+    /**
      * the _id is an ancestry id, shared by all cloned versions of this geometry
      */
-    public _id: string;
+    public ancestryId: string;
     /**
      * the hash is a content hash, changes when the geometry changes
      */
     public hash: string = "";
     constructor() {
-        this._id = uid();
+        this.id = uid();
+        this.ancestryId = uid();
     }
-    protected copyIdentity<G extends BaseGeometry>(to: G): G {
-        to._id = this._id;
+    protected copyAncestry<G extends BaseGeometry>(to: G): G {
+        to.ancestryId = this.ancestryId;
         return to;
     }
     public makeUnique(): this {
-        this._id = uid();
+        this.ancestryId = uid();
         return this;
     }
     abstract type: string;

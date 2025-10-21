@@ -45,13 +45,13 @@ export class LineSegment extends Segment {
     }
 
     public transform(T: Transform) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new LineSegment(this.start.transform(T), this.end.transform(T))
         );
     }
 
     public translate(vector: Point) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new LineSegment(
                 this.start.translate(vector),
                 this.end.translate(vector)
@@ -59,7 +59,7 @@ export class LineSegment extends Segment {
         );
     }
     public rotate(angle: number, center: Point) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new LineSegment(
                 this.start.rotate(angle, center),
                 this.end.rotate(angle, center)
@@ -67,7 +67,7 @@ export class LineSegment extends Segment {
         );
     }
     public scale(factor: number, center: Point) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new LineSegment(
                 this.start.scale(factor, center),
                 this.end.scale(factor, center)
@@ -76,7 +76,7 @@ export class LineSegment extends Segment {
     }
 
     public moveTo(point: Point) {
-        return this.copyIdentity(this.translate(diff(point, this.start)));
+        return this.copyAncestry(this.translate(diff(point, this.start)));
     }
 
     public split(t: number) {
@@ -176,7 +176,7 @@ export class LineSegment extends Segment {
         const newStart = r.start.walk({ enter, exit });
         const newEnd = r.end.walk({ enter, exit });
         if (newStart !== r.start || newEnd !== r.end) {
-            r = this.copyIdentity(new LineSegment(newStart, newEnd)) as this;
+            r = this.copyAncestry(new LineSegment(newStart, newEnd)) as this;
         }
         if (exit) {
             r = exit(r) || r;

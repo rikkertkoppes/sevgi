@@ -81,19 +81,19 @@ export class Circle extends Curve {
     }
 
     public transform(T: Transform) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new Circle(T.apply(this.c), this.r * T.scale.x)
         );
     }
     public translate(v: Point) {
-        return this.copyIdentity(new Circle(this.c.translate(v), this.r));
+        return this.copyAncestry(new Circle(this.c.translate(v), this.r));
     }
 
     public rotate(a: number, c: Point) {
-        return this.copyIdentity(new Circle(this.c.rotate(a, c), this.r));
+        return this.copyAncestry(new Circle(this.c.rotate(a, c), this.r));
     }
     public scale(factor: number, c: Point) {
-        return this.copyIdentity(
+        return this.copyAncestry(
             new Circle(this.c.scale(factor, c), this.r * factor)
         );
     }
@@ -321,7 +321,7 @@ export class Circle extends Curve {
         }
         const newCenter = r.c.walk({ enter, exit });
         if (newCenter !== r.c) {
-            r = this.copyIdentity(new Circle(newCenter, r.r)) as this;
+            r = this.copyAncestry(new Circle(newCenter, r.r)) as this;
         }
         if (exit) {
             r = exit(r) || r;

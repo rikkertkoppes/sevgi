@@ -8,6 +8,7 @@ import { linesToCells } from "../Grid/linesToCells";
 import { mid, lerp } from "@/Core/Geometry/Vector";
 import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { store } from "@/Core/Geometry/GeoData";
 
 export const star: PrimitiveFunction = {
     name: "star",
@@ -27,17 +28,25 @@ export const star: PrimitiveFunction = {
         const lines = nAryOnTreeBranch(
             [inputs.shape || {}, inputs.factor, inputs.distance],
             (branches) => {
-                const lines: LineSegment[] = [];
                 const polies = branches[0] as PolyLine[];
                 if (!polies) return DISCARD;
                 const factors = branches[1] as number[];
                 const distances = branches[2] as number[];
-                polies.forEach((c, i) => {
+                const polyLines = polies.map((c, i) => {
+                    const lines: LineSegment[] = [];
                     const factor = factors[Math.min(i, factors.length - 1)];
                     const distance =
                         distances[Math.min(i, distances.length - 1)];
-                    const segments = c.getSegments();
+                    const propKey = `starPattern|${factor}|${distance}`;
+                    const prop = store.getProp(c.hash, propKey);
+                    if (prop) {
+                        return (prop as LineSegment[]).map((l) =>
+                            l.transform(c.T)
+                        );
+                    }
 
+                    // perform all calculations locally, to be able to cache them
+                    const segments = c.getLocalSegments();
                     const centers = segments.map((l) => mid(l.start, l.end));
                     const midpoint = mid(...centers);
 
@@ -55,9 +64,13 @@ export const star: PrimitiveFunction = {
 
                         lines.push(lin, lout);
                     });
+
+                    store.setProp(c.hash, propKey, lines);
+
+                    return lines.map((l) => l.transform(c.T));
                 });
 
-                return lines;
+                return polyLines.flat();
             }
         );
 

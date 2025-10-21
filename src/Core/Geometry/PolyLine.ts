@@ -160,6 +160,13 @@ export class PolyLine extends Curve {
         return this._worldSegments;
     }
 
+    /**
+     * returns the segments in local coordinates
+     */
+    public getLocalSegments() {
+        return this.segments;
+    }
+
     public offset(d: number, joinType: JoinType = "round"): PolyLine {
         const propKey = `offset_${d}_${joinType}`;
         // check if a stored offset exists

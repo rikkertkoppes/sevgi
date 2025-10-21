@@ -26,6 +26,7 @@ export class RegularPolygon extends PolyLine {
         });
 
         super(lines);
+        this.hash = `rp-${n}`;
     }
 
     get radius() {

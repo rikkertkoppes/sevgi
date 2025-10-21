@@ -96,15 +96,25 @@ export class Transform {
         return new Transform(1, 0, 0, 1, p.x, p.y);
     }
 
-    public static fromRotation(angle: number): Transform {
+    public static fromRotation(angle: number, center?: Point): Transform {
         const cos = angle ? Math.cos(angle) : 1;
         const sin = angle ? Math.sin(angle) : 0;
-        return new Transform(cos, sin, -sin, cos, 0, 0);
+        const transform = new Transform(cos, sin, -sin, cos, 0, 0);
+        if (center) {
+            const t = Transform.fromTranslation(center);
+            return t.multiply(transform).multiply(t.inverse());
+        }
+        return transform;
     }
 
-    public static fromScaling(s: number | Point): Transform {
+    public static fromScaling(s: number | Point, center?: Point): Transform {
         const scale = typeof s === "number" ? v2(s, s) : s;
-        return new Transform(scale.x, 0, 0, scale.y, 0, 0);
+        const transform = new Transform(scale.x, 0, 0, scale.y, 0, 0);
+        if (center) {
+            const t = Transform.fromTranslation(center);
+            return t.multiply(transform).multiply(t.inverse());
+        }
+        return transform;
     }
 
     public static from(

@@ -88,13 +88,12 @@ export class PolyLine extends Curve {
     }
     public rotate(angle: number, center: Point): PolyLine {
         return this.copyIdentity(
-            // this.transform(Transform.fromRotation(angle, center).multiply(this.T))
-            new PolyLine(this.segments.map((p) => p.rotate(angle, center)))
+            this.transform(Transform.fromRotation(angle, center))
         );
     }
     public scale(factor: number, center: Point): PolyLine {
         return this.copyIdentity(
-            new PolyLine(this.segments.map((p) => p.scale(factor, center)))
+            this.transform(Transform.fromScaling(factor, center))
         );
     }
 

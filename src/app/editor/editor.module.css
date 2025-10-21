@@ -79,18 +79,6 @@
     flex: 1.5;
 }
 
-@media (orientation: portrait) {
-    .Panes {
-        flex-direction: column;
-    }
-    .FlowPane {
-        flex: 1;
-    }
-    .ResultPane {
-        flex: 1;
-    }
-}
-
 .ViewButtons {
     display: flex;
     gap: 8px;
@@ -107,4 +95,23 @@
 .ViewButtons svg {
     width: 20px;
     height: 20px;
+}
+
+/**
+ * always use vertical layout on portrait mode
+ * hide layout toggle button
+ */
+@media (orientation: portrait) {
+    .Panes {
+        flex-direction: column;
+    }
+    .FlowPane {
+        flex: 1;
+    }
+    .ResultPane {
+        flex: 1;
+    }
+    .ViewButtons .Orientation {
+        display: none;
+    }
 }

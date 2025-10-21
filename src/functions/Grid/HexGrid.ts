@@ -1,7 +1,9 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { linesToCells } from "./linesToCells";
-import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { Point, v2 } from "@/Core/Geometry/Vector";
+import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
+import { Transform } from "@/Core/Geometry/Transform";
+
+const baseHex = RegularPolygon.from(Point.ZERO, 6, 1, 0, true);
 
 export const hexGrid: PrimitiveFunction = {
     name: "hexGrid",
@@ -19,74 +21,46 @@ export const hexGrid: PrimitiveFunction = {
         points: "Point",
     },
     impl: async (inputs, params) => {
-        const pointsMap: Record<string, Point> = {};
-
-        function getUnique(p: Point) {
-            const h = p.hash;
-            if (pointsMap[h]) {
-                return pointsMap[h];
-            } else {
-                pointsMap[h] = p;
-                return p;
-            }
-        }
-
-        const points: Point[] = [];
-        const lines: LineSegment[] = [];
-
-        const nx = Math.floor(params.nx * 1.5) + 1;
-        const ny = params.ny * 2 + 2;
-        const hSpace = params.size;
-        const vSpace = (params.size * Math.sqrt(3)) / 2;
+        const ny = params.ny;
+        const nu = Math.ceil(params.nx / 2); // upper number
+        const nl = Math.floor(params.nx / 2); // lower number
+        const hSpace = params.size * 3;
+        const vSpace = params.size * Math.sqrt(3);
+        const shapes: RegularPolygon[] = [];
         for (let j = 0; j < ny; j++) {
-            const isLower = j % 2 === 0;
-            const isMid = !isLower;
-            const pointsInRow = nx + (j % 2);
-            const dx = (1 - (j % 2)) * (hSpace / 2);
-            for (let i = 0; i < pointsInRow; i++) {
-                const x = i * hSpace + dx;
-                const y = j * vSpace;
-                const p = getUnique(v2(x, y));
-                if ((isMid && i % 3 !== 1) || (isLower && i % 3 !== 2)) {
-                    points.push(p);
-                }
-                if (
-                    i < pointsInRow - 1 &&
-                    ((isLower && i % 3 === 0) || (isMid && i % 3 === 2))
-                ) {
-                    // horizontal line
-                    const p2 = getUnique(v2(x + hSpace, y));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (isLower && i % 3 === 0 && j < ny - 1) {
-                    // backward
-                    const p2 = getUnique(v2(x - hSpace / 2, y + vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (isLower && i % 3 === 1 && j < ny - 1) {
-                    // forward
-                    const p2 = getUnique(v2(x + hSpace / 2, y + vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (isMid && i % 3 === 0 && j < ny - 1) {
-                    // forward
-                    const p2 = getUnique(v2(x + hSpace / 2, y + vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (isMid && i % 3 === 2 && j < ny - 1) {
-                    // backward
-                    const p2 = getUnique(v2(x - hSpace / 2, y + vSpace));
-                    lines.push(new LineSegment(p, p2));
-                }
+            const y = j * vSpace;
+            for (let i = 0; i < nu; i++) {
+                const x = i * hSpace;
+                const transform = Transform.from(v2(x, y), 0, params.size);
+                const hex = baseHex.transform(transform).makeUnique();
+                shapes.push(hex);
+            }
+            for (let i = 0; i < nl; i++) {
+                const x = i * hSpace + hSpace / 2;
+                const transform = Transform.from(
+                    v2(x, y + vSpace / 2),
+                    0,
+                    params.size
+                );
+                const hex = baseHex.transform(transform).makeUnique();
+                shapes.push(hex);
             }
         }
 
-        const models = linesToCells(lines);
+        const segments = shapes.flatMap((s) => s.getSegments());
+        const uniqueSegments = Array.from(
+            new Map(segments.map((s) => [s.hash, s])).values()
+        );
+
+        const points = uniqueSegments.flatMap((s) => [s.start, s.end]);
+        const uniquePoints = Array.from(
+            new Map(points.map((p) => [p.hash, p])).values()
+        );
 
         return {
-            shapes: broadCast(models),
-            lines: broadCast(lines),
-            points: broadCast(points),
+            shapes: broadCast(shapes),
+            lines: broadCast(uniqueSegments),
+            points: broadCast(uniquePoints),
         };
     },
 };

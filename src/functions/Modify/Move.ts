@@ -18,7 +18,7 @@ export const move: PrimitiveFunction = {
             geometry: binaryOnTree(
                 inputs.geometry || {},
                 inputs.offset,
-                (m: BaseGeometry, o: Point) => {
+                (m?: BaseGeometry, o = Point.ZERO) => {
                     return m?.translate(o) || DISCARD;
                 },
                 true

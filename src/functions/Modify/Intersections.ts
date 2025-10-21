@@ -17,7 +17,7 @@ export const intersections: PrimitiveFunction = {
             point: binaryOnTree(
                 inputs.segment1 || {},
                 inputs.segment2 || {},
-                (c1: Segment, c2: Segment) => {
+                (c1?: Segment, c2?: Segment) => {
                     if (!c1 || !c2) return [];
                     const result = c1?.intersectWith(c2);
                     console.log(result);

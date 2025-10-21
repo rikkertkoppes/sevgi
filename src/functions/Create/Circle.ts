@@ -17,7 +17,7 @@ export const circle: PrimitiveFunction = {
         const circle = binaryOnTree(
             inputs.center,
             inputs.radius,
-            (o: Point, r: number) => {
+            (o = Point.ZERO, r = 10) => {
                 return new Circle(o, r);
             },
             true

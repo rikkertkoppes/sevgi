@@ -1,5 +1,5 @@
 import { Curve } from "@/Core/Geometry/Curve";
-import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import { binaryOnTree, DISCARD, PrimitiveFunction } from "@rkmodules/rules";
 
 export const evaluateCurve: PrimitiveFunction = {
     name: "evaluateCurve",
@@ -19,24 +19,24 @@ export const evaluateCurve: PrimitiveFunction = {
             point: binaryOnTree(
                 inputs.curve || {},
                 inputs.t,
-                (c: Curve, t: number) => {
-                    return c?.pointAt(t);
+                (c?: Curve, t = 0.5) => {
+                    return c?.pointAt(t) || DISCARD;
                 },
                 true
             ),
             normal: binaryOnTree(
                 inputs.curve || {},
                 inputs.t,
-                (c: Curve, t: number) => {
-                    return c?.normalAt(t);
+                (c?: Curve, t = 0.5) => {
+                    return c?.normalAt(t) || DISCARD;
                 },
                 true
             ),
             tangent: binaryOnTree(
                 inputs.curve || {},
                 inputs.t,
-                (c: Curve, t: number) => {
-                    return c?.tangentAt(t);
+                (c?: Curve, t = 0.5) => {
+                    return c?.tangentAt(t) || DISCARD;
                 },
                 true
             ),

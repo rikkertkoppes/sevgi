@@ -17,7 +17,7 @@ export const point: PrimitiveFunction = {
             point: binaryOnTree(
                 inputs.x,
                 inputs.y,
-                (x: number, y: number) => {
+                (x = 0, y = 0) => {
                     return v2(x, y);
                 },
                 true

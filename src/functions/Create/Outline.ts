@@ -1,5 +1,5 @@
 import { PolyLine } from "@/Core/Geometry/PolyLine";
-import { binaryOnTree, PrimitiveFunction } from "@rkmodules/rules";
+import { binaryOnTree, DISCARD, PrimitiveFunction } from "@rkmodules/rules";
 
 export const outline: PrimitiveFunction = {
     name: "outline",
@@ -26,9 +26,9 @@ export const outline: PrimitiveFunction = {
                 inputs.shape || {},
                 inputs.d,
 
-                (m: PolyLine, d: number) => {
+                (m?: PolyLine, d = 1) => {
                     if (params.inside) d = -d;
-                    return m?.offset(d, params.join);
+                    return m?.offset(d, params.join) || DISCARD;
                 },
                 true
             ),

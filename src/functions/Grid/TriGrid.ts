@@ -1,7 +1,14 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { linesToCells } from "./linesToCells";
 import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { Point, v2 } from "@/Core/Geometry/Vector";
+import { PolyLine } from "@/Core/Geometry/PolyLine";
+import { Transform } from "@/Core/Geometry/Transform";
+
+const top = v2(0.5, Math.sqrt(3) / 2);
+const horizontal = new LineSegment(Point.ZERO, Point.UNIT_X);
+const backward = new LineSegment(Point.UNIT_X, top);
+const forward = new LineSegment(top, Point.ZERO);
+const baseTri = PolyLine.from([horizontal, backward, forward]);
 
 export const triGrid: PrimitiveFunction = {
     name: "triGrid",
@@ -10,8 +17,8 @@ export const triGrid: PrimitiveFunction = {
     inputs: {},
     params: {
         size: { type: "number", default: 10 },
-        nx: { type: "number", default: 5 },
-        ny: { type: "number", default: 5 },
+        nx: { type: "number", default: 5, min: 1, step: 1 },
+        ny: { type: "number", default: 5, min: 1, step: 1 },
     },
     outputs: {
         shapes: "PolyLine",
@@ -19,57 +26,54 @@ export const triGrid: PrimitiveFunction = {
         points: "Point",
     },
     impl: async (inputs, params) => {
-        const pointsMap: Record<string, Point> = {};
-
-        function getUnique(p: Point) {
-            const h = p.hash;
-            if (pointsMap[h]) {
-                return pointsMap[h];
-            } else {
-                pointsMap[h] = p;
-                return p;
-            }
-        }
-
-        const lines: LineSegment[] = [];
-
-        const nx = Math.ceil(params.nx / 2) + 1;
-        const ny = params.ny + 1;
+        // nx side by side, counting ups and downs
+        // next row is vertically inverted
+        // ny rows
+        const ny = params.ny;
+        const nu = Math.ceil(params.nx / 2); // upper number
+        const nl = Math.floor(params.nx / 2); // lower number
         const hSpace = params.size;
         const vSpace = params.size * (Math.sqrt(3) / 2);
+        const shapes: PolyLine[] = [];
         for (let j = 0; j < ny; j++) {
-            const pointsInRow = nx - (j % 2) * (params.nx % 2);
-            const dx = (j % 2) * (hSpace / 2);
-            for (let i = 0; i < pointsInRow; i++) {
-                const x = i * hSpace + dx;
-                const y = j * vSpace;
-                const p = getUnique(v2(x, y));
-                if (i < pointsInRow - 1) {
-                    // horizontal line
-                    const p2 = getUnique(v2(x + hSpace, y));
-                    lines.push(new LineSegment(p, p2));
-                }
-                if (j < ny - 1) {
-                    if (j % 2 === 1 || i > 0) {
-                        // backward tilted
-                        const p2 = getUnique(v2(x - hSpace / 2, y + vSpace));
-                        lines.push(new LineSegment(p, p2));
-                    }
-                    if (i < nx - 1 || (j % 2 === 0 && params.nx % 2 === 0)) {
-                        // forward tilted
-                        const p2 = getUnique(v2(x + hSpace / 2, y + vSpace));
-                        lines.push(new LineSegment(p, p2));
-                    }
-                }
+            const oddRow = j % 2 === 1;
+            const nUp = oddRow ? nl : nu;
+            const nDown = oddRow ? nu : nl;
+            const y = j * vSpace;
+            for (let i = 0; i < nUp; i++) {
+                // pointing up
+                const x = i * hSpace + (j % 2) * (hSpace / 2);
+                const transform = Transform.from(v2(x, y), 0, params.size);
+                const tri = baseTri.transform(transform).makeUnique();
+                shapes.push(tri);
+            }
+            for (let i = 0; i < nDown; i++) {
+                // pointing down
+                const x = (i + 1) * hSpace + (1 - (j % 2)) * (hSpace / 2);
+                const transform = Transform.from(
+                    v2(x, y + vSpace),
+                    Math.PI,
+                    params.size
+                );
+                const tri = baseTri.transform(transform).makeUnique();
+                shapes.push(tri);
             }
         }
 
-        const models = linesToCells(lines);
+        const segments = shapes.flatMap((s) => s.getSegments());
+        const uniqueSegments = Array.from(
+            new Map(segments.map((s) => [s.hash, s])).values()
+        );
+
+        const points = uniqueSegments.flatMap((s) => [s.start, s.end]);
+        const uniquePoints = Array.from(
+            new Map(points.map((p) => [p.hash, p])).values()
+        );
 
         return {
-            shapes: broadCast(models),
-            lines: broadCast(lines),
-            points: broadCast(Object.values(pointsMap)),
+            shapes: broadCast(shapes),
+            lines: broadCast(uniqueSegments),
+            points: broadCast(uniquePoints),
         };
     },
 };

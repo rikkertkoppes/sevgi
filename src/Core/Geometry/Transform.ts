@@ -112,8 +112,8 @@ export class Transform {
         r = 0,
         s: number | Point = Point.ONE
     ): Transform {
-        const cos = r ? Math.cos(r) : 1;
-        const sin = r ? Math.sin(r) : 0;
+        const cos = Math.cos(r);
+        const sin = Math.sin(r);
         const scale = typeof s === "number" ? v2(s, s) : s;
         return new Transform(
             scale.x * cos,

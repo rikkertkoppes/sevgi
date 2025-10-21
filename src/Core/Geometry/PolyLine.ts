@@ -66,7 +66,7 @@ export class PolyLine extends Curve {
     }
 
     public clone(): PolyLine {
-        return new PolyLine(this.segments.map((p) => p.clone()));
+        return this.shallowCopy();
     }
     private shallowCopy(): this {
         const c = Object.create(Object.getPrototypeOf(this));
@@ -76,16 +76,15 @@ export class PolyLine extends Curve {
 
     public transform(t: Transform): this {
         const c = this.shallowCopy();
+        t = t.multiply(this.T);
         c.T = t;
         c.Ti = t.inverse();
+        c._worldSegments = null; // reset world segments cache
         return c;
     }
 
     public translate(v: Point): PolyLine {
-        return this.copyIdentity(
-            this.transform(Transform.fromTranslation(v).multiply(this.T))
-            // new PolyLine(this.segments.map((p) => p.translate(v)))
-        );
+        return this.copyIdentity(this.transform(Transform.fromTranslation(v)));
     }
     public rotate(angle: number, center: Point): PolyLine {
         return this.copyIdentity(

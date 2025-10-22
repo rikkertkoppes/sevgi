@@ -184,3 +184,4 @@ export const mirror = (p: Point, axis: "" | "x" | "y" | "xy"): Point => {
             return p;
     }
 };
+export const transpose = ({ x, y }: Point): Point => v2(y, x);

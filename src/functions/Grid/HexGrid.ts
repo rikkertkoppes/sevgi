@@ -1,9 +1,10 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { Point, v2 } from "@/Core/Geometry/Vector";
+import { Point, transpose, v2 } from "@/Core/Geometry/Vector";
 import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
 import { Transform } from "@/Core/Geometry/Transform";
 
 const baseHex = RegularPolygon.from(Point.ZERO, 6, 1, 0, true);
+const HPI = Math.PI / 2;
 
 export const hexGrid: PrimitiveFunction = {
     name: "hexGrid",
@@ -14,6 +15,7 @@ export const hexGrid: PrimitiveFunction = {
         size: { type: "number", default: 10 },
         nx: { type: "number", default: 5 },
         ny: { type: "number", default: 5 },
+        flip: { type: "boolean", default: false },
     },
     outputs: {
         shapes: "PolyLine",
@@ -21,9 +23,11 @@ export const hexGrid: PrimitiveFunction = {
         points: "Point",
     },
     impl: async (inputs, params) => {
-        const ny = params.ny;
-        const nu = Math.ceil(params.nx / 2); // upper number
-        const nl = Math.floor(params.nx / 2); // lower number
+        const f = params.flip;
+        const ny = f ? params.nx : params.ny;
+        const nx = f ? params.ny : params.nx;
+        const nu = Math.ceil(nx / 2); // upper number
+        const nl = Math.floor(nx / 2); // lower number
         const hSpace = params.size * 3;
         const vSpace = params.size * Math.sqrt(3);
         const shapes: RegularPolygon[] = [];
@@ -31,17 +35,17 @@ export const hexGrid: PrimitiveFunction = {
             const y = j * vSpace;
             for (let i = 0; i < nu; i++) {
                 const x = i * hSpace;
-                const transform = Transform.from(v2(x, y), 0, params.size);
+                let v = v2(x, y);
+                if (params.flip) v = transpose(v);
+                const transform = Transform.from(v, f ? HPI : 0, params.size);
                 const hex = baseHex.transform(transform).makeUnique();
                 shapes.push(hex);
             }
             for (let i = 0; i < nl; i++) {
                 const x = i * hSpace + hSpace / 2;
-                const transform = Transform.from(
-                    v2(x, y + vSpace / 2),
-                    0,
-                    params.size
-                );
+                let v = v2(x, y + vSpace / 2);
+                if (params.flip) v = transpose(v);
+                const transform = Transform.from(v, f ? HPI : 0, params.size);
                 const hex = baseHex.transform(transform).makeUnique();
                 shapes.push(hex);
             }

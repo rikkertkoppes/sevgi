@@ -14,6 +14,7 @@ export class LineSegment extends Segment {
     constructor(public start: Point, public end: Point) {
         super();
         this.hash = `line|${this.start.hash}|${this.end.hash}`;
+        this.id = this.hash;
         this._isZeroLength = this.start.hash === this.end.hash;
     }
 
@@ -27,6 +28,10 @@ export class LineSegment extends Segment {
 
     public get bisector() {
         return Line.perpendicularFromPoints(this.start, this.end);
+    }
+
+    public reverse(): Segment {
+        return this.copyAncestry(new LineSegment(this.end, this.start));
     }
 
     public direction() {

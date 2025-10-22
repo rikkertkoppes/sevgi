@@ -10,6 +10,7 @@ export class Point extends BaseGeometry {
     constructor(public x: number, public y: number) {
         super();
         this.hash = fixedNum`${x} ${y}`;
+        this.id = this.hash;
     }
 
     public transform(T: Transform): Point {

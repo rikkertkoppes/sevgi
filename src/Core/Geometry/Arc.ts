@@ -66,6 +66,11 @@ export class Arc extends Segment {
     public get end() {
         return this.e;
     }
+
+    public reverse(): Arc {
+        return new Arc(this.c.reverse(), this._end, this._start);
+    }
+
     /** gets the angle of the bend */
     public get angle() {
         return PI - this.length / Math.abs(this.c.r);

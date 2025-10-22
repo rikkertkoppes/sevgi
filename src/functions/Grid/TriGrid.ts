@@ -9,6 +9,8 @@ const horizontal = new LineSegment(Point.ZERO, Point.UNIT_X);
 const backward = new LineSegment(Point.UNIT_X, top);
 const forward = new LineSegment(top, Point.ZERO);
 const baseTri = PolyLine.from([horizontal, backward, forward]);
+const PI = Math.PI;
+const HPI = PI / 2;
 
 export const triGrid: PrimitiveFunction = {
     name: "triGrid",
@@ -19,6 +21,7 @@ export const triGrid: PrimitiveFunction = {
         size: { type: "number", default: 10 },
         nx: { type: "number", default: 5, min: 1, step: 1 },
         ny: { type: "number", default: 5, min: 1, step: 1 },
+        flip: { type: "boolean", default: false },
     },
     outputs: {
         shapes: "PolyLine",
@@ -29,9 +32,11 @@ export const triGrid: PrimitiveFunction = {
         // nx side by side, counting ups and downs
         // next row is vertically inverted
         // ny rows
-        const ny = params.ny;
-        const nu = Math.ceil(params.nx / 2); // upper number
-        const nl = Math.floor(params.nx / 2); // lower number
+        const f = params.flip;
+        const nx = f ? params.ny : params.nx;
+        const ny = f ? params.nx : params.ny;
+        const nu = Math.ceil(nx / 2); // upper number
+        const nl = Math.floor(nx / 2); // lower number
         const hSpace = params.size;
         const vSpace = params.size * (Math.sqrt(3) / 2);
         const shapes: PolyLine[] = [];
@@ -41,20 +46,18 @@ export const triGrid: PrimitiveFunction = {
             const nDown = oddRow ? nu : nl;
             const y = j * vSpace;
             for (let i = 0; i < nUp; i++) {
-                // pointing up
+                // pointing up / right
                 const x = i * hSpace + (j % 2) * (hSpace / 2);
-                const transform = Transform.from(v2(x, y), 0, params.size);
+                const v = f ? v2(y, x + hSpace) : v2(x, y);
+                const transform = Transform.from(v, f ? -HPI : 0, params.size);
                 const tri = baseTri.transform(transform).makeUnique();
                 shapes.push(tri);
             }
             for (let i = 0; i < nDown; i++) {
-                // pointing down
+                // pointing down / left
                 const x = (i + 1) * hSpace + (1 - (j % 2)) * (hSpace / 2);
-                const transform = Transform.from(
-                    v2(x, y + vSpace),
-                    Math.PI,
-                    params.size
-                );
+                const v = f ? v2(y + vSpace, x - hSpace) : v2(x, y + vSpace);
+                const transform = Transform.from(v, f ? HPI : PI, params.size);
                 const tri = baseTri.transform(transform).makeUnique();
                 shapes.push(tri);
             }

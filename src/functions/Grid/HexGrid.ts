@@ -1,5 +1,5 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
-import { Point, transpose, v2 } from "@/Core/Geometry/Vector";
+import { Point, v2 } from "@/Core/Geometry/Vector";
 import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
 import { Transform } from "@/Core/Geometry/Transform";
 
@@ -35,16 +35,14 @@ export const hexGrid: PrimitiveFunction = {
             const y = j * vSpace;
             for (let i = 0; i < nu; i++) {
                 const x = i * hSpace;
-                let v = v2(x, y);
-                if (params.flip) v = transpose(v);
+                const v = f ? v2(y, x) : v2(x, y);
                 const transform = Transform.from(v, f ? HPI : 0, params.size);
                 const hex = baseHex.transform(transform).makeUnique();
                 shapes.push(hex);
             }
             for (let i = 0; i < nl; i++) {
                 const x = i * hSpace + hSpace / 2;
-                let v = v2(x, y + vSpace / 2);
-                if (params.flip) v = transpose(v);
+                const v = f ? v2(y + vSpace / 2, x) : v2(x, y + vSpace / 2);
                 const transform = Transform.from(v, f ? HPI : 0, params.size);
                 const hex = baseHex.transform(transform).makeUnique();
                 shapes.push(hex);

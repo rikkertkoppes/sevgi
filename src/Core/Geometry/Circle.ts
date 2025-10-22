@@ -70,10 +70,6 @@ export class Circle extends Curve {
         return new Circle(this.c, -this.r);
     }
 
-    public clone() {
-        return new Circle(v2(this.c.x, this.c.y), this.r);
-    }
-
     public offset(d: number) {
         // positive r is ccw, then positive d is outwards, so r should be more positive
         // negative r is clockwise, then positive d is inwards, so r should be less negative

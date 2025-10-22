@@ -12,10 +12,6 @@ export class Point extends BaseGeometry {
         this.hash = fixedNum`${x} ${y}`;
     }
 
-    public clone(): Point {
-        return new Point(this.x, this.y);
-    }
-
     public transform(T: Transform): Point {
         // console.log("transform point", this, T, transform(this, T));
         return this.copyAncestry(T.apply(this));

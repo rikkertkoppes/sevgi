@@ -122,10 +122,6 @@ export class Arc extends Segment {
         return Math.abs(r * d);
     }
 
-    public clone() {
-        return new Arc(this.c.clone(), this._start, this._end);
-    }
-
     public transform(T: Transform) {
         return this.copyAncestry(
             new Arc(this.c.transform(T), this._start, this._end)

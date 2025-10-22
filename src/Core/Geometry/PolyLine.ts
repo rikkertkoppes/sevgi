@@ -65,15 +65,6 @@ export class PolyLine extends Curve {
         this.hash = this.segments.map((s) => s.hash).join("|");
     }
 
-    public clone(): PolyLine {
-        return this.shallowCopy();
-    }
-    private shallowCopy(): this {
-        const c = Object.create(Object.getPrototypeOf(this));
-        Object.assign(c, this);
-        return c;
-    }
-
     public transform(t: Transform): this {
         const c = this.shallowCopy();
         t = t.multiply(this.T);

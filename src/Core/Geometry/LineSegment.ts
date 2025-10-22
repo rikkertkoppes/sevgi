@@ -40,10 +40,6 @@ export class LineSegment extends Segment {
         return rotateRight(this.direction());
     }
 
-    public clone() {
-        return new LineSegment(this.start, this.end);
-    }
-
     public transform(T: Transform) {
         return this.copyAncestry(
             new LineSegment(this.start.transform(T), this.end.transform(T))

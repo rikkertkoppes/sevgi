@@ -33,7 +33,15 @@ export abstract class BaseGeometry {
         return this;
     }
     abstract type: string;
-    abstract clone(): BaseGeometry;
+    public clone(): this {
+        return this.shallowCopy();
+    }
+    protected shallowCopy(): this {
+        const c = Object.create(Object.getPrototypeOf(this));
+        Object.assign(c, this, { id: uid() });
+        return c;
+    }
+
     abstract transform(T: Transform): BaseGeometry;
     abstract translate(v: Point): BaseGeometry;
     abstract rotate(angle: number, center: Point): BaseGeometry;

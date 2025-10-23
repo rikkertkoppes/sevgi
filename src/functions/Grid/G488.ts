@@ -2,12 +2,13 @@ import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
 import { diff, Point, v2 } from "@/Core/Geometry/Vector";
 import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
 import { Transform } from "@/Core/Geometry/Transform";
+import { DCEL } from "@/Core/Geometry/GeoData";
 
 const baseOct = RegularPolygon.from(Point.ZERO, 8, 1, Math.PI / 8, false);
 const baseQuad = RegularPolygon.from(Point.ZERO, 4, 1, 0, false);
 const QPI = Math.PI / 4;
 
-export const truncatedSquareGrid: PrimitiveFunction = {
+export const g488: PrimitiveFunction = {
     name: "truncatedSquareGrid",
     label: "4.8.8 Grid",
     description:
@@ -33,6 +34,7 @@ export const truncatedSquareGrid: PrimitiveFunction = {
         const rQuad = Math.sqrt(2) * rOct - rOct;
         const shapes: RegularPolygon[] = [];
         const aOct = Math.PI / 8;
+        const dcel = new DCEL();
         const halfOffset = v2(rOct, rOct);
         if (f) s += 2 * rQuad;
         for (let i = 0; i < nx; i++) {
@@ -40,6 +42,7 @@ export const truncatedSquareGrid: PrimitiveFunction = {
                 const v = v2(i * s, j * s);
                 const transform = Transform.from(v, aOct, rOct);
                 const oct = baseOct.transform(transform).makeUnique();
+                dcel.addCell(oct); // store in dcel
                 shapes.push(oct);
                 if (j > 0 && i > 0) {
                     if (f) {
@@ -47,12 +50,14 @@ export const truncatedSquareGrid: PrimitiveFunction = {
                         const vo = diff(v, v2(s / 2, s / 2));
                         const transform = Transform.from(vo, aOct, rOct);
                         const oct = baseOct.transform(transform).makeUnique();
+                        dcel.addCell(oct); // store in dcel
                         shapes.push(oct);
                     } else {
                         // create quad
                         const vq = diff(v, halfOffset);
                         const transform = Transform.from(vq, 0, rQuad);
                         const quad = baseQuad.transform(transform).makeUnique();
+                        dcel.addCell(quad); // store in dcel
                         shapes.push(quad);
                     }
                 }
@@ -61,6 +66,7 @@ export const truncatedSquareGrid: PrimitiveFunction = {
                     const vq = diff(v, v2(s / 2, 0));
                     const transform = Transform.from(vq, QPI, rQuad);
                     const quad = baseQuad.transform(transform).makeUnique();
+                    dcel.addCell(quad); // store in dcel
                     shapes.push(quad);
                 }
                 if (f && j > 0) {
@@ -68,6 +74,7 @@ export const truncatedSquareGrid: PrimitiveFunction = {
                     const vq = diff(v, v2(0, s / 2));
                     const transform = Transform.from(vq, QPI, rQuad);
                     const quad = baseQuad.transform(transform).makeUnique();
+                    dcel.addCell(quad); // store in dcel
                     shapes.push(quad);
                 }
             }

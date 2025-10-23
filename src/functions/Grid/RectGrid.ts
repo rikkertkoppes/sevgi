@@ -1,6 +1,7 @@
 import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
 import { v2 } from "@/Core/Geometry/Vector";
 import { Rectangle } from "@/Core/Geometry/Rectangle";
+import { DCEL } from "@/Core/Geometry/GeoData";
 
 export const rectGrid: PrimitiveFunction = {
     name: "rectGrid",
@@ -25,10 +26,12 @@ export const rectGrid: PrimitiveFunction = {
         const hSpace = params.size;
         const vSpace = params.size;
         const shapes = [];
+        const dcel = new DCEL();
         for (let i = 0; i < nx; i++) {
             for (let j = 0; j < ny; j++) {
                 const c = v2(hs + i * hSpace, hs + j * vSpace);
                 const r = Rectangle.fromDimensions(c, s, s).makeUnique();
+                dcel.addCell(r); // store in dcel
                 shapes.push(r);
             }
         }

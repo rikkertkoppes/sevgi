@@ -2,8 +2,9 @@ import { broadCast, PrimitiveFunction } from "@rkmodules/rules";
 import { Point, v2 } from "@/Core/Geometry/Vector";
 import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
 import { Transform } from "@/Core/Geometry/Transform";
+import { DCEL } from "@/Core/Geometry/GeoData";
 
-const baseHex = RegularPolygon.from(Point.ZERO, 6, 1, 0, true);
+const baseHex = RegularPolygon.from(Point.ZERO, 6, 1, 0, false);
 const HPI = Math.PI / 2;
 
 export const hexGrid: PrimitiveFunction = {
@@ -28,23 +29,27 @@ export const hexGrid: PrimitiveFunction = {
         const nx = f ? params.ny : params.nx;
         const nu = Math.ceil(nx / 2); // upper number
         const nl = Math.floor(nx / 2); // lower number
-        const hSpace = params.size * 3;
-        const vSpace = params.size * Math.sqrt(3);
+        const hSpace = params.size * Math.sqrt(3);
+        const vSpace = params.size;
         const shapes: RegularPolygon[] = [];
+        const rHex = params.size / 2;
+        const dcel = new DCEL();
         for (let j = 0; j < ny; j++) {
             const y = j * vSpace;
             for (let i = 0; i < nu; i++) {
                 const x = i * hSpace;
                 const v = f ? v2(y, x) : v2(x, y);
-                const transform = Transform.from(v, f ? HPI : 0, params.size);
+                const transform = Transform.from(v, f ? HPI : 0, rHex);
                 const hex = baseHex.transform(transform).makeUnique();
+                dcel.addCell(hex); // store in dcel
                 shapes.push(hex);
             }
             for (let i = 0; i < nl; i++) {
                 const x = i * hSpace + hSpace / 2;
                 const v = f ? v2(y + vSpace / 2, x) : v2(x, y + vSpace / 2);
-                const transform = Transform.from(v, f ? HPI : 0, params.size);
+                const transform = Transform.from(v, f ? HPI : 0, rHex);
                 const hex = baseHex.transform(transform).makeUnique();
+                dcel.addCell(hex); // store in dcel
                 shapes.push(hex);
             }
         }

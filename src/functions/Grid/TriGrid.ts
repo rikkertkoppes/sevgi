@@ -3,6 +3,7 @@ import { LineSegment } from "@/Core/Geometry/LineSegment";
 import { Point, v2 } from "@/Core/Geometry/Vector";
 import { PolyLine } from "@/Core/Geometry/PolyLine";
 import { Transform } from "@/Core/Geometry/Transform";
+import { DCEL } from "@/Core/Geometry/GeoData";
 
 const top = v2(0.5, Math.sqrt(3) / 2);
 const horizontal = new LineSegment(Point.ZERO, Point.UNIT_X);
@@ -40,6 +41,7 @@ export const triGrid: PrimitiveFunction = {
         const hSpace = params.size;
         const vSpace = params.size * (Math.sqrt(3) / 2);
         const shapes: PolyLine[] = [];
+        const dcel = new DCEL();
         for (let j = 0; j < ny; j++) {
             const oddRow = j % 2 === 1;
             const nUp = oddRow ? nl : nu;
@@ -51,6 +53,7 @@ export const triGrid: PrimitiveFunction = {
                 const v = f ? v2(y, x + hSpace) : v2(x, y);
                 const transform = Transform.from(v, f ? -HPI : 0, params.size);
                 const tri = baseTri.transform(transform).makeUnique();
+                dcel.addCell(tri); // store in dcel
                 shapes.push(tri);
             }
             for (let i = 0; i < nDown; i++) {
@@ -59,6 +62,7 @@ export const triGrid: PrimitiveFunction = {
                 const v = f ? v2(y + vSpace, x - hSpace) : v2(x, y + vSpace);
                 const transform = Transform.from(v, f ? HPI : PI, params.size);
                 const tri = baseTri.transform(transform).makeUnique();
+                dcel.addCell(tri); // store in dcel
                 shapes.push(tri);
             }
         }

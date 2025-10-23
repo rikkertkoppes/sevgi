@@ -2,7 +2,7 @@ import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Circle } from "./Circle";
 import { ClosestPointInfo, Curve } from "./Curve";
-import { store } from "./GeoData";
+import { DCEL, store } from "./GeoData";
 import { Line } from "./Line";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
@@ -24,6 +24,7 @@ export class PolyLine extends Curve {
     public T: Transform = Transform.ONE;
     public Ti: Transform = Transform.ONE;
     private _worldSegments: Segment[] | null = null;
+    public dcel?: DCEL;
 
     protected constructor(segments: Segment[]) {
         super();

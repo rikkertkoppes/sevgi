@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { toArray, Tree } from "@rkmodules/rules";
 
@@ -8,16 +7,8 @@ import { SVGScroller } from "./ScrollZoom";
 
 import "@rkmodules/rules/index.css";
 import styles from "./Canvas.module.css";
-
-interface GeometryProps {
-    c: string;
-    d: string;
-}
-const Geometry = React.memo(({ d, c }: GeometryProps) => {
-    if (!d) return null;
-    return <path d={d} className={c} />;
-});
-Geometry.displayName = "Geometry";
+import { RenderGeometry } from "./RenderGeometry";
+import { RenderSelection } from "./RenderSelection";
 
 function serializeSVG(geometry: BaseGeometry[]) {
     // todo: calculate proper viewBox
@@ -36,13 +27,8 @@ interface CanvasProps {
 }
 
 export function Canvas({ geometry: geoTree, selection }: CanvasProps) {
-    const [selectionGeometry, setSelectionGeometry] = React.useState<
-        BaseGeometry[]
-    >([]);
-
-    const geometry = toArray(geoTree || {}) as BaseGeometry[];
-
     const handleDownload = () => {
+        const geometry = toArray(geoTree || {}) as BaseGeometry[];
         const svg = serializeSVG(geometry);
         const element = document.createElement("a");
         const file = new Blob([svg], { type: "image/svg+xml" });
@@ -52,12 +38,6 @@ export function Canvas({ geometry: geoTree, selection }: CanvasProps) {
         element.click();
         document.body.removeChild(element); // Clean up
     };
-
-    React.useEffect(() => {
-        const mainSel = selection[Object.keys(selection)[0]];
-        const selGeometry = toArray(mainSel || {}) as BaseGeometry[];
-        setSelectionGeometry(selGeometry);
-    }, [selection]);
 
     return (
         <div className={styles.Canvas}>
@@ -102,18 +82,8 @@ export function Canvas({ geometry: geoTree, selection }: CanvasProps) {
                     y2={1000}
                     className={styles.YAxis}
                 />
-                <g className={styles.Geometry}>
-                    {geometry.map((g, i) => {
-                        if (!g) return null;
-                        return <Geometry d={g.toSVG?.()} key={i} c={g.type} />;
-                    })}
-                </g>
-                <g className={styles.Selection}>
-                    {selectionGeometry.map((g, i) => {
-                        if (!g) return null;
-                        return <Geometry d={g.toSVG?.()} key={i} c={g.type} />;
-                    })}
-                </g>
+                <RenderGeometry geometry={geoTree} />
+                <RenderSelection selection={selection} />
             </SVGScroller>
         </div>
     );

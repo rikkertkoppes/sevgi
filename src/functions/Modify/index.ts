@@ -6,6 +6,7 @@ import { rotate } from "./Rotate";
 import { mergeChanges } from "./MergeChanges";
 import { destructPoint } from "./DestructPoint";
 import { intersections } from "./Intersections";
+import { countPoints } from "./CountPoints";
 
 const primitives: Record<string, PrimitiveFunction> = {
     destructPoint,
@@ -13,6 +14,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     rotate,
     scale,
     countSegments,
+    countPoints,
     intersections,
     mergeChanges,
 };

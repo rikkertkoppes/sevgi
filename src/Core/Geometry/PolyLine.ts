@@ -24,6 +24,7 @@ export class PolyLine extends Curve {
     public T: Transform = Transform.ONE;
     public Ti: Transform = Transform.ONE;
     private _worldSegments: Segment[] | null = null;
+    private _worldPoints: Point[] | null = null;
     public dcel?: DCEL;
 
     protected constructor(segments: Segment[]) {
@@ -72,6 +73,7 @@ export class PolyLine extends Curve {
         c.T = t;
         c.Ti = t.inverse();
         c._worldSegments = null; // reset world segments cache
+        c._worldPoints = null; // reset world points cache
         return c;
     }
 
@@ -92,7 +94,8 @@ export class PolyLine extends Curve {
     private getLocalT(globalT: number) {
         globalT = Math.min(Math.max(globalT, 0), 1);
         const offset = globalT * this.length;
-        const edgeIndex = this.offsets.findLastIndex((o) => o <= offset);
+        let edgeIndex = this.offsets.findLastIndex((o) => o <= offset);
+        if (globalT === 1) edgeIndex = this.segments.length - 1;
         const startOffset = this.offsets[edgeIndex];
         const localOffset = offset - startOffset;
         const t = localOffset / this.lengths[edgeIndex];
@@ -106,7 +109,7 @@ export class PolyLine extends Curve {
 
     public pointAt(t: number): Point {
         const { edgeIndex, t: localT } = this.getLocalT(t);
-        return this.segments[edgeIndex].pointAt(localT);
+        return this.segments[edgeIndex].pointAt(localT).transform(this.T);
     }
     public normalAt(t: number): Point {
         const { edgeIndex, t: localT } = this.getLocalT(t);
@@ -157,6 +160,16 @@ export class PolyLine extends Curve {
      */
     public getLocalSegments() {
         return this.segments;
+    }
+
+    /**
+     * @returns the points in world coordinates
+     */
+    public getPoints() {
+        if (!this._worldPoints) {
+            this._worldPoints = this.points.map((p) => p.transform(this.T));
+        }
+        return this._worldPoints;
     }
 
     public offset(d: number, joinType: JoinType = "round"): PolyLine {
@@ -260,10 +273,6 @@ export class PolyLine extends Curve {
         store.setProp(this.hash, propKey, newPoly);
 
         return newPoly.transform(this.T);
-    }
-
-    public getPoints() {
-        return this.points;
     }
 
     public interSectWithLineSegment(segment: LineSegment): Point[] {

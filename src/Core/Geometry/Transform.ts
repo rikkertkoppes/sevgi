@@ -1,5 +1,5 @@
 import { store } from "./GeoData";
-import { fixedNum } from "./Util";
+import { hashNumbers } from "./Util";
 import { Point, v2 } from "./Vector";
 
 export class Transform {
@@ -14,7 +14,7 @@ export class Transform {
         public e: number,
         public f: number
     ) {
-        this.hash = fixedNum`${a},${b},${c},${d},${e},${f}`;
+        this.hash = hashNumbers(a, b, c, d, e, f).toString();
     }
 
     /**
@@ -90,6 +90,10 @@ export class Transform {
             this._rotation = Math.atan2(this.b, this.a);
         }
         return this._rotation;
+    }
+
+    public get elements(): number[] {
+        return [this.a, this.b, this.c, this.d, this.e, this.f];
     }
 
     public static fromTranslation(p: Point): Transform {

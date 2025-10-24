@@ -22,7 +22,6 @@ export class PolyLine extends Curve {
     public first: Point = new Point(0, 0);
     public last: Point = new Point(0, 0);
     public T: Transform = Transform.ONE;
-    public Ti: Transform = Transform.ONE;
     private _worldSegments: Segment[] | null = null;
     private _worldPoints: Point[] | null = null;
     public dcel?: DCEL;
@@ -71,7 +70,6 @@ export class PolyLine extends Curve {
         const c = this.shallowCopy();
         t = t.multiply(this.T);
         c.T = t;
-        c.Ti = t.inverse();
         c._worldSegments = null; // reset world segments cache
         c._worldPoints = null; // reset world points cache
         return c;

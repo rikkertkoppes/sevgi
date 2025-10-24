@@ -38,3 +38,21 @@ export function fixedNum(
 export function uid() {
     return Math.random().toString(36).substring(2, 15);
 }
+
+// fast hashing
+// Quantize to 3 decimals, return a 32-bit signed int
+function q3(x: number): number {
+    // Using Math.round is usually what people intend for fixed decimals
+    // normalize -0 to 0 to keep keys stable
+    const q = Math.round(x * 1000);
+    return q === 0 ? 0 : q | 0;
+}
+
+export function hashNumbers(...nums: number[]) {
+    let h = BigInt(0);
+    for (let i = 0; i < nums.length; i++) {
+        const x = BigInt(q3(nums[i]) >>> 0); // convert to unsigned bigint, at 3 decimals precision
+        h = (h << BigInt(32)) | x; // shift left and add
+    }
+    return h;
+}

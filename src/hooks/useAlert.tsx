@@ -90,7 +90,6 @@ export function AlertHandler() {
             ref.current.focus();
         }
         if (state.visible && inputRef.current && state.mode === "prompt") {
-            console.log("selecting input", inputRef.current);
             inputRef.current.focus();
             setTimeout(() => {
                 inputRef.current?.select();

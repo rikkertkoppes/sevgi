@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 import Create from "@/functions/Create";
 import Modify from "@/functions/Modify";
 import Grid from "@/functions/Grid";
+import { AlertHandler, usePrompts } from "@/hooks/useAlert";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
 import { Palette } from "@/components/Palette";
@@ -46,6 +47,7 @@ export default function Home() {
     const [data, setData] = React.useState<Record<string, any>>({});
     const [selection, setSelection] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
+    const prompts = usePrompts();
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
@@ -153,6 +155,7 @@ export default function Home() {
                                     onChange={setFn}
                                     onClick={handlePlace}
                                     onSelect={handleSelect}
+                                    customPrompts={prompts}
                                 />
                                 {error && (
                                     <div className={styles.Error}>{error}</div>
@@ -175,6 +178,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            <AlertHandler />
         </DDContext>
     );
 }

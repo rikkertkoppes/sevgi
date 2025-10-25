@@ -19,7 +19,7 @@ import Grid from "@/functions/Grid";
 import { AlertHandler, usePrompts } from "@/hooks/useAlert";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
-import { Palette } from "@/components/Palette";
+import { MyNodes, Palette } from "@/components/Palette";
 const ViewButtons = dynamic(() => import("./ViewButtons"), { ssr: false });
 
 import styles from "./editor.module.css";
@@ -31,8 +31,12 @@ const engine = new Engine({
     ...Grid,
 });
 
+if (typeof window !== "undefined") {
+    (window as any).engine = engine;
+}
+
 const emptyFunction: GraphedFunction = {
-    name: "test",
+    name: "",
     body: {},
     outputs: {
         geometry: "",
@@ -41,6 +45,7 @@ const emptyFunction: GraphedFunction = {
 
 export default function Home() {
     const [fn, setFn] = React.useState(emptyFunction);
+    const [saved, setSaved] = React.useState(false);
     const { run, result } = useFunction(engine, fn, true);
     const [placing, setPlacing] = React.useState<string | null>(null);
     const updatePositions = useUpdatePositions(fn);
@@ -51,6 +56,49 @@ export default function Home() {
 
     const handleAddNode = (name: string) => {
         setPlacing(name);
+    };
+
+    const handleNew = async () => {
+        if (
+            saved ||
+            fn === emptyFunction ||
+            (await prompts.confirm("Current flow is not saved, continue?"))
+        ) {
+            setFn(emptyFunction);
+        }
+    };
+
+    const handleSave = async () => {
+        const toSave = { ...fn };
+        if (!toSave.name) {
+            const name = await prompts.prompt(
+                "Enter function name",
+                fn.name || ""
+            );
+            if (name) {
+                toSave.name = name;
+            } else {
+                return;
+            }
+        }
+        localStorage.setItem(`function_${toSave.name}`, JSON.stringify(toSave));
+        setFn(toSave);
+        setSaved(true);
+    };
+
+    const handleOpen = async () => {
+        const name = await prompts.prompt(
+            "Enter function name to open",
+            fn.name || ""
+        );
+        if (name) {
+            const savedFn = localStorage.getItem(`function_${name}`);
+            if (savedFn) {
+                setFn(JSON.parse(savedFn));
+            } else {
+                alert("Function not found");
+            }
+        }
     };
 
     const handlePlace = (
@@ -97,7 +145,19 @@ export default function Home() {
                 <div className={styles.Panes}>
                     <Tabs>
                         <div className={styles.FlowPane}>
-                            <TabHeaders>
+                            <TabHeaders
+                                leftTools={
+                                    <div className={styles.MainMenu}>
+                                        <button onClick={handleNew}>New</button>
+                                        <button onClick={handleSave}>
+                                            Save...
+                                        </button>
+                                        <button onClick={handleOpen}>
+                                            Open...
+                                        </button>
+                                    </div>
+                                }
+                            >
                                 <div className={styles.Version}>
                                     <ViewButtons />
                                     <div className={styles.Title}>
@@ -139,7 +199,10 @@ export default function Home() {
                                 </Tab>
                                 <Tab header="Util">
                                     <Palette
-                                        nodes={Lib.Util}
+                                        nodes={{
+                                            inputs: Lib.IO.inputs,
+                                            ...Lib.Util,
+                                        }}
                                         handleAddNode={handleAddNode}
                                     />
                                 </Tab>
@@ -148,6 +211,9 @@ export default function Home() {
                                         nodes={{ ...Lib.Math, ...Lib.Logic }}
                                         handleAddNode={handleAddNode}
                                     />
+                                </Tab>
+                                <Tab header="My Flows">
+                                    <MyNodes engine={engine} />
                                 </Tab>
                                 <Flow
                                     function={fn}

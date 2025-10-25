@@ -8,6 +8,12 @@
     cursor: crosshair;
 }
 
+.MainMenu {
+    display: flex;
+    gap: 8px;
+    margin-right: 8px;
+}
+
 .Panes {
     flex: 1;
     display: flex;

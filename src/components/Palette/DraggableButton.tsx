@@ -7,9 +7,15 @@ import {
 interface DraggableButtonProps {
     name: string;
     fn: PrimitiveFunction;
+    icon?: string;
     onClick?: (e: React.MouseEvent) => void;
 }
-export function DraggableButton({ name, fn, onClick }: DraggableButtonProps) {
+export function DraggableButton({
+    name,
+    fn,
+    icon,
+    onClick,
+}: DraggableButtonProps) {
     const ref = useDraggableNode(name, fn);
     const outType = normalizeVarDef(
         Object.values(fn.outputs || {})[0] || { type: "Geometry" }
@@ -26,7 +32,7 @@ export function DraggableButton({ name, fn, onClick }: DraggableButtonProps) {
             }
         >
             <svg>
-                <use href={`/symbols.svg#${name}`}></use>
+                <use href={`/symbols.svg#${icon || name}`}></use>
             </svg>
             {fn.label || fn.name}
         </button>

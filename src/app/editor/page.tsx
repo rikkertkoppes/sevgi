@@ -19,7 +19,6 @@ import Grid from "@/functions/Grid";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
 import { Palette } from "@/components/Palette";
-import { output } from "@/functions/Output";
 const ViewButtons = dynamic(() => import("./ViewButtons"), { ssr: false });
 
 import styles from "./editor.module.css";
@@ -29,24 +28,18 @@ const engine = new Engine({
     ...Create,
     ...Modify,
     ...Grid,
-    output,
 });
 
-const testFunction: GraphedFunction = {
+const emptyFunction: GraphedFunction = {
     name: "test",
-    body: {
-        output: {
-            name: "output",
-            inputs: {},
-        },
-    },
+    body: {},
     outputs: {
-        geometry: "<output.geometry>",
+        geometry: "",
     },
 };
 
 export default function Home() {
-    const [fn, setFn] = React.useState(testFunction);
+    const [fn, setFn] = React.useState(emptyFunction);
     const { run, result } = useFunction(engine, fn, true);
     const [placing, setPlacing] = React.useState<string | null>(null);
     const updatePositions = useUpdatePositions(fn);

@@ -92,11 +92,15 @@ export const Tab: React.FC<TabProps> = ({ header, children }) => {
 interface TabHeadersProps {
     className?: string;
     position?: "top" | "bottom" | "left" | "right";
+    leftTools?: React.ReactNode;
+    rightTools?: React.ReactNode;
     children?: React.ReactNode;
 }
 export const TabHeaders: React.FC<TabHeadersProps> = ({
     className,
     position,
+    leftTools,
+    rightTools,
     children,
 }: TabHeadersProps) => {
     const { activeTabIndex, setActiveTabIndex, tabs } = useTabContext();
@@ -109,6 +113,7 @@ export const TabHeaders: React.FC<TabHeadersProps> = ({
                 styles[position || ""]
             )}
         >
+            {leftTools}
             {tabs.map((tab, index) => (
                 <div
                     key={tab.id}
@@ -121,6 +126,7 @@ export const TabHeaders: React.FC<TabHeadersProps> = ({
                 </div>
             ))}
             {children}
+            {rightTools}
         </div>
     );
 };

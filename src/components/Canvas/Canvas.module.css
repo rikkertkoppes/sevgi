@@ -8,6 +8,20 @@
     border-bottom: 1px solid var(--line-color);
 }
 
+.EmptyMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.5em;
+    text-align: center;
+    border: 1px solid var(--line-color);
+    border-radius: 8px;
+    background-color: var(--page);
+    color: var(--foreground);
+    padding: 1em;
+}
+
 .Scroll {
     height: 100%;
     cursor: grab;

@@ -85,6 +85,13 @@ export function Canvas({ geometry: geoTree, selection }: CanvasProps) {
                 <RenderGeometry geometry={geoTree} />
                 <RenderSelection selection={selection} />
             </SVGScroller>
+            {!geoTree && (
+                <div className={styles.EmptyMessage}>
+                    No &quot;geometry&quot; connection exists in the output
+                    node. You may have removed it. Add a connection and name it
+                    &quot;geometry&quot; to display your geometry
+                </div>
+            )}
         </div>
     );
 }

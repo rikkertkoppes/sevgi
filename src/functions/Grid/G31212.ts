@@ -8,6 +8,7 @@ const baseTri = RegularPolygon.from(Point.ZERO, 3, 1, 0, false);
 const baseDodeca = RegularPolygon.from(Point.ZERO, 12, 1, 0, false);
 const PI = Math.PI;
 const HPI = PI / 2;
+const sq3 = Math.sqrt(3);
 
 export const g31212: PrimitiveFunction = {
     name: "G31212",
@@ -39,8 +40,8 @@ export const g31212: PrimitiveFunction = {
         const shapes: RegularPolygon[] = [];
         const rDod = params.size / 2;
         const aDod = Math.PI / 12;
-        const edgeLength = 2 * rDod * Math.sin(Math.PI / 12); // dodecahedron edge length
-        const rTri = edgeLength / (4 * Math.sin(Math.PI / 3)); // triangle inner radius
+        const edgeLength = 2 * rDod * Math.tan(Math.PI / 12); // dodecahedron edge length
+        const rTri = edgeLength / (2 * sq3); // triangle inner radius
         const dcel = new DCEL();
         for (let j = 0; j < ny; j++) {
             const y = j * vSpace;

@@ -4,7 +4,7 @@ import { RegularPolygon } from "@/Core/Geometry/RegularPolygon";
 import { Transform } from "@/Core/Geometry/Transform";
 import { DCEL } from "@/Core/Geometry/GeoData";
 
-const baseOct = RegularPolygon.from(Point.ZERO, 8, 1, Math.PI / 8, false);
+const baseOct = RegularPolygon.from(Point.ZERO, 8, 1, 0, false);
 const baseQuad = RegularPolygon.from(Point.ZERO, 4, 1, 0, false);
 const QPI = Math.PI / 4;
 

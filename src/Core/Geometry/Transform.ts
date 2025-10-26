@@ -1,4 +1,3 @@
-import { store } from "./GeoData";
 import { hashNumbers } from "./Util";
 import { Point, v2 } from "./Vector";
 
@@ -6,6 +5,7 @@ export class Transform {
     public hash: string;
     private _scale: Point | null = null;
     private _rotation: number | null = null;
+    private _inverse: Transform | null = null;
     private constructor(
         public a: number,
         public b: number,
@@ -49,10 +49,7 @@ export class Transform {
 
     public inverse(): Transform {
         // check cache
-        const prop = store.getProp(this.hash, "inverse");
-        if (prop) {
-            return prop;
-        }
+        if (this._inverse) return this._inverse;
 
         const det = this.a * this.d - this.b * this.c;
         if (Math.abs(det) < 1e-10) {
@@ -67,7 +64,8 @@ export class Transform {
             (this.c * this.f - this.d * this.e) * idet,
             (this.b * this.e - this.a * this.f) * idet
         );
-        store.setProp(this.hash, "inverse", t);
+        this._inverse = t;
+        t._inverse = this;
         return t;
     }
 

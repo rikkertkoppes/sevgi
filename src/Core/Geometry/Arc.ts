@@ -1,4 +1,5 @@
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
+import { BoundingBox } from "./BoundingBox";
 import { Circle } from "./Circle";
 import { LineSegment } from "./LineSegment";
 import { Segment } from "./Segment";
@@ -21,6 +22,7 @@ export class Arc extends Segment {
     public endAngle: number;
     private midAngle: number;
     public length: number;
+    private _bb: BoundingBox | null = null;
 
     /**
      * arc, from start to end. if start < end clockwise, otherwise ccw
@@ -65,6 +67,53 @@ export class Arc extends Segment {
     }
     public get end() {
         return this.e;
+    }
+
+    // take the extreme points into account
+    public get boundingBox() {
+        if (this._bb) return this._bb;
+        const points = [this.s, this.e];
+        // check the extreme points at 0, 90, 180, 270 degrees
+        for (let i = 0; i < 4; i++) {
+            const angle = (i * PI) / 2;
+            let inArc = false;
+            if (this.full) {
+                inArc = true;
+            } else if (this.c.handedness === 1) {
+                // clockwise
+                if (this.startAngle < this.endAngle) {
+                    inArc = angle >= this.startAngle && angle <= this.endAngle;
+                } else {
+                    inArc = angle >= this.startAngle || angle <= this.endAngle;
+                }
+            } else {
+                // counterclockwise
+                if (this.startAngle > this.endAngle) {
+                    inArc = angle <= this.startAngle && angle >= this.endAngle;
+                } else {
+                    inArc = angle <= this.startAngle || angle >= this.endAngle;
+                }
+            }
+            if (inArc) {
+                const r = Math.abs(this.c.r);
+                const p = sum(
+                    this.c.c,
+                    v2(r * Math.cos(angle), r * Math.sin(angle))
+                );
+                points.push(p);
+            }
+        }
+        this._bb = new BoundingBox(
+            new Point(
+                Math.min(...points.map((p) => p.x)),
+                Math.min(...points.map((p) => p.y))
+            ),
+            new Point(
+                Math.max(...points.map((p) => p.x)),
+                Math.max(...points.map((p) => p.y))
+            )
+        );
+        return this._bb;
     }
 
     public reverse(): Arc {

@@ -1,5 +1,6 @@
 import { Arc } from "./Arc";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
+import { BoundingBox } from "./BoundingBox";
 import { Circle } from "./Circle";
 import { ClosestPointInfo, Curve } from "./Curve";
 import { DCEL, store } from "./GeoData";
@@ -24,6 +25,7 @@ export class PolyLine extends Curve {
     public T: Transform = Transform.ONE;
     private _worldSegments: Segment[] | null = null;
     private _worldPoints: Point[] | null = null;
+    private _bb: BoundingBox | null = null;
     public dcel?: DCEL;
 
     protected constructor(segments: Segment[]) {
@@ -66,12 +68,23 @@ export class PolyLine extends Curve {
         this.hash = this.segments.map((s) => s.hash).join("|");
     }
 
+    public get boundingBox() {
+        if (this._bb) return this._bb;
+        let bb = this.segments[0].boundingBox;
+        for (let i = 1; i < this.segments.length; i++) {
+            bb = bb.merge(this.segments[i].boundingBox);
+        }
+        this._bb = bb.transform(this.T);
+        return this._bb;
+    }
+
     public transform(t: Transform): this {
         const c = this.shallowCopy();
         t = t.multiply(this.T);
         c.T = t;
         c._worldSegments = null; // reset world segments cache
         c._worldPoints = null; // reset world points cache
+        c._bb = null; // reset bounding box cache
         return c;
     }
 

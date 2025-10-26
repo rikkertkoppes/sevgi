@@ -1,3 +1,4 @@
+import { BoundingBox } from "./BoundingBox";
 import { Transform } from "./Transform";
 import { uid } from "./Util";
 import { Point } from "./Vector";
@@ -20,10 +21,12 @@ export abstract class BaseGeometry {
      * the hash is a content hash, changes when the geometry changes
      */
     public hash: string = "";
+    abstract type: string;
     constructor() {
         this.id = uid();
         this.ancestryId = uid();
     }
+    abstract get boundingBox(): BoundingBox;
     protected copyAncestry<G extends BaseGeometry>(to: G): G {
         to.ancestryId = this.ancestryId;
         return to;
@@ -32,7 +35,6 @@ export abstract class BaseGeometry {
         this.ancestryId = uid();
         return this;
     }
-    abstract type: string;
     public clone(): this {
         return this.shallowCopy();
     }

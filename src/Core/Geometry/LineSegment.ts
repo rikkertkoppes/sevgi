@@ -6,11 +6,13 @@ import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Line } from "./Line";
 import { ClosestPointInfo } from "./Curve";
 import { Transform } from "./Transform";
+import { BoundingBox } from "./BoundingBox";
 
 export class LineSegment extends Segment {
     public type = "LineSegment";
     private _tangent: Point | null = null;
     private _isZeroLength: boolean;
+    private _bb: BoundingBox | null = null;
     constructor(public start: Point, public end: Point) {
         super();
         this.hash = `line|${this.start.hash}|${this.end.hash}`;
@@ -28,6 +30,21 @@ export class LineSegment extends Segment {
 
     public get bisector() {
         return Line.perpendicularFromPoints(this.start, this.end);
+    }
+
+    public get boundingBox() {
+        if (this._bb) return this._bb;
+        this._bb = new BoundingBox(
+            new Point(
+                Math.min(this.start.x, this.end.x),
+                Math.min(this.start.y, this.end.y)
+            ),
+            new Point(
+                Math.max(this.start.x, this.end.x),
+                Math.max(this.start.y, this.end.y)
+            )
+        );
+        return this._bb;
     }
 
     public reverse(): Segment {

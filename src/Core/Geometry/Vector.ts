@@ -1,4 +1,5 @@
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
+import { BoundingBox } from "./BoundingBox";
 import { Transform } from "./Transform";
 import { fixedNum } from "./Util";
 
@@ -11,6 +12,10 @@ export class Point extends BaseGeometry {
         super();
         this.hash = fixedNum`${x} ${y}`;
         this.id = this.hash;
+    }
+
+    public get boundingBox() {
+        return new BoundingBox(this, this);
     }
 
     public transform(T: Transform): Point {

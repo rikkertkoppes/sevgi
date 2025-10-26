@@ -21,6 +21,7 @@ import { normalizeAngle, TAU } from "./Util";
 import { Curve } from "./Curve";
 import { BaseGeometry, WalkerOptions } from "./BaseGeometry";
 import { Transform } from "./Transform";
+import { BoundingBox } from "./BoundingBox";
 
 /** signed circle, negative radii are counter clockwise */
 export class Circle extends Curve {
@@ -45,6 +46,17 @@ export class Circle extends Curve {
      */
     public get handedness() {
         return Math.sign(this.r);
+    }
+
+    public get boundingBox() {
+        if (this.r === 0) {
+            return new BoundingBox(this.c, this.c);
+        }
+        const r = Math.abs(this.r);
+        return new BoundingBox(
+            new Point(this.c.x - r, this.c.y - r),
+            new Point(this.c.x + r, this.c.y + r)
+        );
     }
 
     public pointAt(t: number): Point {

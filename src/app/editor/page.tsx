@@ -16,7 +16,6 @@ import dynamic from "next/dynamic";
 import Create from "@/functions/Create";
 import Modify from "@/functions/Modify";
 import Grid from "@/functions/Grid";
-import List from "@/functions/List";
 import { AlertHandler, usePrompts } from "@/hooks/useAlert";
 import { Tab, TabHeaders, Tabs } from "@/components/Tabs";
 import { Canvas } from "@/components/Canvas";
@@ -30,7 +29,6 @@ const engine = new Engine({
     ...Create,
     ...Modify,
     ...Grid,
-    ...List,
 });
 
 const emptyFunction: GraphedFunction = {
@@ -132,7 +130,6 @@ export default function Home() {
                                         nodes={{
                                             ...Lib.List,
                                             ...Lib.Sequence,
-                                            ...List,
                                         }}
                                         handleAddNode={handleAddNode}
                                     />

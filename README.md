@@ -8,6 +8,18 @@ Have a look at https://sevgi.vercel.app and play around. Do create issues if you
 
 # Changelog
 
+## v0.2.6
+
+-   improved performance on matrix transformations
+-   prepare output node for custom nodes
+-   add curveInfo node
+-   updated homepage
+-   add relativeItem and relativeItems nodes, in favor of shiftList
+
+## v0.2.5
+
+-   fix accuracy problems in G31212 and G488
+
 ## v0.2.4
 
 -   General speedup of grid layouts

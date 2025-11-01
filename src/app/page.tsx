@@ -48,8 +48,16 @@ export default function Home() {
                                 href="https://github.com/sponsors/rikkertkoppes"
                                 target="_blank"
                             >
-                                donate to support Sevgi
-                            </a>
+                                sponsor Sevgi
+                            </a>{" "}
+                            or{" "}
+                            <a
+                                href="https://buymeacoffee.com/rikkertkoppes"
+                                target="_blank"
+                            >
+                                buy me a coffee
+                            </a>{" "}
+                            it allows me to keep working on it!
                         </li>
                     </ul>
                 </div>
@@ -58,6 +66,7 @@ export default function Home() {
                     <ul>
                         <li>Export your designs as SVG files.</li>
                         <li>Perfect for laser cutting</li>
+                        <li>A great starter for patterns and logo design</li>
                     </ul>
                 </div>
                 <div className={styles.Feature}>

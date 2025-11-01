@@ -16,6 +16,7 @@ import { evaluateCurve } from "./EvaluateCurve";
 import { subdivideCurve } from "./SubdivideCurve";
 import { rectangle } from "./Rectangle";
 import { box } from "./Box";
+import { curveInfo } from "./CurveInfo";
 
 const primitives: Record<string, PrimitiveFunction> = {
     point,
@@ -27,6 +28,7 @@ const primitives: Record<string, PrimitiveFunction> = {
     box,
     midpoint,
     evaluateCurve,
+    curveInfo,
     center,
     outline,
     pointsFromPoly,

@@ -17,7 +17,7 @@ export function RenderGeometry({ geometry: geoTree }: RenderGeometryProps) {
     const groupedPaths = React.useMemo(() => {
         const byClass = new Map<string, string[]>();
         for (const g of geometry) {
-            if (!g) continue;
+            if (!g?.toSVG) continue;
             const c = g.type;
             const d = g.toSVG();
             if (!byClass.has(c)) byClass.set(c, []);

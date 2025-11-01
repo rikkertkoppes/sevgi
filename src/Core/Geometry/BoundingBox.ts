@@ -1,3 +1,4 @@
+import { Rectangle } from "./Rectangle";
 import { Transform } from "./Transform";
 import { Point } from "./Vector";
 
@@ -10,6 +11,10 @@ export class BoundingBox {
 
     public merge(bb: BoundingBox) {
         return BoundingBox.merge(this, bb);
+    }
+
+    public toRectangle() {
+        return Rectangle.fromBounds(this.bl, this.tr);
     }
 
     static merge(bb1: BoundingBox, bb2: BoundingBox) {
